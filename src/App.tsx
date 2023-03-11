@@ -6,6 +6,7 @@ import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
 import Home from './components/home/Home'
+import Leagues from './components/leagues/Leagues'
 import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'leagues',
-        element: <div>Coming soon</div>,
+        element: <Leagues />,
         errorElement: <GenericError />,
       },
       {
