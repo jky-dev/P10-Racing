@@ -34,7 +34,7 @@ const Races: React.FC = () => {
                 <Typography variant="h6">{v.raceName}</Typography>
                 <Typography variant="body1">Results</Typography>
                 {raceResults[index]?.map((result) => (
-                  <Typography variant="body2">
+                  <Typography variant="body2" key={result.position}>
                     {result.position}: {result.Driver.givenName}{' '}
                     {result.Driver.familyName}
                   </Typography>

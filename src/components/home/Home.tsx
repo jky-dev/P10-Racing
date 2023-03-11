@@ -19,12 +19,16 @@ const Home: React.FC = () => {
             <li>
               <BrowserLink to="/races">Races</BrowserLink>
             </li>
-            <li>
-              <BrowserLink to="/leagues">Leagues</BrowserLink>
-            </li>
-            <li>
-              <BrowserLink to="/profile">My Profile</BrowserLink>
-            </li>
+            {user && (
+              <>
+                <li>
+                  <BrowserLink to="/leagues">Leagues</BrowserLink>
+                </li>
+                <li>
+                  <BrowserLink to="/profile">My Profile</BrowserLink>
+                </li>
+              </>
+            )}
             {user?.uid === '4bxsPkapBEYiuZO07ix9vVh1eJZ2' && (
               <li>
                 <BrowserLink to="/admin">Admin</BrowserLink>

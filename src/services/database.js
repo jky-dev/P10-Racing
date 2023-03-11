@@ -1,4 +1,4 @@
-import { child, get, ref, getDatabase } from 'firebase/database'
+import { child, get, getDatabase, ref } from 'firebase/database'
 
 export const fetchPath = async (path) => {
   const dbRef = ref(getDatabase())

@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import {
   Auth,
   AuthProvider,
@@ -40,14 +41,18 @@ const Login: React.FC = () => {
   return (
     <>
       <div>Login</div>
-      <button onClick={() => signIn(auth, new GoogleAuthProvider(), navigate)}>
+      <Button
+        variant="contained"
+        onClick={() => signIn(auth, new GoogleAuthProvider(), navigate)}
+      >
         Log in with Google
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="contained"
         onClick={() => signIn(auth, new FacebookAuthProvider(), navigate)}
       >
         Log in with Facebook
-      </button>
+      </Button>
     </>
   )
 }
