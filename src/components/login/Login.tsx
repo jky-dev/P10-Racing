@@ -12,6 +12,7 @@ import {
 import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { dbInitUser } from '../../services/database'
 import Loader from '../loader/Loader'
 
 const signIn = (
@@ -25,6 +26,8 @@ const signIn = (
         signInWithPopup(auth, provider)
       })
     } else {
+      // logged in
+      dbInitUser(user)
       navigate('/')
     }
   })
