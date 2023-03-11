@@ -24,6 +24,9 @@ module.exports = {
     open: true,
     hot: true,
     liveReload: true,
+    historyApiFallback: {
+      index: 'index.html',
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.scss', '.css'],

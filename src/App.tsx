@@ -1,10 +1,11 @@
-import { Typography } from '@mui/material'
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
 import { getDatabase } from 'firebase/database'
 import React from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
+import GenericError from './components/error/GenericError'
+import Home from './components/home/Home'
 import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
@@ -26,22 +27,58 @@ const initFirebase = () => {
   getDatabase(app)
 }
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />,
+    errorElement: <GenericError />,
+    children: [
+      {
+        path: '',
+        element: <About />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'races',
+        element: <Races />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'leagues',
+        element: <div>Coming soon</div>,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'profile',
+        element: <div>Coming soon</div>,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'admin',
+        element: <AdminPanel />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'logout',
+        element: <Logout />,
+        errorElement: <GenericError />,
+      },
+    ],
+  },
+])
+
 const App = () => {
   initFirebase()
-  const [user] = useAuthState(getAuth())
 
   return (
     <>
-      <Typography variant="h3">P10 Racing League</Typography>
-      {user ? (
-        <>
-          <AdminPanel />
-          <Logout />
-        </>
-      ) : (
-        <Login />
-      )}
-      <Races />
+      <RouterProvider router={router} />
+      <Outlet />
     </>
   )
 }
