@@ -1,5 +1,8 @@
 import {
+  Auth,
+  AuthProvider,
   browserSessionPersistence,
+  FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -10,9 +13,7 @@ import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Loader from '../loader/Loader'
 
-const signInWithGoogle = () => {
-  const auth = getAuth()
-  const provider = new GoogleAuthProvider()
+const signIn = (auth: Auth, provider: AuthProvider) => {
   onAuthStateChanged(auth, (user) => {
     if (!user)
       setPersistence(auth, browserSessionPersistence).then(() => {
@@ -23,15 +24,19 @@ const signInWithGoogle = () => {
 
 const Login: React.FC = () => {
   const auth = getAuth()
-  const [user, loading, error] = useAuthState(auth)
+  const [loading] = useAuthState(auth)
 
   if (loading) return <Loader />
 
   return (
     <>
       <div>Login</div>
-      <button onClick={signInWithGoogle}>click to log in with Google</button>
-      {error && <div>{JSON.stringify(error)}</div>}
+      <button onClick={() => signIn(auth, new GoogleAuthProvider())}>
+        Log in with Google
+      </button>
+      <button onClick={() => signIn(auth, new FacebookAuthProvider())}>
+        Log in with Facebook
+      </button>
     </>
   )
 }
