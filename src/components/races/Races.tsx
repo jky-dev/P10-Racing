@@ -1,6 +1,8 @@
+import { Card, CardContent, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { RacesProps } from '../../interfaces'
 import { fetchPath } from '../../services/database'
+import { setRaceResultsByRound } from '../../services/f1'
 import Loader from '../loader/Loader'
 
 const Races: React.FC = () => {
@@ -13,13 +15,29 @@ const Races: React.FC = () => {
 
     setRaces(dbRaces)
     setLoading(false)
+
+    await setRaceResultsByRound(1)
   }
 
   React.useEffect(() => {
     init()
   }, [])
 
-  return <>{loading ? <Loader /> : races.map((v) => <div>{v.raceName}</div>)}</>
+  return (
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        races.map((v) => (
+          <Card variant="outlined" sx={{ width: '300px' }}>
+            <CardContent>
+              <Typography variant="body1">{v.raceName}</Typography>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </>
+  )
 }
 
 export default Races

@@ -1,6 +1,8 @@
+import { Typography } from '@mui/material'
 import { initializeApp } from 'firebase/app'
 import { getDatabase } from 'firebase/database'
 import React from 'react'
+import AdminPanel from './components/admin_panel/AdminPanel'
 import Races from './components/races/Races'
 
 const initFirebase = () => {
@@ -25,7 +27,8 @@ const App = () => {
 
   return (
     <>
-      <h1>P10 Racing</h1>
+      <Typography variant="h3">P10 Racing League</Typography>
+      <AdminPanel />
       <Races />
     </>
   )
