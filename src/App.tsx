@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import { getDatabase } from 'firebase/database'
 import React from 'react'
-import { fetchPath } from './services/database'
+import Races from './components/races/Races'
 
 const initFirebase = () => {
   const firebaseConfig = {
@@ -22,14 +22,11 @@ const initFirebase = () => {
 
 const App = () => {
   initFirebase()
-  const fetchRoot = async () => {
-    const val = await fetchPath('/')
-    console.log(val)
-  }
+
   return (
     <>
-      <button onClick={() => fetchRoot()}>Fetch root</button>
-      <h1>Hello world! I am using React</h1>
+      <h1>P10 Racing</h1>
+      <Races />
     </>
   )
 }
