@@ -3,7 +3,6 @@ import {
   Auth,
   AuthProvider,
   browserSessionPersistence,
-  FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -46,12 +45,6 @@ const Login: React.FC = () => {
         onClick={() => signIn(auth, new GoogleAuthProvider(), navigate)}
       >
         Log in with Google
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => signIn(auth, new FacebookAuthProvider(), navigate)}
-      >
-        Log in with Facebook
       </Button>
     </>
   )

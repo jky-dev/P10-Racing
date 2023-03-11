@@ -19,13 +19,17 @@ const Leagues: React.FC = () => {
     <>
       <div>My Leagues</div>
       <div>
-        <Button variant="contained">Create a league</Button>
+        <Button variant="contained" onClick={createLeague}>
+          Create a league
+        </Button>
       </div>
       <div>
         <TextField helperText="Enter your league code here">
           League code
         </TextField>
-        <Button variant="contained">Join a league</Button>
+        <Button variant="contained" onClick={joinLeague}>
+          Join a league
+        </Button>
       </div>
     </>
   )
