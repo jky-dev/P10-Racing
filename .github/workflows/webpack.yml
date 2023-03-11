@@ -1,6 +1,8 @@
 name: Deploy for preview
 
-on: [pull_request]
+on:
+  push:
+    branches: [ "master" ]
 
 jobs:
   preview:
