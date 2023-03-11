@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getDatabase, set, ref } from 'firebase/database'
+import { getDatabase, ref, set } from 'firebase/database'
 
 export const setRaces = () => {
   const db = getDatabase()
@@ -12,6 +12,8 @@ export const setRaces = () => {
 }
 
 export const setRaceResultsByRound = (round: number) => {
+  if (round < 1) return
+
   const db = getDatabase()
 
   axios

@@ -1,8 +1,12 @@
 import { Typography } from '@mui/material'
 import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
 import { getDatabase } from 'firebase/database'
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import AdminPanel from './components/admin_panel/AdminPanel'
+import Login from './components/login/Login'
+import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
 
 const initFirebase = () => {
@@ -24,11 +28,19 @@ const initFirebase = () => {
 
 const App = () => {
   initFirebase()
+  const [user] = useAuthState(getAuth())
 
   return (
     <>
       <Typography variant="h3">P10 Racing League</Typography>
-      <AdminPanel />
+      {user ? (
+        <>
+          <AdminPanel />
+          <Logout />
+        </>
+      ) : (
+        <Login />
+      )}
       <Races />
     </>
   )
