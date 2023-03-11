@@ -2,16 +2,16 @@ import { getAuth, signOut } from 'firebase/auth'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const goodbye = () => {
+const Logout: React.FC = () => {
   const navigate = useNavigate()
 
-  signOut(getAuth()).then(() => {
-    navigate('/')
-  })
-}
+  const goodbye = () => {
+    signOut(getAuth()).then(() => {
+      navigate('/')
+    })
+  }
 
-const Logout: React.FC = () => {
-  return <button onClick={goodbye}>Log out</button>
+  return <button onClick={() => goodbye()}>Log out</button>
 }
 
 export default Logout
