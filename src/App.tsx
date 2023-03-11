@@ -75,6 +75,7 @@ const router = createBrowserRouter([
 
 const App = () => {
   initFirebase()
+  console.log('hi')
 
   return (
     <>
