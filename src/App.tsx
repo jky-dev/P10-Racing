@@ -1,5 +1,4 @@
-import { initializeApp } from 'firebase/app'
-import { getDatabase } from 'firebase/database'
+import { createClient } from '@supabase/supabase-js'
 import React from 'react'
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import About from './components/about/About'
@@ -11,21 +10,11 @@ import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
 
-const initFirebase = () => {
-  const firebaseConfig = {
-    apiKey: 'AIzaSyBOQxaCS43e4hmLye-U8n5VRnjVP0sfgzs',
-    authDomain: 'p10racing-5e630.firebaseapp.com',
-    projectId: 'p10racing-5e630',
-    storageBucket: 'p10racing-5e630.appspot.com',
-    messagingSenderId: '626860315606',
-    appId: '1:626860315606:web:9403ffcfe1f82d68f7ca77',
-    measurementId: 'G-XL232WQS4L',
-    databaseURL:
-      'https://p10racing-5e630-default-rtdb.asia-southeast1.firebasedatabase.app/',
-  }
-
-  const app = initializeApp(firebaseConfig)
-  getDatabase(app)
+const init = () => {
+  const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
+  const supabaseKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcnFsZGdhZmJhYWdmY3hiY3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg1OTE1NjYsImV4cCI6MTk5NDE2NzU2Nn0.5zGGuJVpBoYLUCr53Haz671UMJw0AtFAHJo9giqnYYA'
+  const supabase = createClient(supabaseUrl, supabaseKey)
 }
 
 const router = createBrowserRouter([
@@ -74,7 +63,7 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
-  initFirebase()
+  init()
 
   return (
     <>

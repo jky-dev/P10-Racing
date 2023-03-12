@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material'
-import { getAuth } from 'firebase/auth'
 import React from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { Link as BrowserLink, Outlet } from 'react-router-dom'
 
 const Home: React.FC = () => {
-  const [user] = useAuthState(getAuth())
+  const user: any = {
+    uid: null,
+  }
 
   return (
     <>
