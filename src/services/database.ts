@@ -33,9 +33,19 @@ export const createLeague = async (
 
   const returnedRecord = league_data[0] as LeaguesProps
 
-  const { data } = await client
+  await client
     .from('league_members')
     .insert([{ league_id: returnedRecord.id, user_uuid: user.id }])
+
+  for (let i = 1; i < 24; i++) {
+    await client.from('league_results').upsert({
+      race_id: i,
+      driver_id: null,
+      points_gained: null,
+      league_id: returnedRecord.id,
+      user_uuid: user.id,
+    })
+  }
 }
 
 export const insertIntoRaces = async (
