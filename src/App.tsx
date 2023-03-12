@@ -1,6 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
 import React from 'react'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
@@ -9,19 +8,6 @@ import Leagues from './components/leagues/Leagues'
 import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
-
-const init = async () => {
-  const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
-  const supabaseKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcnFsZGdhZmJhYWdmY3hiY3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg1OTE1NjYsImV4cCI6MTk5NDE2NzU2Nn0.5zGGuJVpBoYLUCr53Haz671UMJw0AtFAHJo9giqnYYA'
-  const supabase = createClient(supabaseUrl, supabaseKey)
-
-  let { data: constructor, error } = await supabase
-    .from('constructor')
-    .select('*')
-
-  console.log(constructor, error)
-}
 
 const router = createBrowserRouter([
   {
@@ -69,13 +55,6 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
-  init()
-
-  return (
-    <>
-      <RouterProvider router={router} />
-      <Outlet />
-    </>
-  )
+  return <RouterProvider router={router} />
 }
 export default App
