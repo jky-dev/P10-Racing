@@ -1,11 +1,10 @@
 import { Card, CardContent, Typography } from '@mui/material'
 import React, { Key, useState } from 'react'
-import { RaceResult, RacesProps } from '../../interfaces'
 import Loader from '../loader/Loader'
 
 const Races: React.FC = () => {
-  const [races, setRaces] = useState<null | RacesProps[]>([])
-  const [raceResults, setRaceResults] = useState<null | RaceResult[][]>([])
+  const [races, setRaces] = useState([])
+  const [raceResults, setRaceResults] = useState([])
   const [loading, setLoading] = useState(true)
 
   const init = async () => {
@@ -30,7 +29,7 @@ const Races: React.FC = () => {
               <CardContent>
                 <Typography variant="h6">{v.raceName}</Typography>
                 <Typography variant="body1">Results</Typography>
-                {raceResults[index]?.map((result) => (
+                {raceResults[index]?.map((result: any) => (
                   <Typography variant="body2" key={result.position}>
                     {result.position}: {result.Driver.givenName}{' '}
                     {result.Driver.familyName}
