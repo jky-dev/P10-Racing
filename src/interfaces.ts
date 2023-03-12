@@ -24,3 +24,19 @@ export interface ConstructorsApiProps {
   nationality: string
   url: string
 }
+
+export interface DriversApiProps {
+  code: string
+  dateOfBirth: string
+  driverId: string
+  familyName: string
+  givenName: string
+}
+
+export interface ResultsApiProps {
+  Driver: {
+    driverId: string
+  }
+  position: string
+  status: string
+}

@@ -10,6 +10,7 @@ import React, { useState } from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import {
   setConstructors,
+  setDrivers,
   setRaceResultsByRound,
   setRaces,
 } from '../../services/f1'
@@ -36,7 +37,7 @@ const AdminPanel: React.FC = () => {
           onChange={(e) => setRound(Number(e.target.value))}
         />
         <Button
-          onClick={() => setRaceResultsByRound(round)}
+          onClick={() => setRaceResultsByRound(client, round)}
           variant="contained"
         >
           Set Results By Round
@@ -49,6 +50,15 @@ const AdminPanel: React.FC = () => {
         </Typography>
         <Button onClick={() => setConstructors(client)} variant="contained">
           Set Constructors
+        </Button>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <Typography variant="body1" mr={2}>
+          Set Drivers
+        </Typography>
+        <Button onClick={() => setDrivers(client)} variant="contained">
+          Set Drivers
         </Button>
       </ListItem>
     </List>

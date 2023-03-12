@@ -1,7 +1,18 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import axios from 'axios'
-import { ConstructorsApiProps, RaceApiProps } from '../interfaces'
-import { insertIntoConstructors, insertIntoRaces } from './database'
+import {
+  ConstructorsApiProps,
+  DriversApiProps,
+  RaceApiProps,
+  ResultsApiProps,
+} from '../interfaces'
+import {
+  getRaceByRound,
+  insertIntoConstructors,
+  insertIntoDrivers,
+  insertIntoRaces,
+  updateRaceResultWithFinish,
+} from './database'
 
 export const setRaces = (client: SupabaseClient) => {
   axios.get('http://ergast.com/api/f1/current.json').then((res) => {
@@ -24,13 +35,32 @@ export const setConstructors = (client: SupabaseClient) => {
   })
 }
 
-export const setRaceResultsByRound = (round: number) => {
+export const setDrivers = (client: SupabaseClient) => {
+  axios.get('http://ergast.com/api/f1/2023/drivers.json').then((res) => {
+    const drivers: DriversApiProps[] = res.data.MRData.DriverTable.Drivers
+
+    drivers.forEach((driver) => {
+      insertIntoDrivers(client, driver)
+    })
+  })
+}
+
+export const setRaceResultsByRound = (
+  client: SupabaseClient,
+  round: number
+) => {
   if (round < 1) return
 
   axios
     .get(`http://ergast.com/api/f1/2023/${round}/results.json`)
-    .then((res) => {
-      const results = res.data.MRData.RaceTable.Races[0].Results
-      const index = round - 1
+    .then(async (res) => {
+      const results: ResultsApiProps[] =
+        res.data.MRData.RaceTable.Races[0].Results
+
+      const race = await getRaceByRound(client, round)
+
+      results.forEach((result) => {
+        updateRaceResultWithFinish(client, result, race.data[0].id)
+      })
     })
 }
