@@ -1,11 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { useSupabaseContext } from '../contexts/SupabaseContext'
 import {
-  ConstructorsApiProps,
-  DriversApiProps,
+  F1ConstructorsApiProps,
+  F1DriversApiProps,
+  F1RaceApiProps,
+  F1ResultsApiProps,
   LeaguesProps,
-  RaceApiProps,
-  ResultsApiProps,
 } from '../interfaces'
 
 export const test = async () => {
@@ -50,7 +50,7 @@ export const createLeague = async (
 
 export const insertIntoRaces = async (
   client: SupabaseClient,
-  race: RaceApiProps
+  race: F1RaceApiProps
 ) => {
   await client.from('races').upsert(
     [
@@ -68,7 +68,7 @@ export const insertIntoRaces = async (
 
 export const insertIntoConstructors = async (
   client: SupabaseClient,
-  constructor: ConstructorsApiProps
+  constructor: F1ConstructorsApiProps
 ) => {
   await client.from('constructor').upsert(
     [
@@ -83,7 +83,7 @@ export const insertIntoConstructors = async (
 
 export const insertIntoDrivers = async (
   client: SupabaseClient,
-  driver: DriversApiProps
+  driver: F1DriversApiProps
 ) => {
   await client.from('drivers').upsert(
     [
@@ -99,7 +99,7 @@ export const insertIntoDrivers = async (
 
 export const updateRaceResultWithFinish = async (
   client: SupabaseClient,
-  result: ResultsApiProps,
+  result: F1ResultsApiProps,
   race_id: number
 ) => {
   await client.from('race_results').upsert(

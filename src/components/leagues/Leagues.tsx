@@ -2,6 +2,7 @@ import { Button, TextField } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { createLeague } from '../../services/database'
+import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
 
 const joinLeague = () => {
@@ -13,6 +14,7 @@ const joinLeague = () => {
 const Leagues: React.FC = () => {
   const [leagueName, setLeagueName] = React.useState('')
   const [leagueCode, setLeagueCode] = React.useState('')
+  const [leagueId, setLeagueId] = React.useState(null)
   const { client, user } = useSupabaseContext()
   const [loading, setLoading] = React.useState(false)
   const [joinedLeagues, setJoinedLeagues] = React.useState([])
@@ -35,12 +37,7 @@ const Leagues: React.FC = () => {
   const fetchLeagues = async () => {
     setLoading(true)
     const { data } = await client.from('league_members').select(`
-      league_id,
-      leagues (
-        name
-      )
-    `)
-
+    league_id, leagues (name)`)
     console.log(data)
     setJoinedLeagues(data)
     setLoading(false)
@@ -56,8 +53,15 @@ const Leagues: React.FC = () => {
     <>
       <div>My Leagues</div>
       {joinedLeagues.map((league) => {
-        return <div key={league.leagues.name}>{league.leagues.name}</div>
+        return (
+          <div key={league.leagues.name}>
+            <Button onClick={() => setLeagueId(league.league_id)}>
+              {league.leagues.name}
+            </Button>
+          </div>
+        )
       })}
+      <LeagueResults leagueId={leagueId} />
       <div>
         <TextField
           helperText="Enter your league name"

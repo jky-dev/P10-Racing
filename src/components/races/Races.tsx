@@ -1,15 +1,27 @@
 import { Card, CardContent, Typography } from '@mui/material'
+import { SupabaseClient } from '@supabase/supabase-js'
 import React, { Key, useState } from 'react'
+import { useSupabaseContext } from '../../contexts/SupabaseContext'
+import { RacesWithResultsDbProps } from '../../interfaces'
 import Loader from '../loader/Loader'
 
 const Races: React.FC = () => {
-  const [races, setRaces] = useState([])
+  const [races, setRaces] = useState<RacesWithResultsDbProps[] | null>(null)
   const [raceResults, setRaceResults] = useState([])
   const [loading, setLoading] = useState(true)
+  const { client }: { client: SupabaseClient } = useSupabaseContext()
 
   const init = async () => {
+    console.log('init')
     setLoading(true)
-    setRaces([])
+    const { data }: { data: RacesWithResultsDbProps[] } = await client
+      .from('races')
+      .select(`*, race_results ( * )`)
+
+    const { data: drivers } = await client.from('drivers').select('*')
+    console.log(drivers)
+    console.log(data)
+    setRaces(data)
     setRaceResults([])
     setLoading(false)
   }
@@ -18,27 +30,32 @@ const Races: React.FC = () => {
     init()
   }, [])
 
+  if (races === null) return null
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        races.map((v, index) => (
-          <span key={v.round as Key}>
-            <Card variant="outlined" sx={{ width: '300px' }}>
-              <CardContent>
-                <Typography variant="h6">{v.raceName}</Typography>
-                <Typography variant="body1">Results</Typography>
-                {raceResults[index]?.map((result: any) => (
-                  <Typography variant="body2" key={result.position}>
-                    {result.position}: {result.Driver.givenName}{' '}
-                    {result.Driver.familyName}
-                  </Typography>
-                ))}
-              </CardContent>
-            </Card>
-          </span>
-        ))
+        races
+          .sort((a, b) => a.round_number - b.round_number)
+          .map((v) => (
+            <span key={v.race_name as Key}>
+              <Card variant="outlined" sx={{ width: '300px' }}>
+                <CardContent>
+                  <Typography variant="h6">{v.race_name}</Typography>
+                  <Typography variant="body1">Results</Typography>
+                  {v.race_results
+                    .sort((a, b) => a.position - b.position)
+                    .map((result) => (
+                      <Typography variant="body2" key={result.position}>
+                        {result.position}: {result.driver_id}
+                      </Typography>
+                    ))}
+                </CardContent>
+              </Card>
+            </span>
+          ))
       )}
     </>
   )

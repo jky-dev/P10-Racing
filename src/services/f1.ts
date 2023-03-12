@@ -1,10 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import axios from 'axios'
 import {
-  ConstructorsApiProps,
-  DriversApiProps,
-  RaceApiProps,
-  ResultsApiProps,
+  F1ConstructorsApiProps,
+  F1DriversApiProps,
+  F1RaceApiProps,
+  F1ResultsApiProps,
 } from '../interfaces'
 import {
   getRaceByRound,
@@ -16,7 +16,7 @@ import {
 
 export const setRaces = (client: SupabaseClient) => {
   axios.get('http://ergast.com/api/f1/current.json').then((res) => {
-    const races: RaceApiProps[] = res.data.MRData.RaceTable.Races
+    const races: F1RaceApiProps[] = res.data.MRData.RaceTable.Races
 
     races.forEach((race) => {
       insertIntoRaces(client, race)
@@ -26,7 +26,7 @@ export const setRaces = (client: SupabaseClient) => {
 
 export const setConstructors = (client: SupabaseClient) => {
   axios.get('http://ergast.com/api/f1/2023/constructors.json').then((res) => {
-    const constructors: ConstructorsApiProps[] =
+    const constructors: F1ConstructorsApiProps[] =
       res.data.MRData.ConstructorTable.Constructors
 
     constructors.forEach((constructor) => {
@@ -37,7 +37,7 @@ export const setConstructors = (client: SupabaseClient) => {
 
 export const setDrivers = (client: SupabaseClient) => {
   axios.get('http://ergast.com/api/f1/2023/drivers.json').then((res) => {
-    const drivers: DriversApiProps[] = res.data.MRData.DriverTable.Drivers
+    const drivers: F1DriversApiProps[] = res.data.MRData.DriverTable.Drivers
 
     drivers.forEach((driver) => {
       insertIntoDrivers(client, driver)
@@ -54,7 +54,7 @@ export const setRaceResultsByRound = (
   axios
     .get(`http://ergast.com/api/f1/2023/${round}/results.json`)
     .then(async (res) => {
-      const results: ResultsApiProps[] =
+      const results: F1ResultsApiProps[] =
         res.data.MRData.RaceTable.Races[0].Results
 
       const race = await getRaceByRound(client, round)

@@ -6,7 +6,7 @@ export interface LeaguesProps {
   name: string
 }
 
-export interface RaceApiProps {
+export interface F1RaceApiProps {
   Circuit: {
     circuitId: string
     circuitName: string
@@ -18,14 +18,14 @@ export interface RaceApiProps {
   time: string
 }
 
-export interface ConstructorsApiProps {
+export interface F1ConstructorsApiProps {
   constructorId: string
   name: string
   nationality: string
   url: string
 }
 
-export interface DriversApiProps {
+export interface F1DriversApiProps {
   code: string
   dateOfBirth: string
   driverId: string
@@ -33,10 +33,43 @@ export interface DriversApiProps {
   givenName: string
 }
 
-export interface ResultsApiProps {
+export interface F1ResultsApiProps {
   Driver: {
     driverId: string
   }
   position: string
   status: string
+}
+
+export interface LeagueResultsDbProps {
+  driver_id: string | null
+  leagues: {
+    name: string
+    invite_code: string
+  }
+  races: RacesDbProps
+}
+
+export interface RacesDbProps {
+  created_at: string
+  date: string
+  id: number
+  race_name: string
+  round_number: number
+  time: string
+  year: number
+}
+
+export interface RaceResultsDbProps {
+  created_at: string
+  driver_id: string
+  id: number
+  position: number
+  race_id: number
+  status: string
+  unique_index: string
+}
+
+export interface RacesWithResultsDbProps extends RacesDbProps {
+  race_results: RaceResultsDbProps[]
 }
