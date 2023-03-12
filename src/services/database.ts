@@ -42,54 +42,49 @@ export const insertIntoRaces = async (
   client: SupabaseClient,
   race: RaceApiProps
 ) => {
-  await client.from('races').upsert([
-    {
-      race_name: race.raceName,
-      round_number: race.round,
-      year: race.season,
-      date: race.date,
-      time: race.time,
-    },
-  ])
+  await client.from('races').upsert(
+    [
+      {
+        race_name: race.raceName,
+        round_number: race.round,
+        year: race.season,
+        date: race.date,
+        time: race.time,
+      },
+    ],
+    { onConflict: 'race_name', ignoreDuplicates: true }
+  )
 }
 
 export const insertIntoConstructors = async (
   client: SupabaseClient,
   constructor: ConstructorsApiProps
 ) => {
-  await client.from('constructor').upsert([
-    {
-      constructor_id: constructor.constructorId,
-      name: constructor.name,
-    },
-  ])
+  await client.from('constructor').upsert(
+    [
+      {
+        constructor_id: constructor.constructorId,
+        name: constructor.name,
+      },
+    ],
+    { onConflict: 'constructor_id', ignoreDuplicates: true }
+  )
 }
 
 export const insertIntoDrivers = async (
   client: SupabaseClient,
   driver: DriversApiProps
 ) => {
-  await client.from('drivers').upsert([
-    {
-      driver_id: driver.driverId,
-      last_name: driver.familyName,
-      given_name: driver.givenName,
-    },
-  ])
-}
-
-export const insertIntoRaceResults = async (
-  client: SupabaseClient,
-  driver: DriversApiProps
-) => {
-  await client.from('race_results').upsert([
-    {
-      race_id: 1,
-      position: null,
-      status: null,
-      driver_id: driver.driverId,
-    },
-  ])
+  await client.from('drivers').upsert(
+    [
+      {
+        driver_id: driver.driverId,
+        last_name: driver.familyName,
+        given_name: driver.givenName,
+      },
+    ],
+    { onConflict: 'driver_id', ignoreDuplicates: true }
+  )
 }
 
 export const updateRaceResultWithFinish = async (
