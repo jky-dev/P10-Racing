@@ -1,17 +1,22 @@
 import {
   Button,
   Divider,
-  Input,
   List,
   ListItem,
   TextField,
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
-import { setRaceResultsByRound, setRaces } from '../../services/f1'
+import { useSupabaseContext } from '../../contexts/SupabaseContext'
+import {
+  setConstructors,
+  setRaceResultsByRound,
+  setRaces,
+} from '../../services/f1'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
+  const { client } = useSupabaseContext()
 
   return (
     <List>
@@ -19,7 +24,7 @@ const AdminPanel: React.FC = () => {
         <Typography variant="body1" mr={2}>
           Set Race Details
         </Typography>
-        <Button onClick={() => setRaces()} variant="contained">
+        <Button onClick={() => setRaces(client)} variant="contained">
           Set Races
         </Button>
       </ListItem>
@@ -35,6 +40,15 @@ const AdminPanel: React.FC = () => {
           variant="contained"
         >
           Set Results By Round
+        </Button>
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <Typography variant="body1" mr={2}>
+          Set Constructors
+        </Typography>
+        <Button onClick={() => setConstructors(client)} variant="contained">
+          Set Constructors
         </Button>
       </ListItem>
     </List>
