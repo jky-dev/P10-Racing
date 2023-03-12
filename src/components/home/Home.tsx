@@ -1,11 +1,10 @@
 import { Typography } from '@mui/material'
 import React from 'react'
 import { Link as BrowserLink, Outlet } from 'react-router-dom'
+import { useSupabaseContext } from '../../contexts/SupabaseContext'
 
 const Home: React.FC = () => {
-  const user: any = {
-    uid: null,
-  }
+  const { user } = useSupabaseContext()
 
   return (
     <>
@@ -29,7 +28,7 @@ const Home: React.FC = () => {
                 </li>
               </>
             )}
-            {user?.uid === '4bxsPkapBEYiuZO07ix9vVh1eJZ2' && (
+            {user?.email === 'battlefield200@gmail.com' && (
               <li>
                 <BrowserLink to="/admin">Admin</BrowserLink>
               </li>

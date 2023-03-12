@@ -1,7 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './src/App'
-import { SupabaseProvider } from './src/contexts/Context'
+import { SupabaseProvider } from './src/contexts/SupabaseContext'
 
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'

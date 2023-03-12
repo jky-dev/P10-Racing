@@ -1,24 +1,13 @@
-import { SupabaseClient } from '@supabase/supabase-js'
 import React from 'react'
 import {
   SupabaseContextProps,
   useSupabaseContext,
-} from '../../contexts/Context'
-
-const fetchDataTest = async (client: SupabaseClient) => {
-  let { data: constructor, error } = await client
-    .from('constructor')
-    .select('*')
-
-  console.log(constructor)
-}
+} from '../../contexts/SupabaseContext'
 
 const About: React.FC = () => {
   const { client }: SupabaseContextProps = useSupabaseContext()
 
-  React.useEffect(() => {
-    fetchDataTest(client)
-  }, [])
+  React.useEffect(() => {}, [])
 
   return <div>Welcome to P10 Racing League!</div>
 }
