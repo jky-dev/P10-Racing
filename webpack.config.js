@@ -29,6 +29,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx', '.scss', '.css'],
   },
+  devtool: 'eval-source-map',
   module: {
     rules: [
       {

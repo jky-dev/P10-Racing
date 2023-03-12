@@ -1,29 +1,44 @@
 export interface RacesProps {
-  date: String
-  raceName: String
-  round: String
-  season: String
-  time: String
-  url: String
+  date: string
+  raceName: string
+  round: string
+  season: string
+  time: string
+  url: string
 }
 
 export interface RaceResult {
   Constructor: {
-    constructorId: String
-    name: String
-    nationality: String
-    url: String
+    constructorId: string
+    name: string
+    nationality: string
+    url: string
   }
   Driver: {
-    code: String
-    givenName: String
-    familyName: String
-    driverId: String
+    code: string
+    givenName: string
+    familyName: string
+    driverId: string
   }
   grid: number
   laps: number
   numberpoints: number
   position: number
-  positionText: String
-  status: String
+  positionText: string
+  status: string
+}
+
+export interface User {
+  email: string
+  username: string
+}
+
+interface LeagueUser {
+  id: string
+  name: string
+}
+
+export interface League {
+  members: LeagueUser[]
+  name: string
 }

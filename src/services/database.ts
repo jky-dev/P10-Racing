@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth'
-import { child, get, getDatabase, ref, set } from 'firebase/database'
+import { child, get, getDatabase, push, ref, set } from 'firebase/database'
 
 export const fetchPath = async (path: string) => {
   const dbRef = ref(getDatabase())
@@ -9,19 +9,31 @@ export const fetchPath = async (path: string) => {
   return value.val()
 }
 
-export const dbCreateLeague = () => {
-  const shortUuid = crypto.randomUUID().slice(0, 7)
-  console.log(shortUuid)
+export const dbCreateLeague = async (user: User, name: string) => {
+  // create a new league
+  const leagueKey = push(ref(getDatabase(), 'leagues'), {
+    name: name,
+  }).key
+
+  // add league to user
+  push(ref(getDatabase(), `users/${user.uid}/leagues`), {
+    league: leagueKey,
+    name: name,
+  })
+
+  // add user to league
+  push(ref(getDatabase(), `leagues/${leagueKey}/members`), {
+    id: user.uid,
+    name: user.displayName,
+  })
 }
 
-export const dbInitUser = (user: User) => {
-  const dbRef = ref(getDatabase())
+export const dbInitUser = async (user: User) => {
+  const dbUser = await fetchPath(`users/${user.uid}`)
 
-  get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-    if (!snapshot.exists()) {
-      setUpNewUser(user)
-    }
-  })
+  if (dbUser === null) {
+    setUpNewUser(user)
+  }
 }
 
 const setUpNewUser = (user: User) => {
