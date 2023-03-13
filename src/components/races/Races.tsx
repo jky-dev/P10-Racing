@@ -12,18 +12,20 @@ const Races: React.FC = () => {
   const { client }: { client: SupabaseClient } = useSupabaseContext()
 
   const init = async () => {
-    console.log('init')
     setLoading(true)
     const { data }: { data: RacesWithResultsDbProps[] } = await client
       .from('races')
       .select(`*, race_results ( * )`)
 
     const { data: drivers } = await client.from('drivers').select('*')
-    console.log(drivers)
-    console.log(data)
     setRaces(data)
     setRaceResults([])
     setLoading(false)
+  }
+
+  const formatDateTime = (race: RacesWithResultsDbProps) => {
+    const test = new Date(`${race.date} ${race.time}`)
+    return test.toLocaleString()
   }
 
   React.useEffect(() => {
@@ -44,6 +46,7 @@ const Races: React.FC = () => {
               <Card variant="outlined" sx={{ width: '300px' }}>
                 <CardContent>
                   <Typography variant="h6">{v.race_name}</Typography>
+                  <Typography variant="body1">{formatDateTime(v)}</Typography>
                   <Typography variant="body1">Results</Typography>
                   {v.race_results
                     .sort((a, b) => a.position - b.position)
