@@ -27,7 +27,6 @@ export const createLeague = async (
         name: name,
         invite_code: code,
         created_by_uuid: user.id,
-        members: [user.id],
       },
     ])
     .select()

@@ -45,12 +45,15 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     <div>
       Results
       <div>
+        {results.length !== 23 && <div>Error</div>}
         {results
           .sort((a, b) => a.races.round_number - b.races.round_number)
           .map((result) => {
             return (
               <div key={result.races.race_name}>
-                <h4>{result.races.race_name}</h4>
+                <h4>
+                  {result.races.round_number}. {result.races.race_name}
+                </h4>
                 <h5>{result.driver_id}</h5>
               </div>
             )
