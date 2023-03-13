@@ -20,18 +20,25 @@ export const createLeague = async (
   name: string,
   code: string
 ) => {
-  const { data: league_data } = await client
+  const { data: league_data, error } = await client
     .from('leagues')
     .insert([
       {
         name: name,
         invite_code: code,
         created_by_uuid: user.id,
+        members: [user.id],
       },
     ])
     .select()
 
+  if (error || league_data.length === 0) return
+
   const returnedRecord = league_data[0] as LeaguesProps
+
+  await client
+    .from('invite_codes')
+    .insert({ invite_code: code, league_id: returnedRecord.id })
 
   await addUserToLeague(client, returnedRecord.id, user.id)
 }
