@@ -20,8 +20,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .from('league_results')
       .select(
         `
-    races (race_name, round_number, year, date, time),
-    leagues (name, invite_code)`
+        driver_id,
+        races (race_name, round_number, year, date, time),
+        leagues (name, invite_code)`
       )
       .eq('league_id', leagueId)
 

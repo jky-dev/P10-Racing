@@ -26,6 +26,7 @@ const Leagues: React.FC = () => {
       crypto.randomUUID().slice(0, 6)
     )
     setLoading(false)
+    fetchLeagues()
   }
 
   const onJoinHandler = async () => {
@@ -35,6 +36,7 @@ const Leagues: React.FC = () => {
     setLoading(true)
     await joinLeague(client, user, leagueCode)
     setLoading(false)
+    fetchLeagues()
   }
 
   const fetchLeagues = async () => {
