@@ -33,18 +33,63 @@ export const createLeague = async (
 
   const returnedRecord = league_data[0] as LeaguesProps
 
-  await client
-    .from('league_members')
-    .insert([{ league_id: returnedRecord.id, user_uuid: user.id }])
+  await addUserToLeague(client, returnedRecord.id, user.id)
+}
 
+export const joinLeague = async (
+  client: SupabaseClient,
+  user: any,
+  code: string
+) => {
+  const { data }: { data: { id: number }[] } = await client
+    .from('leagues')
+    .select('id')
+    .eq('invite_code', code)
+
+  if (data.length !== 1) return
+
+  const leagueId = data[0].id
+
+  const { data: check } = await client
+    .from('league_members')
+    .select('*')
+    .eq('league_id', leagueId)
+    .eq('user_uuid', user.id)
+
+  if (check.length !== 0) return
+
+  await addUserToLeague(client, leagueId, user.id)
+}
+
+const addUserToLeague = async (
+  client: SupabaseClient,
+  leagueId: number,
+  userId: string
+) => {
+  await client.from('league_members').upsert(
+    [
+      {
+        league_id: leagueId,
+        user_uuid: userId,
+        index: `${leagueId}_${userId}`,
+      },
+    ],
+    { onConflict: 'index', ignoreDuplicates: true }
+  )
+
+  // race ids just happen to be 1 -> 23
   for (let i = 1; i < 24; i++) {
-    await client.from('league_results').upsert({
-      race_id: i,
-      driver_id: null,
-      points_gained: null,
-      league_id: returnedRecord.id,
-      user_uuid: user.id,
-    })
+    await client.from('league_results').upsert(
+      {
+        race_id: i,
+        driver_id: null,
+        points_gained: null,
+        league_id: leagueId,
+        user_uuid: userId,
+        index: `${i}_${leagueId}_${userId}`,
+      },
+      { onConflict: 'index', ignoreDuplicates: true }
+    )
   }
 }
 

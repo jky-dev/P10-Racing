@@ -1,15 +1,9 @@
 import { Button, TextField } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { createLeague } from '../../services/database'
+import { createLeague, joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
-
-const joinLeague = () => {
-  // add user to the league
-  // add league to the user
-  alert('Coming soon!')
-}
 
 const Leagues: React.FC = () => {
   const [leagueName, setLeagueName] = React.useState('')
@@ -31,6 +25,15 @@ const Leagues: React.FC = () => {
       leagueName,
       crypto.randomUUID().slice(0, 6)
     )
+    setLoading(false)
+  }
+
+  const onJoinHandler = async () => {
+    // add user to the league
+    // add league to the user
+    if (leagueCode.length === 0) return
+    setLoading(true)
+    await joinLeague(client, user, leagueCode)
     setLoading(false)
   }
 
@@ -82,7 +85,7 @@ const Leagues: React.FC = () => {
         >
           League code
         </TextField>
-        <Button variant="contained" onClick={joinLeague}>
+        <Button variant="contained" onClick={onJoinHandler}>
           Join a league
         </Button>
       </div>
