@@ -73,3 +73,11 @@ export interface RaceResultsDbProps {
 export interface RacesWithResultsDbProps extends RacesDbProps {
   race_results: RaceResultsDbProps[]
 }
+
+export interface DriversDbProps {
+  id: number
+  constructor: string
+  driver_id: string
+  given_name: string
+  last_name: string
+}

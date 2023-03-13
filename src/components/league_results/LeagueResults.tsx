@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { LeagueResultsDbProps } from '../../interfaces'
+import { DriversDbProps, LeagueResultsDbProps } from '../../interfaces'
 import Loader from '../loader/Loader'
 
 interface LeagueResultsProps {
@@ -12,7 +12,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     null
   )
   const [loading, setLoading] = React.useState(false)
-  const { client } = useSupabaseContext()
+  const { client, user } = useSupabaseContext()
+  const [drivers, setDrivers] = React.useState<Map<any, any> | null>(null)
+  const [settingMap, setSettingMap] = React.useState(false)
 
   const fetchResults = async () => {
     setLoading(true)
@@ -20,25 +22,41 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .from('league_results')
       .select(
         `
-        driver_id,
-        races (race_name, round_number, year, date, time),
-        leagues (name, invite_code)`
+          driver_id,
+          races (race_name, round_number, year, date, time),
+          leagues (name, invite_code)
+        `
       )
       .eq('league_id', leagueId)
+      .eq('user_uuid', user.id)
 
     setResults(data)
     console.log(data)
     setLoading(false)
   }
 
+  const fetchDrivers = async () => {
+    setSettingMap(true)
+    const { data }: { data: DriversDbProps[] } = await client
+      .from('drivers')
+      .select('*')
+    const driversMap = new Map()
+    data.forEach((driver) => {
+      driversMap.set(driver.id, driver)
+    })
+    setDrivers(driversMap)
+    setSettingMap(false)
+  }
+
   React.useEffect(() => {
     if (leagueId === null) return
     fetchResults()
+    fetchDrivers()
   }, [leagueId])
 
   if (leagueId === null) return null
 
-  if (loading) return <Loader />
+  if (loading || settingMap) return <Loader />
 
   if (results === null) return null
 
@@ -55,7 +73,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                 <h4>
                   {result.races.round_number}. {result.races.race_name}
                 </h4>
-                <h5>{result.driver_id}</h5>
+                <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
               </div>
             )
           })}
