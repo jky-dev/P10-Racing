@@ -1,6 +1,10 @@
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { DriversDbProps, LeagueResultsDbProps } from '../../interfaces'
+import {
+  DriversDbProps,
+  LeagueResultsDbProps,
+  RacesDbProps,
+} from '../../interfaces'
 import Loader from '../loader/Loader'
 
 interface LeagueResultsProps {
@@ -31,7 +35,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .eq('user_uuid', user.id)
 
     setResults(data)
-    console.log(data)
     setLoading(false)
   }
 
@@ -46,6 +49,11 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     })
     setDrivers(driversMap)
     setSettingMap(false)
+  }
+
+  const showPicker = (race: RacesDbProps) => {
+    const raceDate = Date.parse(`${race.date} ${race.time}`)
+    return raceDate > Date.now()
   }
 
   React.useEffect(() => {
@@ -73,7 +81,11 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                 <h4>
                   {result.races.round_number}. {result.races.race_name}
                 </h4>
-                <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
+                {showPicker(result.races) ? (
+                  <div>picker</div>
+                ) : (
+                  <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
+                )}
               </div>
             )
           })}

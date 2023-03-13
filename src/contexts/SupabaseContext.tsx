@@ -6,7 +6,6 @@ const SupabaseContext = createContext(null)
 SupabaseContext.displayName = 'Supabase Context'
 
 const useContext = () => {
-  console.log('using context')
   const [user, setUser] = React.useState(null)
   const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
   const supabaseKey =

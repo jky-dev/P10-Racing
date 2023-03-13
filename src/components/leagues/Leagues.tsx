@@ -43,7 +43,6 @@ const Leagues: React.FC = () => {
     setLoading(true)
     const { data } = await client.from('league_members').select(`
     league_id, leagues (name)`)
-    console.log(data)
     setJoinedLeagues(data)
     setLoading(false)
   }
