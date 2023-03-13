@@ -19,10 +19,7 @@ const useContext = () => {
       data: { user },
     } = await client.auth.getUser()
     if (user) {
-      const { data } = await client
-        .from('users')
-        .select('*')
-        .eq('email', user.email)
+      const { data } = await client.from('users').select('email')
 
       if (data.length === 0) {
         const { data } = await client
