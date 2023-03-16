@@ -7,6 +7,9 @@ import { useSupabaseContext } from '../../contexts/SupabaseContext'
 const signIn = (client: SupabaseClient) => {
   client.auth.signInWithOAuth({
     provider: 'google',
+    options: {
+      redirectTo: window.location.origin,
+    },
   })
 }
 
