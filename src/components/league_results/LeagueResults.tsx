@@ -6,6 +6,7 @@ import {
   RacesDbProps,
 } from '../../interfaces'
 import Loader from '../loader/Loader'
+import Picker from './Picker'
 
 interface LeagueResultsProps {
   leagueId: string
@@ -17,7 +18,10 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   )
   const [loading, setLoading] = React.useState(false)
   const { client, user } = useSupabaseContext()
-  const [drivers, setDrivers] = React.useState<Map<any, any> | null>(null)
+  const [drivers, setDrivers] = React.useState<Map<
+    number,
+    DriversDbProps
+  > | null>(null)
   const [settingMap, setSettingMap] = React.useState(false)
 
   const fetchResults = async () => {
@@ -26,7 +30,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .from('league_results')
       .select(
         `
-          driver_id,
+          id, driver_id, race_id, index, league_id,
           races (race_name, round_number, year, date, time),
           leagues (name, invite_code)
         `
@@ -56,6 +60,17 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     return raceDate > Date.now()
   }
 
+  const submitDriver = async (driverId: number, rowId: number) => {
+    const { error } = await client
+      .from('league_results')
+      .update({
+        driver_id: driverId,
+      })
+      .eq('id', rowId)
+
+    if (!error) console.log('updated', driverId, rowId)
+  }
+
   React.useEffect(() => {
     if (leagueId === null) return
     fetchResults()
@@ -71,24 +86,29 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   return (
     <div>
       Results
+      <div>Invite code: {results[0].leagues.invite_code}</div>
       <div>
         {results.length !== 23 && <div>Error</div>}
         {results
           .sort((a, b) => a.races.round_number - b.races.round_number)
-          .map((result) => {
-            return (
-              <div key={result.races.race_name}>
-                <h4>
-                  {result.races.round_number}. {result.races.race_name}
-                </h4>
-                {showPicker(result.races) ? (
-                  <div>picker</div>
-                ) : (
-                  <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
-                )}
-              </div>
-            )
-          })}
+          .map((result) => (
+            <div key={result.races.race_name}>
+              <h4>
+                {result.races.round_number}.{result.races.race_name}
+              </h4>
+              {showPicker(result.races) ? (
+                <Picker
+                  id={result.races.race_name}
+                  rowId={result.id}
+                  drivers={drivers}
+                  submitHandler={submitDriver}
+                  preSelectedDriver={result.driver_id}
+                />
+              ) : (
+                <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   )

@@ -42,7 +42,11 @@ export interface F1ResultsApiProps {
 }
 
 export interface LeagueResultsDbProps {
-  driver_id: string | null
+  id: number
+  driver_id: number | null
+  index: string
+  race_id: number
+  league_id: number
   leagues: {
     name: string
     invite_code: string
