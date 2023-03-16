@@ -55,6 +55,13 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     setSettingMap(false)
   }
 
+  const driverName = (driverId: number | null): string => {
+    if (driverId === null) return ''
+    return (
+      drivers.get(driverId).given_name + ' ' + drivers.get(driverId).last_name
+    )
+  }
+
   const showPicker = (race: RacesDbProps) => {
     const raceDate = Date.parse(`${race.date} ${race.time}`)
     return raceDate > Date.now()
@@ -105,7 +112,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                   preSelectedDriver={result.driver_id}
                 />
               ) : (
-                <h5>Pick: {drivers.get(result.driver_id)?.given_name}</h5>
+                <h5>Pick: {driverName(result.driver_id)}</h5>
               )}
             </div>
           ))}
