@@ -56,7 +56,7 @@ const Leagues: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <Typography>My Leagues</Typography>
+      <Typography variant="h4">My Leagues</Typography>
       <div className={styles.leaguesContainer}>
         {joinedLeagues.map((league) => {
           return (

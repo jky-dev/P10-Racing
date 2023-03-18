@@ -7,14 +7,15 @@ import {
   SelectChangeEvent,
 } from '@mui/material'
 import React from 'react'
-import { DriversDbProps } from '../../interfaces'
-
+import { DriversDbProps } from '../../../interfaces'
+import styles from './Picker.module.scss'
 interface PickerProps {
   id: string
   drivers: Map<number, DriversDbProps>
   submitHandler: any
   preSelectedDriver: number | null
   rowId: number
+  disabled?: boolean
 }
 
 const Picker: React.FC<PickerProps> = ({
@@ -23,6 +24,7 @@ const Picker: React.FC<PickerProps> = ({
   submitHandler,
   preSelectedDriver,
   rowId,
+  disabled = false,
 }) => {
   const [driver, setDriver] = React.useState<number>(preSelectedDriver ?? -1)
 
@@ -36,7 +38,7 @@ const Picker: React.FC<PickerProps> = ({
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <FormControl key={id} sx={{ m: 1, width: 200 }}>
         <InputLabel id={`picker-label-${id}`}>Driver</InputLabel>
         <Select
@@ -44,6 +46,7 @@ const Picker: React.FC<PickerProps> = ({
           value={driver.toString()}
           label="Driver"
           onChange={handleChange}
+          disabled={disabled}
         >
           <MenuItem value={-1} disabled>
             Pick a driver
@@ -59,7 +62,7 @@ const Picker: React.FC<PickerProps> = ({
       </FormControl>
       <Button
         onClick={handleSubmit}
-        disabled={driver === -1}
+        disabled={driver === -1 || disabled}
         variant="outlined"
       >
         Submit

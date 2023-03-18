@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import {
@@ -6,7 +7,7 @@ import {
   RacesDbProps,
 } from '../../interfaces'
 import Loader from '../loader/Loader'
-import Picker from './Picker'
+import Picker from './Picker/Picker'
 
 interface LeagueResultsProps {
   leagueId: string
@@ -55,16 +56,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     setSettingMap(false)
   }
 
-  const driverName = (driverId: number | null): string => {
-    if (driverId === null) return ''
-    return (
-      drivers.get(driverId).given_name + ' ' + drivers.get(driverId).last_name
-    )
-  }
-
-  const showPicker = (race: RacesDbProps) => {
+  const disabled = (race: RacesDbProps) => {
     const raceDate = Date.parse(`${race.date} ${race.time}`)
-    return raceDate > Date.now()
+    return raceDate < Date.now()
   }
 
   const submitDriver = async (driverId: number, rowId: number) => {
@@ -92,28 +86,25 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   return (
     <div>
-      Results
-      <div>Invite code: {results[0].leagues.invite_code}</div>
+      <Typography variant="h4">Results</Typography>
+      <Typography>Invite code: {results[0].leagues.invite_code}</Typography>
       <div>
         {results.length !== 23 && <div>Error</div>}
         {results
           .sort((a, b) => a.races.round_number - b.races.round_number)
           .map((result) => (
             <div key={result.races.race_name}>
-              <h4>
-                {result.races.round_number}.{result.races.race_name}
-              </h4>
-              {showPicker(result.races) ? (
-                <Picker
-                  id={result.races.race_name}
-                  rowId={result.id}
-                  drivers={drivers}
-                  submitHandler={submitDriver}
-                  preSelectedDriver={result.driver_id}
-                />
-              ) : (
-                <h5>Pick: {driverName(result.driver_id)}</h5>
-              )}
+              <Typography>
+                {result.races.round_number}. {result.races.race_name}
+              </Typography>
+              <Picker
+                id={result.races.race_name}
+                rowId={result.id}
+                drivers={drivers}
+                submitHandler={submitDriver}
+                preSelectedDriver={result.driver_id}
+                disabled={disabled(result.races)}
+              />
             </div>
           ))}
       </div>
