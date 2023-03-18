@@ -72,7 +72,7 @@ const Leagues: React.FC = () => {
         })}
       </div>
       <LeagueResults leagueId={leagueId} />
-      <div>
+      <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league name"
           value={leagueName}
@@ -80,11 +80,13 @@ const Leagues: React.FC = () => {
         >
           League name
         </TextField>
-        <Button variant="contained" onClick={onCreateHandler}>
-          Create a league
-        </Button>
+        <span>
+          <Button variant="contained" onClick={onCreateHandler}>
+            Create a league
+          </Button>
+        </span>
       </div>
-      <div>
+      <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league code here"
           value={leagueCode}
@@ -92,9 +94,11 @@ const Leagues: React.FC = () => {
         >
           League code
         </TextField>
-        <Button variant="contained" onClick={onJoinHandler}>
-          Join a league
-        </Button>
+        <span>
+          <Button variant="contained" onClick={onJoinHandler}>
+            Join a league
+          </Button>
+        </span>
       </div>
     </div>
   )
