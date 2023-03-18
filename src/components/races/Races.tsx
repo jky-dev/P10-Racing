@@ -4,6 +4,7 @@ import {
   SupabaseContextProps,
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
+import { formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
 import styles from './Races.module.scss'
 
@@ -12,7 +13,7 @@ const Races: React.FC = () => {
     useSupabaseContext()
 
   const formatDateTime = (race: RacesDbProps) => {
-    return new Date(`${race.date} ${race.time}`).toLocaleString()
+    return formatRaceDateTime(race.date, race.time)
   }
 
   const raceName = (name: string) => {

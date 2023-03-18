@@ -10,7 +10,7 @@ const Leagues: React.FC = () => {
   const [leagueName, setLeagueName] = React.useState('')
   const [leagueCode, setLeagueCode] = React.useState('')
   const [leagueId, setLeagueId] = React.useState(null)
-  const { client, user } = useSupabaseContext()
+  const { client, user, loading: userLoading } = useSupabaseContext()
   const [loading, setLoading] = React.useState(false)
   const [joinedLeagues, setJoinedLeagues] = React.useState([])
 
@@ -56,10 +56,11 @@ const Leagues: React.FC = () => {
   }
 
   React.useEffect(() => {
+    if (user === null) return
     fetchLeagues()
-  }, [])
+  }, [user])
 
-  if (loading) return <Loader />
+  if (userLoading || loading) return <Loader />
 
   return (
     <div className={styles.container}>
