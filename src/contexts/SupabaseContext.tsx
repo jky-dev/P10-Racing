@@ -25,7 +25,7 @@ const useContext = () => {
     DriversDbProps
   > | null>(null)
   const [races, setRaces] = React.useState<RacesDbProps[]>([])
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(true)
   const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
   const supabaseKey =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcnFsZGdhZmJhYWdmY3hiY3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg1OTE1NjYsImV4cCI6MTk5NDE2NzU2Nn0.5zGGuJVpBoYLUCr53Haz671UMJw0AtFAHJo9giqnYYA'
@@ -37,7 +37,10 @@ const useContext = () => {
       data: { user },
     } = await client.auth.getUser()
     if (user) {
-      const { data } = await client.from('users').select('email')
+      const { data } = await client
+        .from('users')
+        .select('email')
+        .eq('email', user.email)
 
       if (data.length === 0) {
         const defaultName = user.email.split('@')[0]
@@ -86,13 +89,17 @@ const useContext = () => {
     console.log(dIdMap)
     setDriversMap(dMap)
     setDriverIdMap(dIdMap)
-    setLoading(false)
+  }
+
+  const loadDetails = async () => {
+    await checkUser()
+    await setData()
   }
 
   React.useEffect(() => {
     setLoading(true)
-    checkUser()
-    setData()
+    loadDetails()
+    setLoading(false)
   }, [])
 
   return {
