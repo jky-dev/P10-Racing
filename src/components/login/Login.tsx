@@ -1,7 +1,6 @@
 import { Button } from '@mui/material'
 import { SupabaseClient } from '@supabase/supabase-js'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 
 const signIn = (client: SupabaseClient) => {
@@ -14,8 +13,7 @@ const signIn = (client: SupabaseClient) => {
 }
 
 const Login: React.FC = () => {
-  const { client, setUser } = useSupabaseContext()
-  const navigate = useNavigate()
+  const { client } = useSupabaseContext()
 
   return (
     <>

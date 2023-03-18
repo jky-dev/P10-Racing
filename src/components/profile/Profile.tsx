@@ -32,6 +32,7 @@ const Profile = () => {
         <>
           <Typography variant="h4">Coming soon</Typography>
           <Typography variant="h5">Email: {profile?.email}</Typography>
+          
           <Typography variant="h5">Name: {profile?.name}</Typography>
         </>
       )}

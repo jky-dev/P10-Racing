@@ -5,6 +5,7 @@ import {
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
 import { RacesDbProps } from '../../interfaces'
+import styles from './Races.module.scss'
 
 const Races: React.FC = () => {
   const { raceResultsMap, races, driversIdMap, loading }: SupabaseContextProps =
@@ -14,15 +15,19 @@ const Races: React.FC = () => {
     return new Date(`${race.date} ${race.time}`).toLocaleString()
   }
 
+  const raceName = (name: string) => {
+    return name.split(' Grand Prix')[0]
+  }
+
   return (
-    <>
+    <div className={styles.container}>
       {races
         .sort((a, b) => a.round_number - b.round_number)
         .map((race) => (
           <span key={race.race_name as Key}>
-            <Card variant="outlined" sx={{ width: '300px' }}>
+            <Card variant="outlined" sx={{ width: '250px' }}>
               <CardContent>
-                <Typography variant="h6">{race.race_name}</Typography>
+                <Typography variant="h6">{raceName(race.race_name)}</Typography>
                 <Typography variant="body1">{formatDateTime(race)}</Typography>
                 <Typography variant="body1">Results</Typography>
                 {raceResultsMap
@@ -39,7 +44,7 @@ const Races: React.FC = () => {
             </Card>
           </span>
         ))}
-    </>
+    </div>
   )
 }
 

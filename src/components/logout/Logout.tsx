@@ -18,9 +18,11 @@ const Logout: React.FC = () => {
   }, [])
 
   return (
-    <Button onClick={() => goodbye()} variant="contained">
-      Log out
-    </Button>
+    <span>
+      <Button onClick={() => goodbye()} variant="contained">
+        Log out
+      </Button>
+    </span>
   )
 }
 

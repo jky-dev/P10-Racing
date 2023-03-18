@@ -8,9 +8,7 @@ const Home: React.FC = () => {
     <div className={styles.container}>
       <Navigation />
       <div className={styles.layout}>
-        <div>
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </div>
   )
