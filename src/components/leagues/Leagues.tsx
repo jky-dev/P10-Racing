@@ -42,8 +42,14 @@ const Leagues: React.FC = () => {
 
   const fetchLeagues = async () => {
     setLoading(true)
-    const { data } = await client.from('league_members').select(`
-    league_id, leagues (name)`)
+    const { data } = await client
+      .from('league_members')
+      .select(
+        `
+          league_id, leagues (name)
+        `
+      )
+      .eq('user_uuid', user.id)
     setJoinedLeagues(data)
     setLoading(false)
   }

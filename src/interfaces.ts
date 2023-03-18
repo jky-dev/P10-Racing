@@ -42,6 +42,7 @@ export interface F1ResultsApiProps {
 }
 
 export interface LeagueResultsDbProps {
+  created_at: string
   id: number
   driver_id: number | null
   index: string
@@ -52,6 +53,8 @@ export interface LeagueResultsDbProps {
     invite_code: string
   }
   races: RacesDbProps
+  user_uuid: string
+  users: UserDbProps
 }
 
 export interface RacesDbProps {
@@ -84,4 +87,11 @@ export interface DriversDbProps {
   driver_id: string
   given_name: string
   last_name: string
+}
+
+export interface UserDbProps {
+  created_at: string
+  email: string
+  name: string | null
+  uuid: string
 }

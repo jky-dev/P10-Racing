@@ -40,9 +40,11 @@ const useContext = () => {
       const { data } = await client.from('users').select('email')
 
       if (data.length === 0) {
+        const defaultName = user.email.split('@')[0]
+
         await client
           .from('users')
-          .insert([{ email: user.email, uuid: user.id }])
+          .insert([{ email: user.email, uuid: user.id, name: defaultName }])
       }
     }
     setUser(user)

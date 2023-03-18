@@ -7,10 +7,11 @@ import {
   RacesDbProps,
 } from '../../interfaces'
 import Loader from '../loader/Loader'
+import styles from './LeagueResults.module.scss'
 import Picker from './Picker/Picker'
 
 interface LeagueResultsProps {
-  leagueId: string
+  leagueId: number
 }
 
 const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
@@ -24,6 +25,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     DriversDbProps
   > | null>(null)
   const [settingMap, setSettingMap] = React.useState(false)
+  const [leagueMembers, setLeagueMembers] = React.useState<string[]>([])
 
   const fetchResults = async () => {
     setLoading(true)
@@ -31,15 +33,31 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .from('league_results')
       .select(
         `
-          id, driver_id, race_id, index, league_id,
+          *,
           races (race_name, round_number, year, date, time),
           leagues (name, invite_code)
         `
       )
       .eq('league_id', leagueId)
-      .eq('user_uuid', user.id)
 
-    setResults(data)
+    console.log(data)
+
+    const personalResults = data.filter((value) => value.user_uuid === user.id)
+
+    const { data: leagueMembers }: { data: LeagueResultsDbProps[] } =
+      await client
+        .from('league_members')
+        .select(
+          `*,
+            users (*)
+          `
+        )
+        .eq('league_id', leagueId)
+
+    console.log(leagueMembers)
+    setLeagueMembers(leagueMembers.map((member) => member.users.name))
+
+    setResults(personalResults)
     setLoading(false)
   }
 
@@ -86,6 +104,12 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   return (
     <div>
+      <div className={styles.memberContainer}>
+        <Typography variant="h4">Members</Typography>
+        {leagueMembers.map((member) => (
+          <Typography key={member}>{member}</Typography>
+        ))}
+      </div>
       <Typography variant="h4">Results</Typography>
       <Typography>Invite code: {results[0].leagues.invite_code}</Typography>
       <div>
