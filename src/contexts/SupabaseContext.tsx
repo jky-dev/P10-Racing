@@ -37,18 +37,16 @@ const useContext = () => {
       data: { user },
     } = await client.auth.getUser()
     if (user) {
-      const { data } = await client
-        .from('users')
-        .select('email')
-        .eq('email', user.email)
+      const defaultName = user.email.split('@')[0]
 
-      if (data.length === 0) {
-        const defaultName = user.email.split('@')[0]
-
+      try {
         await client
           .from('users')
-          .insert([{ email: user.email, uuid: user.id, name: defaultName }])
-      }
+          .upsert(
+            { email: user.email, uuid: user.id, name: defaultName },
+            { onConflict: 'uuid', ignoreDuplicates: true }
+          )
+      } catch (exception) {}
     }
     setUser(user)
   }

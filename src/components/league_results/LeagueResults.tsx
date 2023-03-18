@@ -108,7 +108,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       <Typography variant="h4">Results</Typography>
       <Typography>Invite code: {results[0].leagues.invite_code}</Typography>
       <div>
-        {results.length !== 23 && <div>Error</div>}
+        {results.length !== 23 && <div>Error - missing some results</div>}
         {results
           .sort((a, b) => a.races.round_number - b.races.round_number)
           .map((result) => (
