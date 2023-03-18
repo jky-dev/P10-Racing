@@ -5,9 +5,11 @@ import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
 import Home from './components/home/Home'
 import Leagues from './components/leagues/Leagues'
+import Loader from './components/loader/Loader'
 import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
 import Races from './components/races/Races'
+import { useSupabaseContext } from './contexts/SupabaseContext'
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,8 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
+  const { loading } = useSupabaseContext()
+  if (loading) return <Loader />
   return <RouterProvider router={router} />
 }
 export default App

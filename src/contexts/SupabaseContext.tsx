@@ -1,19 +1,38 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js'
 import React, { createContext, ReactNode } from 'react'
+import { DriversDbProps, RaceResultsDbProps, RacesDbProps } from '../interfaces'
 
 const SupabaseContext = createContext(null)
 
 SupabaseContext.displayName = 'Supabase Context'
 
 const useContext = () => {
-  const [user, setUser] = React.useState(null)
+  const [user, setUser] = React.useState<User | null>(null)
+  const [driversMap, setDriversMap] = React.useState<Map<
+    number,
+    DriversDbProps
+  > | null>(null)
+  const [racesMap, setRacesMap] = React.useState<Map<
+    number,
+    RacesDbProps
+  > | null>(null)
+  const [raceResultsMap, setRaceResultsMap] = React.useState<Map<
+    number,
+    RaceResultsDbProps[]
+  > | null>(null)
+  const [driversIdMap, setDriverIdMap] = React.useState<Map<
+    string,
+    DriversDbProps
+  > | null>(null)
+  const [races, setRaces] = React.useState<RacesDbProps[]>([])
+  const [loading, setLoading] = React.useState(false)
   const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
   const supabaseKey =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcnFsZGdhZmJhYWdmY3hiY3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg1OTE1NjYsImV4cCI6MTk5NDE2NzU2Nn0.5zGGuJVpBoYLUCr53Haz671UMJw0AtFAHJo9giqnYYA'
 
   const client = createClient(supabaseUrl, supabaseKey)
 
-  const checkUser = async (client: SupabaseClient) => {
+  const checkUser = async () => {
     const {
       data: { user },
     } = await client.auth.getUser()
@@ -21,7 +40,7 @@ const useContext = () => {
       const { data } = await client.from('users').select('email')
 
       if (data.length === 0) {
-        const { data } = await client
+        await client
           .from('users')
           .insert([{ email: user.email, uuid: user.id }])
       }
@@ -29,10 +48,62 @@ const useContext = () => {
     setUser(user)
   }
 
+  const setData = async () => {
+    const { data: drivers }: { data: DriversDbProps[] } = await client
+      .from('drivers')
+      .select('*')
+
+    const { data: dbRaces }: { data: RacesDbProps[] } = await client
+      .from('races')
+      .select('*')
+
+    const { data: raceResults }: { data: RaceResultsDbProps[] } = await client
+      .from('race_results')
+      .select('*')
+
+    const rrMap = new Map<number, RaceResultsDbProps[]>()
+    const rMap = new Map()
+    for (const race of dbRaces) {
+      rMap.set(race.id, race)
+      rrMap.set(race.id, [])
+    }
+    for (const raceResult of raceResults) {
+      rrMap.get(raceResult.race_id).push(raceResult)
+    }
+    setRacesMap(rMap)
+    setRaces(dbRaces)
+    setRaceResultsMap(rrMap)
+    console.log(rrMap, rMap)
+
+    const dMap = new Map()
+    const dIdMap = new Map()
+    for (const driver of drivers) {
+      dMap.set(driver.id, driver)
+      dIdMap.set(driver.driver_id, driver)
+    }
+    console.log(dIdMap)
+    setDriversMap(dMap)
+    setDriverIdMap(dIdMap)
+    setLoading(false)
+  }
+
   React.useEffect(() => {
-    checkUser(client)
+    setLoading(true)
+    checkUser()
+    setData()
   }, [])
-  return { client, user, setUser }
+
+  return {
+    client,
+    user,
+    setUser,
+    driversMap,
+    driversIdMap,
+    racesMap,
+    raceResultsMap,
+    races,
+    loading,
+  }
 }
 
 interface Props {
@@ -41,6 +112,14 @@ interface Props {
 
 export interface SupabaseContextProps {
   client: SupabaseClient
+  user: User
+  setUser: React.Dispatch<React.SetStateAction<User>>
+  driversMap: Map<number, DriversDbProps>
+  racesMap: Map<number, RacesDbProps>
+  raceResultsMap: Map<number, RaceResultsDbProps[]>
+  races: RacesDbProps[]
+  driversIdMap: Map<string, DriversDbProps>
+  loading: boolean
 }
 
 export const useSupabaseContext = () => {

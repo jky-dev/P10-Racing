@@ -1,65 +1,44 @@
 import { Card, CardContent, Typography } from '@mui/material'
-import { SupabaseClient } from '@supabase/supabase-js'
-import React, { Key, useState } from 'react'
-import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { RacesWithResultsDbProps } from '../../interfaces'
-import Loader from '../loader/Loader'
+import React, { Key } from 'react'
+import {
+  SupabaseContextProps,
+  useSupabaseContext,
+} from '../../contexts/SupabaseContext'
+import { RacesDbProps } from '../../interfaces'
 
 const Races: React.FC = () => {
-  const [races, setRaces] = useState<RacesWithResultsDbProps[] | null>(null)
-  const [raceResults, setRaceResults] = useState([])
-  const [loading, setLoading] = useState(true)
-  const { client }: { client: SupabaseClient } = useSupabaseContext()
+  const { raceResultsMap, races, driversIdMap, loading }: SupabaseContextProps =
+    useSupabaseContext()
 
-  const init = async () => {
-    setLoading(true)
-    const { data }: { data: RacesWithResultsDbProps[] } = await client
-      .from('races')
-      .select(`*, race_results ( * )`)
-
-    const { data: drivers } = await client.from('drivers').select('*')
-    setRaces(data)
-    setRaceResults([])
-    setLoading(false)
+  const formatDateTime = (race: RacesDbProps) => {
+    return new Date(`${race.date} ${race.time}`).toLocaleString()
   }
-
-  const formatDateTime = (race: RacesWithResultsDbProps) => {
-    const test = new Date(`${race.date} ${race.time}`)
-    return test.toLocaleString()
-  }
-
-  React.useEffect(() => {
-    init()
-  }, [])
-
-  if (races === null) return null
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        races
-          .sort((a, b) => a.round_number - b.round_number)
-          .map((v) => (
-            <span key={v.race_name as Key}>
-              <Card variant="outlined" sx={{ width: '300px' }}>
-                <CardContent>
-                  <Typography variant="h6">{v.race_name}</Typography>
-                  <Typography variant="body1">{formatDateTime(v)}</Typography>
-                  <Typography variant="body1">Results</Typography>
-                  {v.race_results
-                    .sort((a, b) => a.position - b.position)
-                    .map((result) => (
-                      <Typography variant="body2" key={result.position}>
-                        {result.position}: {result.driver_id}
-                      </Typography>
-                    ))}
-                </CardContent>
-              </Card>
-            </span>
-          ))
-      )}
+      {races
+        .sort((a, b) => a.round_number - b.round_number)
+        .map((race) => (
+          <span key={race.race_name as Key}>
+            <Card variant="outlined" sx={{ width: '300px' }}>
+              <CardContent>
+                <Typography variant="h6">{race.race_name}</Typography>
+                <Typography variant="body1">{formatDateTime(race)}</Typography>
+                <Typography variant="body1">Results</Typography>
+                {raceResultsMap
+                  .get(race.id)
+                  .sort((a, b) => a.position - b.position)
+                  .map((result) => (
+                    <Typography variant="body2" key={result.position}>
+                      {result.position}:{' '}
+                      {driversIdMap.get(result.driver_id).given_name}{' '}
+                      {driversIdMap.get(result.driver_id).last_name}
+                    </Typography>
+                  ))}
+              </CardContent>
+            </Card>
+          </span>
+        ))}
     </>
   )
 }
