@@ -10,4 +10,4 @@ tested with Node v18.15
 # Production
 Hosted on AWS S3 with Supabase
 
-http://p10racingleague.s3-website-ap-southeast-2.amazonaws.com/
+https://www.p10racing.app
