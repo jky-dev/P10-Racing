@@ -40,8 +40,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       )
       .eq('league_id', leagueId)
 
-    console.log(data)
-
     const personalResults = data.filter((value) => value.user_uuid === user.id)
 
     const { data: leagueMembers }: { data: LeagueResultsDbProps[] } =
@@ -54,7 +52,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         )
         .eq('league_id', leagueId)
 
-    console.log(leagueMembers)
     setLeagueMembers(leagueMembers.map((member) => member.users.name))
 
     setResults(personalResults)
@@ -86,8 +83,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         driver_id: driverId,
       })
       .eq('id', rowId)
-
-    if (!error) console.log('updated', driverId, rowId)
   }
 
   React.useEffect(() => {

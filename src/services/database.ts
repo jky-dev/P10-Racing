@@ -1,5 +1,4 @@
 import { SupabaseClient } from '@supabase/supabase-js'
-import { useSupabaseContext } from '../contexts/SupabaseContext'
 import {
   F1ConstructorsApiProps,
   F1DriversApiProps,
@@ -7,12 +6,6 @@ import {
   F1ResultsApiProps,
   LeaguesProps,
 } from '../interfaces'
-
-export const test = async () => {
-  const { client } = useSupabaseContext()
-  const { data, error } = await client.from('constructor').select('*')
-  console.log(data)
-}
 
 export const createLeague = async (
   client: SupabaseClient,

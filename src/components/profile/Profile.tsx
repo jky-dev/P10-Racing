@@ -15,7 +15,6 @@ const Profile = () => {
       .select('*')
       .eq('uuid', user.id)
 
-    console.log(data)
     setProfile(data[0])
     setLoading(false)
   }

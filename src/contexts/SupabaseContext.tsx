@@ -78,7 +78,6 @@ const useContext = () => {
     setRacesMap(rMap)
     setRaces(dbRaces)
     setRaceResultsMap(rrMap)
-    console.log(rrMap, rMap)
 
     const dMap = new Map()
     const dIdMap = new Map()
@@ -86,7 +85,6 @@ const useContext = () => {
       dMap.set(driver.id, driver)
       dIdMap.set(driver.driver_id, driver)
     }
-    console.log(dIdMap)
     setDriversMap(dMap)
     setDriverIdMap(dIdMap)
   }
