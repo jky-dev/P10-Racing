@@ -8,6 +8,7 @@ import Leagues from './components/leagues/Leagues'
 import Loader from './components/loader/Loader'
 import Login from './components/login/Login'
 import Logout from './components/logout/Logout'
+import Profile from './components/profile/Profile'
 import Races from './components/races/Races'
 import { useSupabaseContext } from './contexts/SupabaseContext'
 
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <div>Coming soon</div>,
+        element: <Profile />,
         errorElement: <GenericError />,
       },
       {

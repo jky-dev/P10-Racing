@@ -7,8 +7,10 @@ const Home: React.FC = () => {
   return (
     <div className={styles.container}>
       <Navigation />
-      <div style={{ marginTop: '4rem' }}>
-        <Outlet />
+      <div className={styles.layout}>
+        <div>
+          <Outlet />
+        </div>
       </div>
     </div>
   )

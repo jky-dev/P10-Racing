@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
@@ -16,7 +17,11 @@ const Logout: React.FC = () => {
     if (!user) navigate('/')
   }, [])
 
-  return <button onClick={() => goodbye()}>Log out</button>
+  return (
+    <Button onClick={() => goodbye()} variant="contained">
+      Log out
+    </Button>
+  )
 }
 
 export default Logout

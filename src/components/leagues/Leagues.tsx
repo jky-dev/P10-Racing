@@ -1,9 +1,10 @@
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { createLeague, joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
+import styles from './Leagues.module.scss'
 
 const Leagues: React.FC = () => {
   const [leagueName, setLeagueName] = React.useState('')
@@ -54,17 +55,22 @@ const Leagues: React.FC = () => {
   if (loading) return <Loader />
 
   return (
-    <>
-      <div>My Leagues</div>
-      {joinedLeagues.map((league) => {
-        return (
-          <div key={league.leagues.name}>
-            <Button onClick={() => setLeagueId(league.league_id)}>
-              {league.leagues.name}
-            </Button>
-          </div>
-        )
-      })}
+    <div className={styles.container}>
+      <Typography>My Leagues</Typography>
+      <div className={styles.leaguesContainer}>
+        {joinedLeagues.map((league) => {
+          return (
+            <span key={league.league_id}>
+              <Button
+                onClick={() => setLeagueId(league.league_id)}
+                variant="outlined"
+              >
+                {league.leagues.name}
+              </Button>
+            </span>
+          )
+        })}
+      </div>
       <LeagueResults leagueId={leagueId} />
       <div>
         <TextField
@@ -90,7 +96,7 @@ const Leagues: React.FC = () => {
           Join a league
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 

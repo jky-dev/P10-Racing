@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.leaguesContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
