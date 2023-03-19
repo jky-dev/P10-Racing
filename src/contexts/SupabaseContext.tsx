@@ -64,7 +64,9 @@ const useContext: () => SupabaseContextProps | null = () => {
 
     const rrMap = new Map<number, RaceResultsDbProps[]>()
     const rMap = new Map()
-    for (const race of dbRaces) {
+    for (const race of dbRaces.sort(
+      (a, b) => a.round_number - b.round_number
+    )) {
       rMap.set(race.id, race)
       rrMap.set(race.id, [])
     }

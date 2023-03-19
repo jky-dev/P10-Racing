@@ -25,13 +25,16 @@ interface LeagueResultsProps {
 }
 
 const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
-  const [results, setResults] = React.useState<LeagueResultsDbProps[] | null>(
-    null
+  const [loading, setLoading] = React.useState(true)
+  const { client, user, driversMap, races } = useSupabaseContext()
+  const [leagueMembers, setLeagueMembers] = React.useState(
+    new Map<string, LeagueMembersDbProps>()
   )
-  const [loading, setLoading] = React.useState(false)
-  const { client, user, driversMap } = useSupabaseContext()
-  const [leagueMembers, setLeagueMembers] = React.useState<string[]>([])
-  const [nextRaceRound, setNextRaceRound] = React.useState(-1)
+  const [nextRaceRoundId, setNextRaceRoundId] = React.useState(-1)
+  const [leagueResultsMap, setLeagueResultsMap] = React.useState(
+    new Map<string, Map<number, LeagueResultsDbProps>>()
+  )
+
   const { sendAlert } = useUtilsContext()
 
   const fetchResults = async () => {
@@ -41,36 +44,40 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .select(
         `
           *,
-          races (race_name, round_number, year, date, time),
           leagues (name, invite_code)
         `
       )
       .eq('league_id', leagueId)
 
-    const personalResults = (data as LeagueResultsDbProps[])
-      .filter((value) => value.user_uuid === user!.id || value.races === null)
-      .sort((a, b) => a!.races!.round_number! - b!.races!.round_number!)
-
-    setNextRaceRound(
-      personalResults.findIndex((value) => !disabled(value.races))
-    )
-
     const { data: leagueMembers }: { data: unknown } = await client
       .from('league_members')
       .select(
         `*,
-            users (*)
-          `
+          users (*)
+        `
       )
       .eq('league_id', leagueId)
 
-    setLeagueMembers(
-      (leagueMembers as LeagueMembersDbProps[]).map(
-        (member) => member.users.name
-      )
-    )
+    const map = new Map<string, Map<number, LeagueResultsDbProps>>()
+    const tempMembersMap = new Map<string, LeagueMembersDbProps>()
 
-    setResults(personalResults)
+    for (const member of leagueMembers as LeagueMembersDbProps[]) {
+      map.set(member.user_uuid, new Map<number, LeagueResultsDbProps>())
+      tempMembersMap.set(member.user_uuid, member)
+    }
+
+    for (const leagueResult of data as LeagueResultsDbProps[]) {
+      const userId = leagueResult.user_uuid
+      map.get(userId).set(leagueResult.race_id, leagueResult)
+    }
+
+    setLeagueResultsMap(map)
+    setLeagueMembers(tempMembersMap)
+
+    const indexOfNextRace = races.findIndex((value) => !disabled(value))
+
+    setNextRaceRoundId(races[indexOfNextRace].id)
+
     setLoading(false)
   }
 
@@ -89,6 +96,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
     if (!error) {
       sendAlert('Submitted driver: ' + driverName(driversMap.get(driverId)))
+      fetchResults()
     } else {
       sendAlert('Failed to submit driver - please try again later', 'error')
     }
@@ -99,7 +107,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     fetchResults()
   }, [leagueId])
 
-  if (leagueId === null || results === null) return null
+  if (leagueId === -1) return null
 
   if (loading) return <Loader />
 
@@ -107,48 +115,74 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     <div className={styles.container}>
       <Typography variant="h4">Members</Typography>
       <div>
-        {leagueMembers.map((member) => (
-          <Typography key={member}>{member}</Typography>
+        {Array.from(leagueMembers.entries()).map(([key, value]) => (
+          <Typography key={key}>
+            {`${value.users.name} - ${driverName(
+              driversMap.get(
+                leagueResultsMap.get(key).get(nextRaceRoundId).driver_id
+              ),
+              'Not picked'
+            )}`}
+          </Typography>
         ))}
       </div>
       <Typography variant="h4">Your Picks</Typography>
       <div>
-        {results.length !== 23 && <div>Error - missing some results</div>}
-        {results.map((result, index) => (
-          <Accordion
-            key={result.races.race_name}
-            defaultExpanded={nextRaceRound === index}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              sx={{
-                '& .MuiAccordionSummary-content': {
-                  justifyContent: 'space-between',
-                },
-              }}
+        {leagueResultsMap.get(user.id).size !== 23 && (
+          <div>Error - missing some results</div>
+        )}
+        {races
+          .sort((a, b) => a.round_number - b.round_number)
+          .map((race) => (
+            <Accordion
+              key={race.race_name}
+              defaultExpanded={nextRaceRoundId === race.id}
             >
-              <Typography>
-                {result.races.race_name} -{' '}
-                {formatRaceDateTime(result.races.date, result.races.time)}
-              </Typography>
-              {index === nextRaceRound && result.driver_id === null && (
-                <Tooltip title="Lock in a driver before the race starts!">
-                  <PriorityHigh color="error" />
-                </Tooltip>
-              )}
-            </AccordionSummary>
-            <AccordionDetails>
-              <Picker
-                id={result.races.race_name}
-                rowId={result.id}
-                drivers={driversMap}
-                submitHandler={submitDriver}
-                preSelectedDriver={result.driver_id}
-                disabled={disabled(result.races)}
-              />
-            </AccordionDetails>
-          </Accordion>
-        ))}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    justifyContent: 'space-between',
+                  },
+                }}
+              >
+                <Typography>
+                  {race.race_name} - {formatRaceDateTime(race.date, race.time)}
+                </Typography>
+                {nextRaceRoundId === race.id &&
+                  leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
+                    null && (
+                    <Tooltip title="Lock in a driver before the race starts!">
+                      <PriorityHigh color="error" />
+                    </Tooltip>
+                  )}
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={styles.racePicks}>
+                  {Array.from(leagueMembers.entries()).map(([key, value]) => (
+                    <Typography key={key}>
+                      {`${value.users.name} - ${driverName(
+                        driversMap.get(
+                          leagueResultsMap.get(key).get(race.id).driver_id
+                        ),
+                        'Not picked'
+                      )}`}
+                    </Typography>
+                  ))}
+                </div>
+                <Picker
+                  id={race.race_name}
+                  rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
+                  drivers={driversMap}
+                  submitHandler={submitDriver}
+                  preSelectedDriver={
+                    leagueResultsMap.get(user.id).get(race.id)?.driver_id
+                  }
+                  disabled={disabled(race)}
+                />
+              </AccordionDetails>
+            </Accordion>
+          ))}
       </div>
     </div>
   )
