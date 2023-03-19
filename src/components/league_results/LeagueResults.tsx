@@ -111,7 +111,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <Typography key={member}>{member}</Typography>
         ))}
       </div>
-      <Typography variant="h4">Results</Typography>
+      <Typography variant="h4">Your Picks</Typography>
       <div>
         {results.length !== 23 && <div>Error - missing some results</div>}
         {results.map((result, index) => (
