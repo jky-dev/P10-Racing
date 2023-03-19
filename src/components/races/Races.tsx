@@ -17,7 +17,7 @@ const Races: React.FC = () => {
   }
 
   const raceName = (name: string) => {
-    return name.split(' Grand Prix')[0]
+    return name.split(' Grand Prix')[0] + ' GP'
   }
 
   return (
