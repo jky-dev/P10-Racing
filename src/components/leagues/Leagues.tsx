@@ -76,8 +76,6 @@ const Leagues: React.FC = () => {
       )
       .eq('user_uuid', user.id)
 
-    console.log(data)
-
     const tempLeaguesMap = new Map<number, LeaguesProps>()
     for (const league of data as JoinedLeagueProps[]) {
       tempLeaguesMap.set(league.league_id, league.leagues)
