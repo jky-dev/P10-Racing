@@ -51,7 +51,12 @@ const Join = () => {
         sendAlert('Failed to join league', 'error')
       }
     } else {
-      navigate('/login')
+      client.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/join/' + inviteCode,
+        },
+      })
     }
   }
 

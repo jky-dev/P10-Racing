@@ -5,8 +5,21 @@ import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import styles from './About.module.scss'
 
 const About: React.FC = () => {
-  const { user } = useSupabaseContext()
+  const { user, client } = useSupabaseContext()
   const navigate = useNavigate()
+
+  const handleClick = () => {
+    if (user) {
+      navigate('/leagues')
+    } else {
+      client.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin,
+        },
+      })
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -15,10 +28,7 @@ const About: React.FC = () => {
       </Typography>
 
       <div className={styles.button}>
-        <Button
-          variant="contained"
-          onClick={() => navigate(user ? '/leagues' : '/login')}
-        >
+        <Button variant="contained" onClick={handleClick}>
           {user ? 'Join a league' : 'Get started'}
         </Button>
       </div>
