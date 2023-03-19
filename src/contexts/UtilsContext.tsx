@@ -18,7 +18,10 @@ const useContext = () => {
     variant: 'success',
   })
 
-  const sendAlert = (message: string, variant: AlertColor = 'success') => {
+  const sendAlert: (message: string, variant?: AlertColor) => void = (
+    message: string,
+    variant: AlertColor = 'success'
+  ) => {
     setSnackBarState((prev) => ({
       ...prev,
       open: true,
@@ -46,7 +49,12 @@ const useContext = () => {
   return { SnackBar, sendAlert }
 }
 
-export const useUtilsContext = () => {
+interface UtilsContextProps {
+  sendAlert: (message: string, variant?: AlertColor) => void
+  SnackBar: () => JSX.Element
+}
+
+export const useUtilsContext: () => UtilsContextProps = () => {
   const context = React.useContext(UtilsContext)
 
   if (context === undefined) {

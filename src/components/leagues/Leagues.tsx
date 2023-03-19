@@ -1,6 +1,7 @@
 import { Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
+import { useUtilsContext } from '../../contexts/UtilsContext'
 import { createLeague, joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
@@ -13,6 +14,7 @@ const Leagues: React.FC = () => {
   const { client, user, loading: userLoading } = useSupabaseContext()
   const [loading, setLoading] = React.useState(false)
   const [joinedLeagues, setJoinedLeagues] = React.useState([])
+  const { sendAlert } = useUtilsContext()
 
   const onCreateHandler = async () => {
     // add the league to your user profile
@@ -20,12 +22,17 @@ const Leagues: React.FC = () => {
     // create access code -> league mapping
     if (leagueName.length === 0) return
     setLoading(true)
-    await createLeague(
-      client,
-      user,
-      leagueName,
-      crypto.randomUUID().slice(0, 6)
-    )
+    try {
+      await createLeague(
+        client,
+        user,
+        leagueName,
+        crypto.randomUUID().slice(0, 6)
+      )
+      sendAlert('Successfully created league ' + leagueName)
+    } catch (exception) {
+      sendAlert('Failed to create league, please try again later', 'error')
+    }
     setLoading(false)
     fetchLeagues()
   }
@@ -35,7 +42,11 @@ const Leagues: React.FC = () => {
     // add league to the user
     if (leagueCode.length === 0) return
     setLoading(true)
-    await joinLeague(client, user, leagueCode)
+    try {
+      await joinLeague(client, user, leagueCode)
+    } catch (e) {
+      sendAlert(e.message, 'error')
+    }
     setLoading(false)
     fetchLeagues()
   }

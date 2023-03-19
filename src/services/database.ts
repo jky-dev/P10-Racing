@@ -24,7 +24,7 @@ export const createLeague = async (
     ])
     .select()
 
-  if (error || league_data.length === 0) return
+  if (error || league_data.length === 0) throw new Error('An error occurred')
 
   const returnedRecord = league_data[0] as LeaguesProps
 
@@ -45,7 +45,7 @@ export const joinLeague = async (
     .select('id')
     .eq('invite_code', code)
 
-  if (data.length !== 1) return
+  if (data.length !== 1) throw new Error('League invite not found')
 
   const leagueId = data[0].id
 
@@ -55,7 +55,7 @@ export const joinLeague = async (
     .eq('league_id', leagueId)
     .eq('user_uuid', user.id)
 
-  if (check.length !== 0) return
+  if (check.length !== 0) throw new Error('You are already part of this league')
 
   await addUserToLeague(client, leagueId, user.id)
 }
