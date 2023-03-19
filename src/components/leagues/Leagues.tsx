@@ -2,7 +2,12 @@ import { Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
-import { LeagueDbProps, LeagueMembersDbProps } from '../../interfaces'
+import {
+  InviteCodeDbProps,
+  LeagueDbProps,
+  LeagueMembersDbProps,
+  LeaguesProps,
+} from '../../interfaces'
 import { createLeague, joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
@@ -10,6 +15,7 @@ import styles from './Leagues.module.scss'
 
 interface JoinedLeagueProps extends LeagueMembersDbProps {
   leagues: LeagueDbProps
+  invite_codes: InviteCodeDbProps
 }
 
 const Leagues: React.FC = () => {
@@ -18,8 +24,8 @@ const Leagues: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState<number>(-1)
   const { client, user } = useSupabaseContext()
   const [loading, setLoading] = React.useState(false)
-  const [joinedLeagues, setJoinedLeagues] = React.useState<JoinedLeagueProps[]>(
-    []
+  const [joinedLeagues, setJoinedLeagues] = React.useState(
+    new Map<number, LeagueDbProps>()
   )
   const { sendAlert } = useUtilsContext()
 
@@ -65,12 +71,19 @@ const Leagues: React.FC = () => {
       .from('league_members')
       .select(
         `
-          league_id, leagues (name)
+          league_id, leagues (*)
         `
       )
-      .eq('user_uuid', user!.id)
+      .eq('user_uuid', user.id)
 
-    setJoinedLeagues(data as JoinedLeagueProps[])
+    console.log(data)
+
+    const tempLeaguesMap = new Map<number, LeaguesProps>()
+    for (const league of data as JoinedLeagueProps[]) {
+      tempLeaguesMap.set(league.league_id, league.leagues)
+    }
+
+    setJoinedLeagues(tempLeaguesMap)
     setLoading(false)
   }
 
@@ -79,20 +92,31 @@ const Leagues: React.FC = () => {
     fetchLeagues()
   }, [user])
 
+  const title = () => {
+    const title = 'My Leagues'
+    if (leagueId === -1) {
+      return title
+    } else {
+      return title + ` - ${joinedLeagues.get(leagueId).name}`
+    }
+  }
+
   if (loading) return <Loader />
 
   return (
     <div className={styles.container}>
-      <Typography variant="h4">My Leagues</Typography>
+      <Typography variant="h4">{title()}</Typography>
+      {leagueId !== -1 && (
+        <Typography variant="h6">
+          Invite code: {joinedLeagues.get(leagueId).invite_code}
+        </Typography>
+      )}
       <div className={styles.leaguesContainer}>
-        {joinedLeagues.map((league) => {
+        {Array.from(joinedLeagues.entries()).map(([leagueId, league]) => {
           return (
-            <span key={league.league_id}>
-              <Button
-                onClick={() => setLeagueId(league.league_id)}
-                variant="outlined"
-              >
-                {league.leagues.name}
+            <span key={leagueId}>
+              <Button onClick={() => setLeagueId(leagueId)} variant="outlined">
+                {league.name}
               </Button>
             </span>
           )
