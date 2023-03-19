@@ -70,7 +70,6 @@ const Leagues: React.FC = () => {
       )
       .eq('user_uuid', user!.id)
 
-    console.log(data)
     setJoinedLeagues(data as JoinedLeagueProps[])
     setLoading(false)
   }

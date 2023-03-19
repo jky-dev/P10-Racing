@@ -47,8 +47,6 @@ export const joinLeague = async (
     .select('league_id')
     .eq('invite_code', code)
 
-  console.log(data)
-
   if ((data as InviteCodeDbProps[]).length !== 1)
     throw new Error('League invite not found')
 
