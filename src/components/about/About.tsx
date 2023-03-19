@@ -1,10 +1,12 @@
 import { Button, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import styles from './About.module.scss'
 
 const About: React.FC = () => {
   const { user } = useSupabaseContext()
+  const navigate = useNavigate()
 
   return (
     <div className={styles.container}>
@@ -13,7 +15,10 @@ const About: React.FC = () => {
       </Typography>
 
       <div className={styles.button}>
-        <Button variant="contained">
+        <Button
+          variant="contained"
+          onClick={() => navigate(user ? '/leagues' : '/login')}
+        >
           {user ? 'Join a league' : 'Get started'}
         </Button>
       </div>
