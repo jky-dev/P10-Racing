@@ -30,13 +30,11 @@ export const createLeague = async (
 
   const returnedRecord = league_data[0] as LeaguesProps
 
-  await client
-    .from('invite_codes')
-    .insert({
-      invite_code: code,
-      league_id: returnedRecord.id,
-      created_by_uuid: user.id,
-    })
+  await client.from('invite_codes').insert({
+    invite_code: code,
+    league_id: returnedRecord.id,
+    created_by_uuid: user.id,
+  })
 
   await addUserToLeague(client, returnedRecord.id, user.id)
 }
@@ -73,16 +71,11 @@ const addUserToLeague = async (
   leagueId: number,
   userId: string
 ) => {
-  await client.from('league_members').upsert(
-    [
-      {
-        league_id: leagueId,
-        user_uuid: userId,
-        index: `${leagueId}_${userId}`,
-      },
-    ],
-    { onConflict: 'index', ignoreDuplicates: true }
-  )
+  await client.from('league_members').insert({
+    league_id: leagueId,
+    user_uuid: userId,
+    index: `${leagueId}_${userId}`,
+  })
 
   // race ids just happen to be 1 -> 23
   for (let i = 1; i < 24; i++) {
