@@ -18,3 +18,10 @@
   flex-wrap: wrap;
   align-items: baseline;
 }
+
+.inviteCode {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0.5rem;
+}

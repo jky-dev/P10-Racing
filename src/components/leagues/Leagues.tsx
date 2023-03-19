@@ -1,4 +1,11 @@
-import { Button, TextField, Typography } from '@mui/material'
+import { Share } from '@mui/icons-material'
+import {
+  Button,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
@@ -90,6 +97,15 @@ const Leagues: React.FC = () => {
     fetchLeagues()
   }, [user])
 
+  const handleInviteClick = async () => {
+    await navigator.clipboard.writeText(
+      window.location.origin +
+        '/join/' +
+        joinedLeagues.get(leagueId).invite_code
+    )
+    sendAlert('Copied invite to clipboard!')
+  }
+
   const title = () => {
     const title = 'My Leagues'
     if (leagueId === -1) {
@@ -105,9 +121,16 @@ const Leagues: React.FC = () => {
     <div className={styles.container}>
       <Typography variant="h4">{title()}</Typography>
       {leagueId !== -1 && (
-        <Typography variant="h6">
-          Invite code: {joinedLeagues.get(leagueId).invite_code}
-        </Typography>
+        <div className={styles.inviteCode}>
+          <Typography variant="h6">
+            Invite code: {joinedLeagues.get(leagueId).invite_code}
+          </Typography>
+          <Tooltip title="Copy invite code">
+            <IconButton onClick={handleInviteClick}>
+              <Share></Share>
+            </IconButton>
+          </Tooltip>
+        </div>
       )}
       <div className={styles.leaguesContainer}>
         {Array.from(joinedLeagues.entries()).map(([leagueId, league]) => {

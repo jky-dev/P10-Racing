@@ -5,6 +5,7 @@ import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
 import Home from './components/home/Home'
+import Join from './components/join/Join'
 import Leagues from './components/leagues/Leagues'
 import Loader from './components/loader/Loader'
 import Login from './components/login/Login'
@@ -53,6 +54,12 @@ const router = createBrowserRouter([
       {
         path: 'logout',
         element: <Logout />,
+        errorElement: <GenericError />,
+      },
+      { path: 'join', element: <Join />, errorElement: <GenericError /> },
+      {
+        path: 'join/:inviteCode',
+        element: <Join />,
         errorElement: <GenericError />,
       },
     ],
