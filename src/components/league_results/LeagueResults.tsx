@@ -1,8 +1,10 @@
+import { PriorityHigh } from '@mui/icons-material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import React from 'react'
@@ -110,11 +112,23 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
             key={result.races.race_name}
             defaultExpanded={nextRaceRound === index}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{
+                '& .MuiAccordionSummary-content': {
+                  justifyContent: 'space-between !important',
+                },
+              }}
+            >
               <Typography>
                 {result.races.race_name} -{' '}
                 {formatRaceDateTime(result.races.date, result.races.time)}
               </Typography>
+              {index === nextRaceRound && result.driver_id === null && (
+                <Tooltip title="Lock in a driver before the race starts!">
+                  <PriorityHigh color="error" />
+                </Tooltip>
+              )}
             </AccordionSummary>
             <AccordionDetails>
               <Picker
