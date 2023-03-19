@@ -7,7 +7,7 @@ import {
   F1ResultsApiProps,
 } from '../interfaces'
 import {
-  getRaceByRound,
+  getRaceByRoundNumber,
   insertIntoConstructors,
   insertIntoDrivers,
   insertIntoRaces,
@@ -57,7 +57,9 @@ export const setRaceResultsByRound = (
       const results: F1ResultsApiProps[] =
         res.data.MRData.RaceTable.Races[0].Results
 
-      const race = await getRaceByRound(client, round)
+      console.log(results)
+
+      const race = await getRaceByRoundNumber(client, round)
 
       results.forEach((result) => {
         updateRaceResultWithFinish(client, result, race.data[0].id)

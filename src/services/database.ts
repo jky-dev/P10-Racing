@@ -32,7 +32,11 @@ export const createLeague = async (
 
   await client
     .from('invite_codes')
-    .insert({ invite_code: code, league_id: returnedRecord.id })
+    .insert({
+      invite_code: code,
+      league_id: returnedRecord.id,
+      created_by_uuid: user.id,
+    })
 
   await addUserToLeague(client, returnedRecord.id, user.id)
 }
@@ -160,10 +164,24 @@ export const updateRaceResultWithFinish = async (
         unique_index: race_id + result.Driver.driverId,
       },
     ],
-    { onConflict: 'unique_index', ignoreDuplicates: false }
+    { onConflict: 'unique_index', ignoreDuplicates: true }
   )
 }
 
-export const getRaceByRound = async (client: SupabaseClient, round: number) => {
-  return await client.from('races').select('id').eq('round_number', round)
+export const getRaceByRoundNumber = async (
+  client: SupabaseClient,
+  roundNumber: number
+) => {
+  return await client.from('races').select('id').eq('round_number', roundNumber)
+}
+
+export const getRaceResultsByRaceId = async (
+  client: SupabaseClient,
+  raceId: number
+) => {
+  return await client.from('race_results').select('*').eq('race_id', raceId)
+}
+
+export const getTable = async (client: SupabaseClient, table: string) => {
+  return await client.from(table).select('*')
 }
