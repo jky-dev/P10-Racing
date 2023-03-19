@@ -113,7 +113,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   return (
     <div className={styles.container}>
-      <Typography variant="h4">Members</Typography>
+      <Typography variant="h4">Next Race Picks</Typography>
       <div>
         {Array.from(leagueMembers.entries()).map(([key, value]) => (
           <Typography key={key}>
@@ -126,7 +126,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           </Typography>
         ))}
       </div>
-      <Typography variant="h4">Your Picks</Typography>
+      <Typography variant="h4">Races</Typography>
       <div>
         {leagueResultsMap.get(user.id).size !== 23 && (
           <div>Error - missing some results</div>
