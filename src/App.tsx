@@ -1,5 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import styles from './App.module.scss'
 import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
@@ -61,7 +62,13 @@ const router = createBrowserRouter([
 const App = () => {
   const { loading } = useSupabaseContext()
   const { SnackBar } = useUtilsContext()
-  if (loading) return <Loader />
+
+  if (loading)
+    return (
+      <div className={styles.container}>
+        <Loader />
+      </div>
+    )
 
   return (
     <>

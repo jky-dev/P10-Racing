@@ -90,12 +90,12 @@ const useContext = () => {
   const loadDetails = async () => {
     await checkUser()
     await setData()
+    setLoading(false)
   }
 
   React.useEffect(() => {
     setLoading(true)
     loadDetails()
-    setLoading(false)
   }, [])
 
   return {
