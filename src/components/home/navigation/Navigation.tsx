@@ -30,7 +30,7 @@ const Navigation = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', mb: 3 }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        P10
+        P10 Racing
       </Typography>
       <Divider />
       <List>
@@ -72,7 +72,7 @@ const Navigation = () => {
   }, [user])
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <>
       <AppBar component="nav">
         <Toolbar>
           <IconButton
@@ -89,7 +89,7 @@ const Navigation = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            P10 Racing League
+            P10 Racing
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
@@ -119,7 +119,7 @@ const Navigation = () => {
       >
         {drawer}
       </Drawer>
-    </Box>
+    </>
   )
 }
 
