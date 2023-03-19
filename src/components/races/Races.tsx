@@ -9,7 +9,7 @@ import { RacesDbProps } from '../../interfaces'
 import styles from './Races.module.scss'
 
 const Races: React.FC = () => {
-  const { raceResultsMap, races, driversIdMap, loading }: SupabaseContextProps =
+  const { raceResultsMap, races, driversIdMap }: SupabaseContextProps =
     useSupabaseContext()
 
   const formatDateTime = (race: RacesDbProps) => {

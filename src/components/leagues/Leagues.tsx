@@ -11,7 +11,7 @@ const Leagues: React.FC = () => {
   const [leagueName, setLeagueName] = React.useState('')
   const [leagueCode, setLeagueCode] = React.useState('')
   const [leagueId, setLeagueId] = React.useState(null)
-  const { client, user, loading: userLoading } = useSupabaseContext()
+  const { client, user } = useSupabaseContext()
   const [loading, setLoading] = React.useState(false)
   const [joinedLeagues, setJoinedLeagues] = React.useState([])
   const { sendAlert } = useUtilsContext()
@@ -71,7 +71,7 @@ const Leagues: React.FC = () => {
     fetchLeagues()
   }, [user])
 
-  if (userLoading || loading) return <Loader />
+  if (loading) return <Loader />
 
   return (
     <div className={styles.container}>
