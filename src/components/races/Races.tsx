@@ -4,7 +4,7 @@ import {
   SupabaseContextProps,
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
-import { formatRaceDateTime } from '../../helpers/helpers'
+import { driverName, formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
 import styles from './Races.module.scss'
 
@@ -42,13 +42,12 @@ const Races: React.FC = () => {
                   </Typography>
                   <Typography variant="body1">Results</Typography>
                   {raceResultsMap
-                    .get(race.id)
+                    .get(race.id)!
                     .sort((a, b) => a.position - b.position)
                     .map((result) => (
                       <Typography variant="body2" key={result.position}>
                         {result.position}:{' '}
-                        {driversIdMap.get(result.driver_id).given_name}{' '}
-                        {driversIdMap.get(result.driver_id).last_name}
+                        {driverName(driversIdMap.get(result.driver_id))}
                       </Typography>
                     ))}
                 </CardContent>

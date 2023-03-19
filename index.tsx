@@ -10,7 +10,7 @@ import '@fontsource/roboto/700.css'
 import { UtilsProvider } from './src/contexts/UtilsContext'
 
 const container = document.getElementById('root')
-const root = createRoot(container)
+const root = createRoot(container!)
 root.render(
   <SupabaseProvider>
     <UtilsProvider>

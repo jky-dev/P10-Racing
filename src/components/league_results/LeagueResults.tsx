@@ -11,7 +11,11 @@ import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { driverName, formatRaceDateTime } from '../../helpers/helpers'
-import { LeagueResultsDbProps, RacesDbProps } from '../../interfaces'
+import {
+  LeagueMembersDbProps,
+  LeagueResultsDbProps,
+  RacesDbProps,
+} from '../../interfaces'
 import Loader from '../loader/Loader'
 import styles from './LeagueResults.module.scss'
 import Picker from './Picker/Picker'
@@ -32,7 +36,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   const fetchResults = async () => {
     setLoading(true)
-    const { data }: { data: LeagueResultsDbProps[] } = await client
+    const { data }: { data: unknown } = await client
       .from('league_results')
       .select(
         `
@@ -43,25 +47,28 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       )
       .eq('league_id', leagueId)
 
-    const personalResults = data
-      .filter((value) => value.user_uuid === user.id)
-      .sort((a, b) => a.races.round_number - b.races.round_number)
+    const personalResults = (data as LeagueResultsDbProps[])
+      .filter((value) => value.user_uuid === user!.id || value.races === null)
+      .sort((a, b) => a!.races!.round_number! - b!.races!.round_number!)
 
     setNextRaceRound(
       personalResults.findIndex((value) => !disabled(value.races))
     )
 
-    const { data: leagueMembers }: { data: LeagueResultsDbProps[] } =
-      await client
-        .from('league_members')
-        .select(
-          `*,
+    const { data: leagueMembers }: { data: unknown } = await client
+      .from('league_members')
+      .select(
+        `*,
             users (*)
           `
-        )
-        .eq('league_id', leagueId)
+      )
+      .eq('league_id', leagueId)
 
-    setLeagueMembers(leagueMembers.map((member) => member.users.name))
+    setLeagueMembers(
+      (leagueMembers as LeagueMembersDbProps[]).map(
+        (member) => member.users.name
+      )
+    )
 
     setResults(personalResults)
     setLoading(false)
@@ -88,7 +95,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   }
 
   React.useEffect(() => {
-    if (leagueId === null) return
+    if (leagueId === -1) return
     fetchResults()
   }, [leagueId])
 

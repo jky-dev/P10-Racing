@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { UserDbProps } from '../../interfaces'
@@ -10,12 +10,9 @@ const Profile = () => {
   const [loading, setLoading] = React.useState<boolean>(false)
 
   const fetchProfile = async () => {
-    const { data }: { data: UserDbProps[] } = await client
-      .from('users')
-      .select('*')
-      .eq('uuid', user.id)
+    const { data } = await client.from('users').select('*').eq('uuid', user!.id)
 
-    setProfile(data[0])
+    setProfile((data as UserDbProps[])[0])
     setLoading(false)
   }
 
@@ -29,12 +26,21 @@ const Profile = () => {
       {loading || profile === null ? (
         <Loader />
       ) : (
-        <>
-          <Typography variant="h4">Coming soon</Typography>
+        <Box
+          sx={{
+            width: '100%',
+            justifyContent: 'flex-start',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+          }}
+        >
+          <Typography variant="h4" sx={{ mb: 1 }}>
+            My Profile
+          </Typography>
           <Typography variant="h5">Email: {profile?.email}</Typography>
-
           <Typography variant="h5">Name: {profile?.name}</Typography>
-        </>
+        </Box>
       )}
     </>
   )

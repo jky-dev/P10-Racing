@@ -1,9 +1,11 @@
-import { SupabaseClient } from '@supabase/supabase-js'
+import { SupabaseClient, User } from '@supabase/supabase-js'
 import {
   F1ConstructorsApiProps,
   F1DriversApiProps,
   F1RaceApiProps,
   F1ResultsApiProps,
+  InviteCodeDbProps,
+  LeagueMembersDbProps,
   LeaguesProps,
 } from '../interfaces'
 
@@ -37,25 +39,29 @@ export const createLeague = async (
 
 export const joinLeague = async (
   client: SupabaseClient,
-  user: any,
+  user: User,
   code: string
 ) => {
-  const { data }: { data: { id: number }[] } = await client
-    .from('leagues')
-    .select('id')
+  const { data } = await client
+    .from('invite_codes')
+    .select('league_id')
     .eq('invite_code', code)
 
-  if (data.length !== 1) throw new Error('League invite not found')
+  console.log(data)
 
-  const leagueId = data[0].id
+  if ((data as InviteCodeDbProps[]).length !== 1)
+    throw new Error('League invite not found')
+
+  const leagueId = (data as InviteCodeDbProps[])[0].league_id
 
   const { data: check } = await client
     .from('league_members')
-    .select('*')
+    .select('id')
     .eq('league_id', leagueId)
     .eq('user_uuid', user.id)
 
-  if (check.length !== 0) throw new Error('You are already part of this league')
+  if ((check as LeagueMembersDbProps[]).length !== 0)
+    throw new Error('You are already part of this league')
 
   await addUserToLeague(client, leagueId, user.id)
 }

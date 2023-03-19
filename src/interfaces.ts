@@ -57,6 +57,15 @@ export interface LeagueResultsDbProps {
   users: UserDbProps
 }
 
+export interface LeagueMembersDbProps {
+  created_at: string
+  id: number
+  index: string
+  league_id: number
+  user_uuid: string
+  users: UserDbProps
+}
+
 export interface RacesDbProps {
   created_at: string
   date: string
@@ -92,6 +101,20 @@ export interface DriversDbProps {
 export interface UserDbProps {
   created_at: string
   email: string
-  name: string | null
+  name: string
   uuid: string
+}
+
+export interface InviteCodeDbProps {
+  invite_code: string
+  created_at: string
+  league_id: number
+}
+
+export interface LeagueDbProps {
+  id: number
+  created_at: string
+  name: string
+  invite_code: string
+  created_by_uuid: string
 }

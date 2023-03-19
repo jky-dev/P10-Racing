@@ -1,7 +1,7 @@
 import { Alert, AlertColor, Snackbar } from '@mui/material'
 import React, { createContext, ReactNode } from 'react'
 
-const UtilsContext = createContext(null)
+const UtilsContext = createContext<UtilsContextProps | null>(null)
 
 UtilsContext.displayName = 'Utils Context'
 
@@ -57,7 +57,7 @@ interface UtilsContextProps {
 export const useUtilsContext: () => UtilsContextProps = () => {
   const context = React.useContext(UtilsContext)
 
-  if (context === undefined) {
+  if (!context) {
     throw new Error('Utils Context undefined')
   }
 
