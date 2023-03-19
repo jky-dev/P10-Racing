@@ -7,11 +7,14 @@ import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
+import { UtilsProvider } from './src/contexts/UtilsContext'
 
 const container = document.getElementById('root')
 const root = createRoot(container)
 root.render(
   <SupabaseProvider>
-    <App />
+    <UtilsProvider>
+      <App />
+    </UtilsProvider>
   </SupabaseProvider>
 )

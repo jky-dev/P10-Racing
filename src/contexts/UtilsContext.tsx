@@ -1,0 +1,67 @@
+import { Alert, AlertColor, Snackbar } from '@mui/material'
+import React, { createContext, ReactNode } from 'react'
+
+const UtilsContext = createContext(null)
+
+UtilsContext.displayName = 'Utils Context'
+
+interface SnackBarStateProps {
+  open: boolean
+  message: string
+  variant: AlertColor
+}
+
+const useContext = () => {
+  const [snackBarState, setSnackBarState] = React.useState<SnackBarStateProps>({
+    open: false,
+    message: '',
+    variant: 'success',
+  })
+
+  const sendAlert = (message: string, variant: AlertColor = 'success') => {
+    setSnackBarState((prev) => ({
+      ...prev,
+      open: true,
+      message: message,
+      variant: variant,
+    }))
+  }
+
+  const handleClose = () => {
+    setSnackBarState((prev) => ({ ...prev, open: false }))
+  }
+
+  const SnackBar = () => (
+    <Snackbar
+      open={snackBarState.open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+    >
+      <Alert onClose={handleClose} severity={snackBarState.variant}>
+        {snackBarState.message}
+      </Alert>
+    </Snackbar>
+  )
+
+  return { SnackBar, sendAlert }
+}
+
+export const useUtilsContext = () => {
+  const context = React.useContext(UtilsContext)
+
+  if (context === undefined) {
+    throw new Error('Utils Context undefined')
+  }
+
+  return context
+}
+
+interface Props {
+  children?: ReactNode
+}
+
+export const UtilsProvider = ({ children }: Props) => {
+  const value = useContext()
+
+  return <UtilsContext.Provider value={value}>{children}</UtilsContext.Provider>
+}

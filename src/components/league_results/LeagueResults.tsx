@@ -7,7 +7,8 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { formatRaceDateTime } from '../../helpers/helpers'
+import { useUtilsContext } from '../../contexts/UtilsContext'
+import { driverName, formatRaceDateTime } from '../../helpers/helpers'
 import { LeagueResultsDbProps, RacesDbProps } from '../../interfaces'
 import Loader from '../loader/Loader'
 import styles from './LeagueResults.module.scss'
@@ -25,6 +26,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   const { client, user, driversMap } = useSupabaseContext()
   const [leagueMembers, setLeagueMembers] = React.useState<string[]>([])
   const [nextRaceRound, setNextRaceRound] = React.useState(-1)
+  const { sendAlert } = useUtilsContext()
 
   const fetchResults = async () => {
     setLoading(true)
@@ -75,6 +77,12 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         driver_id: driverId,
       })
       .eq('id', rowId)
+
+    if (!error) {
+      sendAlert('Submitted driver: ' + driverName(driversMap.get(driverId)))
+    } else {
+      sendAlert('Failed to submit driver - please try again later', 'error')
+    }
   }
 
   React.useEffect(() => {
@@ -82,11 +90,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     fetchResults()
   }, [leagueId])
 
-  if (leagueId === null) return null
+  if (leagueId === null || results === null) return null
 
   if (loading) return <Loader />
-
-  if (results === null) return null
 
   return (
     <div className={styles.container}>

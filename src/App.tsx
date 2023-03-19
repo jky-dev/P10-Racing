@@ -11,6 +11,7 @@ import Logout from './components/logout/Logout'
 import Profile from './components/profile/Profile'
 import Races from './components/races/Races'
 import { useSupabaseContext } from './contexts/SupabaseContext'
+import { useUtilsContext } from './contexts/UtilsContext'
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,14 @@ const router = createBrowserRouter([
 
 const App = () => {
   const { loading } = useSupabaseContext()
+  const { SnackBar } = useUtilsContext()
   if (loading) return <Loader />
-  return <RouterProvider router={router} />
+
+  return (
+    <>
+      {<SnackBar />}
+      <RouterProvider router={router} />
+    </>
+  )
 }
 export default App
