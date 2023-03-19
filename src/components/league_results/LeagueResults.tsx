@@ -116,7 +116,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
               expandIcon={<ExpandMoreIcon />}
               sx={{
                 '& .MuiAccordionSummary-content': {
-                  justifyContent: 'space-between !important',
+                  justifyContent: 'space-between',
                 },
               }}
             >
