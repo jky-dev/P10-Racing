@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography } from '@mui/material'
 import React, { Key } from 'react'
+
 import {
   SupabaseContextProps,
   useSupabaseContext,
@@ -40,7 +41,9 @@ const Races: React.FC = () => {
                   <Typography variant="body1">
                     {formatDateTime(race)}
                   </Typography>
-                  <Typography variant="body1">Results</Typography>
+                  {raceResultsMap.get(race.id).length > 0 && (
+                    <Typography variant="body1">Results</Typography>
+                  )}
                   {raceResultsMap
                     .get(race.id)!
                     .sort((a, b) => a.position - b.position)
