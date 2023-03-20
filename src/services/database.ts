@@ -157,7 +157,7 @@ export const updateRaceResultWithFinish = async (
         unique_index: race_id + result.Driver.driverId,
       },
     ],
-    { onConflict: 'unique_index', ignoreDuplicates: true }
+    { onConflict: 'unique_index', ignoreDuplicates: false }
   )
 }
 

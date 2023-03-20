@@ -24,8 +24,6 @@ pointsArray.forEach((value, index) => {
 
 pointsMap.set(20, -5)
 
-console.log(pointsMap)
-
 const useContext = () => {
   const [snackBarState, setSnackBarState] = React.useState<SnackBarStateProps>({
     open: false,

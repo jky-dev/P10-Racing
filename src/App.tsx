@@ -14,6 +14,7 @@ import Profile from './components/profile/Profile'
 import Races from './components/races/Races'
 import { useSupabaseContext } from './contexts/SupabaseContext'
 import { useUtilsContext } from './contexts/UtilsContext'
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -33,17 +34,29 @@ const router = createBrowserRouter([
       },
       {
         path: 'leagues',
-        element: <Leagues />,
+        element: (
+          <ProtectedRoute>
+            <Leagues />
+          </ProtectedRoute>
+        ),
         errorElement: <GenericError />,
       },
       {
         path: 'profile',
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
         errorElement: <GenericError />,
       },
       {
         path: 'admin',
-        element: <AdminPanel />,
+        element: (
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        ),
         errorElement: <GenericError />,
       },
       {
@@ -53,7 +66,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'logout',
-        element: <Logout />,
+        element: (
+          <ProtectedRoute>
+            <Logout />
+          </ProtectedRoute>
+        ),
         errorElement: <GenericError />,
       },
       { path: 'join', element: <Join />, errorElement: <GenericError /> },
