@@ -8,6 +8,7 @@ import {
   LeagueResultsDbProps,
   RacesDbProps,
 } from '../../../interfaces'
+import styles from './ResultsTable.module.scss'
 
 interface ResultsTable {
   leagueMembers: Map<string, LeagueMembersDbProps>
@@ -32,13 +33,22 @@ const ResultsTable: React.FC<ResultsTable> = ({
     return `${points} (${pos})`
   }
 
+  const pointsTitle = () => {
+    const mq = window.matchMedia('(max-width:600px)')
+    if (mq.matches) {
+      return 'Points'
+    } else {
+      return 'Points (Pos)'
+    }
+  }
+
   return (
-    <Table sx={{ width: '100%' }}>
+    <Table sx={{ width: '100%', overflow: 'auto' }}>
       <TableHead>
         <TableRow>
           <TableCell
             sx={{
-              maxWidth: '10px',
+              width: '40%',
             }}
           >
             User
@@ -46,7 +56,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
           <TableCell
             align="right"
             sx={{
-              maxWidth: '10px',
+              width: '40%',
             }}
           >
             Pick
@@ -54,10 +64,10 @@ const ResultsTable: React.FC<ResultsTable> = ({
           <TableCell
             align="right"
             sx={{
-              maxWidth: '10px',
+              width: '20%',
             }}
           >
-            Points (Pos)
+            {pointsTitle()}
           </TableCell>
         </TableRow>
       </TableHead>
@@ -69,26 +79,43 @@ const ResultsTable: React.FC<ResultsTable> = ({
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                maxWidth: '10px',
+                maxWidth: 0,
               }}
             >
               {value.users.name}
             </TableCell>
             <TableCell
-              align="right"
               sx={{
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                maxWidth: '10px',
+                maxWidth: 0,
+                verticalAlign: 'middle',
               }}
+              align="right"
             >
-              {driverName(
-                driversMap.get(
+              <div className={styles.driverName}>
+                <span className={styles.text}>
+                  {driverName(
+                    driversMap.get(
+                      leagueResultsMap.get(uuid).get(race.id).driver_id
+                    ),
+                    '-'
+                  )}
+                </span>
+                {!!driversMap.get(
                   leagueResultsMap.get(uuid).get(race.id).driver_id
-                ),
-                '-'
-              )}
+                ) && (
+                  <img
+                    src={`/images/${
+                      driversMap.get(
+                        leagueResultsMap.get(uuid).get(race.id).driver_id
+                      ).constructor
+                    }.png`}
+                    height={20}
+                  />
+                )}
+              </div>
             </TableCell>
             <TableCell
               align="right"
@@ -96,7 +123,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                maxWidth: '10px',
+                maxWidth: 0,
               }}
             >
               {getPointsColumn(uuid, race.id)}
