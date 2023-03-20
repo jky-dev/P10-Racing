@@ -12,16 +12,11 @@ interface SnackBarStateProps {
 }
 
 const pointsMap = new Map<number, number>()
-
-pointsMap.set(10, 25)
-
 const pointsArray = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1]
-
 pointsArray.forEach((value, index) => {
   pointsMap.set(10 - index, value)
   pointsMap.set(10 + index, value)
 })
-
 pointsMap.set(20, -5)
 
 const useContext = () => {
