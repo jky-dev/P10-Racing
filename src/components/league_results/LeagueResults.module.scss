@@ -13,3 +13,18 @@
 .racePicks {
   margin-bottom: 2rem;
 }
+
+.accordionText {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.raceName {
+  display: flex;
+  align-items: center;
+}

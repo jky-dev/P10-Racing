@@ -4,11 +4,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Tooltip,
   Typography,
 } from '@mui/material'
@@ -24,6 +19,7 @@ import {
 import Loader from '../loader/Loader'
 import styles from './LeagueResults.module.scss'
 import Picker from './Picker/Picker'
+import ResultsTable from './Results/ResultsTable'
 
 interface LeagueResultsProps {
   leagueId: number
@@ -114,14 +110,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     }
   }
 
-  const getPoints = (userId: string, raceId: number) => {
-    const points = leagueResultsMap.get(userId).get(raceId).points_gained
-
-    if (points === null) return '-'
-
-    return points
-  }
-
   React.useEffect(() => {
     if (leagueId === -1) return
     fetchResults()
@@ -151,87 +139,56 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         {leagueResultsMap.get(user.id).size !== 23 && (
           <div>Error - missing some results</div>
         )}
-        {races
-          .sort((a, b) => a.round_number - b.round_number)
-          .map((race) => (
-            <Accordion
-              key={race.race_name}
-              defaultExpanded={nextRaceRoundId === race.id}
+        {races.map((race) => (
+          <Accordion
+            key={race.race_name}
+            defaultExpanded={nextRaceRoundId === race.id}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              sx={{
+                '& .MuiAccordionSummary-content': {
+                  justifyContent: 'space-between',
+                },
+              }}
             >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  '& .MuiAccordionSummary-content': {
-                    justifyContent: 'space-between',
-                  },
-                }}
-              >
-                <Typography>
-                  {race.race_name} - {formatRaceDateTime(race.date, race.time)}
+              <div className={styles.accordionText}>
+                <Typography className={styles.raceName}>
+                  {race.race_name}{' '}
+                  {nextRaceRoundId === race.id &&
+                    leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
+                      null && (
+                      <Tooltip title="Lock in a driver before the race starts!">
+                        <PriorityHigh color="error" />
+                      </Tooltip>
+                    )}
                 </Typography>
-                {nextRaceRoundId === race.id &&
-                  leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
-                    null && (
-                    <Tooltip title="Lock in a driver before the race starts!">
-                      <PriorityHigh color="error" />
-                    </Tooltip>
-                  )}
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className={styles.racePicks}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>User</TableCell>
-                        <TableCell align="right">Pick</TableCell>
-                        <TableCell align="right">Finish</TableCell>
-                        <TableCell align="right">Points</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {Array.from(leagueMembers.entries()).map(
-                        ([uuid, value]) => (
-                          <TableRow>
-                            <TableCell>{value.users.name}</TableCell>
-                            <TableCell align="right">
-                              {driverName(
-                                driversMap.get(
-                                  leagueResultsMap.get(uuid).get(race.id)
-                                    .driver_id
-                                ),
-                                '-'
-                              )}
-                            </TableCell>
-                            <TableCell align="right">
-                              {raceResultsDriverMap
-                                .get(race.id)
-                                .get(
-                                  leagueResultsMap.get(uuid).get(race.id)
-                                    .driver_id
-                                )?.position || '-'}
-                            </TableCell>
-                            <TableCell align="right">
-                              {getPoints(uuid, race.id)}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-                <Picker
-                  id={race.race_name}
-                  rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
-                  drivers={driversMap}
-                  submitHandler={submitDriver}
-                  preSelectedDriver={
-                    leagueResultsMap.get(user.id).get(race.id)?.driver_id
-                  }
-                  disabled={disabled(race)}
+                <Typography variant="body2">
+                  {formatRaceDateTime(race.date, race.time)}
+                </Typography>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div className={styles.racePicks}>
+                <ResultsTable
+                  leagueMembers={leagueMembers}
+                  leagueResultsMap={leagueResultsMap}
+                  race={race}
                 />
-              </AccordionDetails>
-            </Accordion>
-          ))}
+              </div>
+              <Picker
+                id={race.race_name}
+                rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
+                drivers={driversMap}
+                submitHandler={submitDriver}
+                preSelectedDriver={
+                  leagueResultsMap.get(user.id).get(race.id)?.driver_id
+                }
+                disabled={disabled(race)}
+              />
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </div>
     </div>
   )
