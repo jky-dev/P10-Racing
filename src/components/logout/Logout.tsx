@@ -13,10 +13,6 @@ const Logout: React.FC = () => {
     navigate('/')
   }
 
-  React.useEffect(() => {
-    if (!user) navigate('/')
-  }, [])
-
   return (
     <span>
       <Button onClick={() => goodbye()} variant="contained">
