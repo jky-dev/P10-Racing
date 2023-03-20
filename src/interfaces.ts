@@ -52,6 +52,7 @@ export interface LeagueResultsDbProps {
     name: string
     invite_code: string
   }
+  points_gained: number
   races: RacesDbProps
   user_uuid: string
   users: UserDbProps

@@ -4,6 +4,11 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Tooltip,
   Typography,
 } from '@mui/material'
@@ -26,7 +31,14 @@ interface LeagueResultsProps {
 
 const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   const [loading, setLoading] = React.useState(true)
-  const { client, user, driversMap, races } = useSupabaseContext()
+  const {
+    client,
+    user,
+    driversMap,
+    races,
+    raceResultsDriverMap,
+    driversIdMap,
+  } = useSupabaseContext()
   const [leagueMembers, setLeagueMembers] = React.useState(
     new Map<string, LeagueMembersDbProps>()
   )
@@ -102,6 +114,14 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     }
   }
 
+  const getPoints = (userId: string, raceId: number) => {
+    const points = leagueResultsMap.get(userId).get(raceId).points_gained
+
+    if (points === null) return '-'
+
+    return points
+  }
+
   React.useEffect(() => {
     if (leagueId === -1) return
     fetchResults()
@@ -159,16 +179,45 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
               </AccordionSummary>
               <AccordionDetails>
                 <div className={styles.racePicks}>
-                  {Array.from(leagueMembers.entries()).map(([key, value]) => (
-                    <Typography key={key}>
-                      {`${value.users.name} - ${driverName(
-                        driversMap.get(
-                          leagueResultsMap.get(key).get(race.id).driver_id
-                        ),
-                        'Not picked'
-                      )}`}
-                    </Typography>
-                  ))}
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>User</TableCell>
+                        <TableCell align="right">Pick</TableCell>
+                        <TableCell align="right">Finish</TableCell>
+                        <TableCell align="right">Points</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Array.from(leagueMembers.entries()).map(
+                        ([uuid, value]) => (
+                          <TableRow>
+                            <TableCell>{value.users.name}</TableCell>
+                            <TableCell align="right">
+                              {driverName(
+                                driversMap.get(
+                                  leagueResultsMap.get(uuid).get(race.id)
+                                    .driver_id
+                                ),
+                                '-'
+                              )}
+                            </TableCell>
+                            <TableCell align="right">
+                              {raceResultsDriverMap
+                                .get(race.id)
+                                .get(
+                                  leagueResultsMap.get(uuid).get(race.id)
+                                    .driver_id
+                                )?.position || '-'}
+                            </TableCell>
+                            <TableCell align="right">
+                              {getPoints(uuid, race.id)}
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                    </TableBody>
+                  </Table>
                 </div>
                 <Picker
                   id={race.race_name}

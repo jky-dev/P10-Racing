@@ -17,6 +17,9 @@ const useContext: () => SupabaseContextProps | null = () => {
   const [raceResultsMap, setRaceResultsMap] = React.useState<
     Map<number, RaceResultsDbProps[]>
   >(new Map())
+  const [raceResultsDriverMap, setRaceResultsDriverMap] = React.useState<
+    Map<number, Map<number, RaceResultsDbProps>>
+  >(new Map())
   const [driversIdMap, setDriverIdMap] = React.useState<
     Map<string, DriversDbProps>
   >(new Map())
@@ -62,6 +65,14 @@ const useContext: () => SupabaseContextProps | null = () => {
     if (!drivers || !dbRaces || !raceResults)
       throw new Error('failed to initialize')
 
+    const dMap = new Map<number, DriversDbProps>()
+    const dIdMap = new Map<string, DriversDbProps>()
+    for (const driver of drivers) {
+      dMap.set(driver.id, driver)
+      dIdMap.set(driver.driver_id, driver)
+    }
+
+    const rrdMap = new Map<number, Map<number, RaceResultsDbProps>>()
     const rrMap = new Map<number, RaceResultsDbProps[]>()
     const rMap = new Map()
     for (const race of dbRaces.sort(
@@ -69,20 +80,19 @@ const useContext: () => SupabaseContextProps | null = () => {
     )) {
       rMap.set(race.id, race)
       rrMap.set(race.id, [])
+      rrdMap.set(race.id, new Map<number, RaceResultsDbProps>())
     }
     for (const raceResult of raceResults) {
       rrMap.get(raceResult.race_id)!.push(raceResult)
+      rrdMap
+        .get(raceResult.race_id)
+        .set(dIdMap.get(raceResult.driver_id).id, raceResult)
     }
     setRacesMap(rMap)
     setRaces(dbRaces)
     setRaceResultsMap(rrMap)
+    setRaceResultsDriverMap(rrdMap)
 
-    const dMap = new Map()
-    const dIdMap = new Map()
-    for (const driver of drivers) {
-      dMap.set(driver.id, driver)
-      dIdMap.set(driver.driver_id, driver)
-    }
     setDriversMap(dMap)
     setDriverIdMap(dIdMap)
   }
@@ -106,6 +116,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     driversIdMap,
     racesMap,
     raceResultsMap,
+    raceResultsDriverMap,
     races,
     loading,
   }
@@ -123,6 +134,7 @@ export interface SupabaseContextProps {
   driversIdMap: Map<string, DriversDbProps>
   racesMap: Map<number, RacesDbProps>
   raceResultsMap: Map<number, RaceResultsDbProps[]>
+  raceResultsDriverMap: Map<number, Map<number, RaceResultsDbProps>>
   races: RacesDbProps[]
   loading: boolean
 }

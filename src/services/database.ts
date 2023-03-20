@@ -178,3 +178,22 @@ export const getRaceResultsByRaceId = async (
 export const getTable = async (client: SupabaseClient, table: string) => {
   return await client.from(table).select('*')
 }
+
+export const getTableWithColumn = async (
+  client: SupabaseClient,
+  table: string,
+  columnName: string,
+  match: any
+) => {
+  return await client.from(table).select('*').eq(columnName, match)
+}
+
+export const getRaceResultsByRound = async (
+  client: SupabaseClient,
+  roundNumber: number
+) => {
+  const { data } = await getRaceByRoundNumber(client, roundNumber)
+  const raceId: number = data[0].id
+
+  return await getRaceResultsByRaceId(client, raceId)
+}

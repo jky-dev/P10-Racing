@@ -8,12 +8,19 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
+import { useUtilsContext } from '../../contexts/UtilsContext'
 import {
   LeagueMembersDbProps,
+  LeagueResultsDbProps,
   LeaguesProps,
+  RaceResultsDbProps,
   UserDbProps,
 } from '../../interfaces'
-import { getTable } from '../../services/database'
+import {
+  getRaceByRoundNumber,
+  getRaceResultsByRound,
+  getTable,
+} from '../../services/database'
 import {
   setConstructors,
   setDrivers,
@@ -24,7 +31,8 @@ import Loader from '../loader/Loader'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
-  const { client } = useSupabaseContext()
+  const { client, driversMap } = useSupabaseContext()
+  const { pointsMap } = useUtilsContext()
 
   const [leaguesMap, setLeaguesMap] =
     React.useState<Map<number, LeaguesProps>>(null)
@@ -34,7 +42,7 @@ const AdminPanel: React.FC = () => {
 
   const [loading, setLoading] = React.useState(true)
 
-  const func = async () => {
+  const setupLeagues = async () => {
     const { data: leagues }: any = await getTable(client, 'leagues')
 
     const tLM = new Map<number, LeaguesProps>()
@@ -65,8 +73,39 @@ const AdminPanel: React.FC = () => {
     setLoading(false)
   }
 
+  const calculatePoints = async () => {
+    const { data: race } = await getRaceByRoundNumber(client, round)
+
+    const raceId: number = race[0].id
+
+    const { data } = await getRaceResultsByRound(client, round)
+
+    const driverResultMap = new Map<string, RaceResultsDbProps>()
+
+    for (const result of data as RaceResultsDbProps[]) {
+      driverResultMap.set(result.driver_id, result)
+    }
+
+    const { data: leagueResults } = await client
+      .from('league_results')
+      .select('*')
+      .eq('race_id', raceId)
+      .not('driver_id', 'is', null)
+
+    for (const result of leagueResults as LeagueResultsDbProps[]) {
+      const driverIdString = driversMap.get(result.driver_id).driver_id // get the string
+      const position = driverResultMap.get(driverIdString).position
+      const pointsGained = pointsMap.get(position)
+
+      const { error } = await client
+        .from('league_results')
+        .update({ points_gained: pointsGained })
+        .eq('id', result.id)
+    }
+  }
+
   React.useEffect(() => {
-    func()
+    setupLeagues()
   }, [])
 
   if (loading) return <Loader />
@@ -93,6 +132,9 @@ const AdminPanel: React.FC = () => {
           variant="contained"
         >
           Set Results By Round
+        </Button>
+        <Button onClick={() => calculatePoints()}>
+          Calculate Points By Round
         </Button>
       </ListItem>
       <Divider />
