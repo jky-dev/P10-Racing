@@ -1,6 +1,10 @@
+import { ThemeProvider } from '@emotion/react'
+import { CssBaseline, PaletteMode, createTheme } from '@mui/material'
 import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
 import styles from './App.module.scss'
+import ProtectedRoute from './ProtectedRoute'
 import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
@@ -14,7 +18,6 @@ import Profile from './components/profile/Profile'
 import Races from './components/races/Races'
 import { useSupabaseContext } from './contexts/SupabaseContext'
 import { useUtilsContext } from './contexts/UtilsContext'
-import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -85,19 +88,23 @@ const router = createBrowserRouter([
 
 const App = () => {
   const { loading } = useSupabaseContext()
-  const { SnackBar } = useUtilsContext()
-
-  if (loading)
-    return (
-      <div className={styles.container}>
-        <Loader />
-      </div>
-    )
+  const { SnackBar, theme } = useUtilsContext()
 
   return (
     <>
-      {<SnackBar />}
-      <RouterProvider router={router} />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {loading ? (
+          <div className={styles.container}>
+            <Loader />
+          </div>
+        ) : (
+          <>
+            {<SnackBar />}
+            <RouterProvider router={router} />
+          </>
+        )}
+      </ThemeProvider>
     </>
   )
 }

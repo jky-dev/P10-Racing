@@ -1,5 +1,7 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Brightness4, Brightness7 } from '@mui/icons-material'
+import { Box, Button, IconButton, TextField, Typography } from '@mui/material'
 import React from 'react'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { UserDbProps } from '../../interfaces'
@@ -11,7 +13,7 @@ const Profile = () => {
   const [profile, setProfile] = React.useState<UserDbProps | null>(null)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [name, setName] = React.useState('')
-  const { sendAlert } = useUtilsContext()
+  const { sendAlert, toggleColorMode, mode } = useUtilsContext()
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -82,6 +84,14 @@ const Profile = () => {
                 Change
               </Button>
             </span>
+          </div>
+          <div className={styles.themeToggleContainer}>
+            <Typography>
+              {mode === 'light' ? 'Light mode' : 'Dark mode'}
+            </Typography>
+            <IconButton onClick={toggleColorMode}>
+              {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
+            </IconButton>
           </div>
         </>
       )}

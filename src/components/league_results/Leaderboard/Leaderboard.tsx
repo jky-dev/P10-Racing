@@ -68,10 +68,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
             )}
             <ListItemText
               primary={obj.user}
+              secondary={obj.total}
               inset={index > 2}
-              sx={{ width: 200 }}
+              sx={{ width: 500 }}
             />
-            <ListItemText primary={obj.total} sx={{ width: 50 }} />
           </ListItem>
         ))}
       </List>

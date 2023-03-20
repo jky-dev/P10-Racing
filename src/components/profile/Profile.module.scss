@@ -5,3 +5,10 @@
   align-items: center;
   margin: 1rem 0;
 }
+
+.themeToggleContainer {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  align-items: center;
+}

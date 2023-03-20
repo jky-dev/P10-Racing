@@ -1,5 +1,13 @@
-import { Alert, AlertColor, Snackbar } from '@mui/material'
-import React, { createContext, ReactNode } from 'react'
+import { Theme } from '@emotion/react'
+import {
+  Alert,
+  AlertColor,
+  PaletteLinearProgress,
+  PaletteMode,
+  Snackbar,
+  createTheme,
+} from '@mui/material'
+import React, { ReactNode, createContext } from 'react'
 
 const UtilsContext = createContext<UtilsContextProps | null>(null)
 
@@ -25,6 +33,9 @@ const useContext = () => {
     message: '',
     variant: 'success',
   })
+  const [mode, setMode] = React.useState<PaletteMode>(
+    (localStorage.getItem('theme') as PaletteMode) || 'light'
+  )
 
   const sendAlert: (message: string, variant?: AlertColor) => void = (
     message: string,
@@ -42,6 +53,21 @@ const useContext = () => {
     setSnackBarState((prev) => ({ ...prev, open: false }))
   }
 
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: mode,
+        },
+      }),
+    [mode]
+  )
+
+  const toggleColorMode = () => {
+    localStorage.setItem('theme', mode === 'light' ? 'dark' : 'light')
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+  }
+
   const SnackBar = () => (
     <Snackbar
       open={snackBarState.open}
@@ -54,13 +80,16 @@ const useContext = () => {
     </Snackbar>
   )
 
-  return { SnackBar, sendAlert, pointsMap }
+  return { SnackBar, sendAlert, pointsMap, theme, toggleColorMode, mode }
 }
 
 interface UtilsContextProps {
   sendAlert: (message: string, variant?: AlertColor) => void
   SnackBar: () => JSX.Element
   pointsMap: Map<number, number>
+  theme: Theme
+  toggleColorMode: () => void
+  mode: PaletteMode
 }
 
 export const useUtilsContext: () => UtilsContextProps = () => {
