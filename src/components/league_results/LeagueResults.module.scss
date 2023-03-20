@@ -22,6 +22,10 @@
   align-items: baseline;
   justify-content: space-between;
   width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 }
 
 .raceName {

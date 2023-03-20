@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 import React from 'react'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { driverName, formatRaceDateTime } from '../../helpers/helpers'
@@ -17,6 +18,7 @@ import {
   RacesDbProps,
 } from '../../interfaces'
 import Loader from '../loader/Loader'
+import Leaderboard from './Leaderboard/Leaderboard'
 import styles from './LeagueResults.module.scss'
 import Picker from './Picker/Picker'
 import ResultsTable from './Results/ResultsTable'
@@ -27,14 +29,7 @@ interface LeagueResultsProps {
 
 const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   const [loading, setLoading] = React.useState(true)
-  const {
-    client,
-    user,
-    driversMap,
-    races,
-    raceResultsDriverMap,
-    driversIdMap,
-  } = useSupabaseContext()
+  const { client, user, driversMap, races } = useSupabaseContext()
   const [leagueMembers, setLeagueMembers] = React.useState(
     new Map<string, LeagueMembersDbProps>()
   )
@@ -121,19 +116,10 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   return (
     <div className={styles.container}>
-      <Typography variant="h4">Next Race Picks</Typography>
-      <div>
-        {Array.from(leagueMembers.entries()).map(([key, value]) => (
-          <Typography key={key}>
-            {`${value.users.name} - ${driverName(
-              driversMap.get(
-                leagueResultsMap.get(key).get(nextRaceRoundId).driver_id
-              ),
-              'Not picked'
-            )}`}
-          </Typography>
-        ))}
-      </div>
+      <Leaderboard
+        leagueResultsMap={leagueResultsMap}
+        usersMap={leagueMembers}
+      />
       <Typography variant="h4">Races</Typography>
       <div>
         {leagueResultsMap.get(user.id).size !== 23 && (
