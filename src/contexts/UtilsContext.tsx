@@ -2,7 +2,6 @@ import { Theme } from '@emotion/react'
 import {
   Alert,
   AlertColor,
-  PaletteLinearProgress,
   PaletteMode,
   Snackbar,
   createTheme,
