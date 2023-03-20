@@ -60,7 +60,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       <Typography variant="h4">Leaderboard</Typography>
       <List>
         {leaderboardArray.map((obj, index) => (
-          <ListItem disableGutters>
+          <ListItem disableGutters key={obj.user}>
             {index < 3 && (
               <ListItemAvatar>
                 <EmojiEvents htmlColor={colorMap[index]} />

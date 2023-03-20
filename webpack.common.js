@@ -6,6 +6,9 @@ const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const CopyPlugin = require('copy-webpack-plugin')
+
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 module.exports = {
@@ -14,6 +17,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'index_bundle.js',
+    publicPath: '/',
   },
   target: 'web',
   devServer: {
@@ -79,6 +83,14 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -89,6 +101,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: isDevelopment ? '[name].css' : '[name].[hash].css',
       chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
+    }),
+    new CopyPlugin({
+      patterns: [{ from: './src/img', to: 'images' }],
     }),
   ],
 }

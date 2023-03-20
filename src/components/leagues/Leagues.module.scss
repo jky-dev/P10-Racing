@@ -2,13 +2,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-}
-
-.leaguesContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .leagueSubmitContainer {
@@ -24,4 +18,11 @@
   flex-direction: row;
   align-items: center;
   column-gap: 0.5rem;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }

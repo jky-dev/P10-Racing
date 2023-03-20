@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React from 'react'
+
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { driverName } from '../../../helpers/helpers'
 import {
@@ -62,7 +63,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
       </TableHead>
       <TableBody>
         {Array.from(leagueMembers.entries()).map(([uuid, value]) => (
-          <TableRow>
+          <TableRow key={uuid}>
             <TableCell
               sx={{
                 textOverflow: 'ellipsis',

@@ -7,6 +7,7 @@ import {
 } from '../../contexts/SupabaseContext'
 import { driverName, formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
+import redbullimg from './../../img/redbull.png'
 import styles from './Races.module.scss'
 
 const Races: React.FC = () => {
@@ -48,10 +49,18 @@ const Races: React.FC = () => {
                     .get(race.id)!
                     .sort((a, b) => a.position - b.position)
                     .map((result) => (
-                      <Typography variant="body2" key={result.position}>
-                        {result.position}:{' '}
-                        {driverName(driversIdMap.get(result.driver_id))}
-                      </Typography>
+                      <div className={styles.result}>
+                        <Typography variant="body2" key={result.position}>
+                          {result.position}:{' '}
+                          {driverName(driversIdMap.get(result.driver_id))}
+                        </Typography>
+                        <img
+                          src={`/images/${
+                            driversIdMap.get(result.driver_id).constructor
+                          }.png`}
+                          height="20"
+                        />
+                      </div>
                     ))}
                 </CardContent>
               </Card>

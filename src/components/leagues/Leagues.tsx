@@ -1,12 +1,16 @@
 import { Share } from '@mui/icons-material'
 import {
+  Box,
   Button,
   IconButton,
+  Tab,
+  Tabs,
   TextField,
   Tooltip,
   Typography,
 } from '@mui/material'
 import React from 'react'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import {
@@ -89,6 +93,7 @@ const Leagues: React.FC = () => {
     }
 
     setJoinedLeagues(tempLeaguesMap)
+    setLeagueId(tempLeaguesMap.values().next().value.id)
     setLoading(false)
   }
 
@@ -106,43 +111,41 @@ const Leagues: React.FC = () => {
     sendAlert('Copied invite to clipboard!')
   }
 
-  const title = () => {
-    const title = 'My Leagues'
-    if (leagueId === -1) {
-      return title
-    } else {
-      return title + ` - ${joinedLeagues.get(leagueId).name}`
-    }
-  }
-
   if (loading) return <Loader />
 
   return (
     <div className={styles.container}>
-      <Typography variant="h4">{title()}</Typography>
-      {leagueId !== -1 && (
-        <div className={styles.inviteCode}>
-          <Typography variant="h6">
-            Invite code: {joinedLeagues.get(leagueId).invite_code}
-          </Typography>
-          <Tooltip title="Copy invite code">
-            <IconButton onClick={handleInviteClick}>
-              <Share></Share>
-            </IconButton>
-          </Tooltip>
-        </div>
-      )}
-      <div className={styles.leaguesContainer}>
-        {Array.from(joinedLeagues.entries()).map(([leagueId, league]) => {
-          return (
-            <span key={leagueId}>
-              <Button onClick={() => setLeagueId(leagueId)} variant="outlined">
-                {league.name}
-              </Button>
-            </span>
-          )
-        })}
+      <div className={styles.title}>
+        <Typography variant="h4">
+          {joinedLeagues.get(leagueId)?.name}
+        </Typography>
+        {leagueId !== -1 && (
+          <span>
+            <Tooltip title="Copy invite code">
+              <IconButton onClick={handleInviteClick}>
+                <Share color="primary" />
+              </IconButton>
+            </Tooltip>
+          </span>
+        )}
       </div>
+      <Box sx={{ width: '100%' }}>
+        <Tabs
+          value={leagueId}
+          onChange={(e, v) => setLeagueId(v)}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{
+            '& .MuiTabScrollButton-root': {
+              opacity: '0.8 !important',
+            },
+          }}
+        >
+          {Array.from(joinedLeagues.values()).map((league) => {
+            return <Tab label={league.name} value={league.id} key={league.id} />
+          })}
+        </Tabs>
+      </Box>
       <LeagueResults leagueId={leagueId} />
       <div className={styles.leagueSubmitContainer}>
         <TextField

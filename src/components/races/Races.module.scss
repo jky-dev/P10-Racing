@@ -19,3 +19,10 @@
     justify-content: center;
   }
 }
+
+.result {
+  display: inline-flex;
+  justify-content: flex-start;
+  column-gap: 0.5rem;
+  align-items: center;
+}
