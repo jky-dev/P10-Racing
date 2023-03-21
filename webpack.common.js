@@ -103,10 +103,7 @@ module.exports = {
       chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
     }),
     new CopyPlugin({
-      patterns: [
-        { from: './src/img', to: 'images' },
-        { from: './src/robot', to: './' },
-      ],
+      patterns: [{ from: './src/img', to: 'images' }],
     }),
   ],
 }
