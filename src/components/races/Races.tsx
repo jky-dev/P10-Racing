@@ -35,7 +35,7 @@ const Races: React.FC = () => {
           .map((race) => (
             <span key={race.race_name as Key}>
               <Card variant="outlined" sx={{ width: '250px' }}>
-                <CardContent>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Typography variant="h6">
                     {raceName(race.race_name)}
                   </Typography>

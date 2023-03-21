@@ -48,7 +48,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
         <TableRow>
           <TableCell
             sx={{
-              width: '40%',
+              width: '30%',
             }}
           >
             User
@@ -64,7 +64,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
           <TableCell
             align="right"
             sx={{
-              width: '20%',
+              width: '30%',
             }}
           >
             {pointsTitle()}
