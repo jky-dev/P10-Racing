@@ -41,8 +41,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     }
     tempArray.sort((a, b) => b.total - a.total)
     setLeaderboardArray([...tempArray])
-
-    console.log(tempArray)
   }
 
   React.useEffect(() => {
