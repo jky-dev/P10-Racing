@@ -7,7 +7,6 @@ import {
 } from '../../contexts/SupabaseContext'
 import { driverName, formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
-import redbullimg from './../../img/redbull.png'
 import styles from './Races.module.scss'
 
 const Races: React.FC = () => {
