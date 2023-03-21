@@ -48,7 +48,7 @@ const Races: React.FC = () => {
                     .get(race.id)!
                     .sort((a, b) => a.position - b.position)
                     .map((result) => (
-                      <div className={styles.result}>
+                      <div className={styles.result} key={result.driver_id}>
                         <Typography variant="body2" key={result.position}>
                           {result.position}:{' '}
                           {driverName(driversIdMap.get(result.driver_id))}

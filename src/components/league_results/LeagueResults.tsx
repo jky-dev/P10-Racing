@@ -4,6 +4,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   Tooltip,
   Typography,
 } from '@mui/material'
@@ -25,9 +26,17 @@ import ResultsTable from './Results/ResultsTable'
 
 interface LeagueResultsProps {
   leagueId: number
+  name: string
+  owner: boolean
+  onDelete: () => void
 }
 
-const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
+const LeagueResults: React.FC<LeagueResultsProps> = ({
+  leagueId,
+  name,
+  owner,
+  onDelete,
+}) => {
   const [loading, setLoading] = React.useState(true)
   const { client, user, driversMap, races } = useSupabaseContext()
   const [leagueMembers, setLeagueMembers] = React.useState(
@@ -89,6 +98,10 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     return raceDate < Date.now()
   }
 
+  const deleteLeague = async () => {
+    await client.rpc('delete_league', { league_id: leagueId })
+  }
+
   const submitDriver = async (driverId: number, rowId: number) => {
     const { error } = await client
       .from('league_results')
@@ -103,6 +116,21 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     } else {
       sendAlert('Failed to submit driver - please try again later', 'error')
     }
+  }
+
+  const handleDelete = async () => {
+    if (
+      !confirm(
+        `Are you sure you want to delete league '${name}'? This action CANNOT be undone.`
+      )
+    )
+      return
+
+    await deleteLeague()
+
+    onDelete()
+
+    console.log('commence delete')
   }
 
   React.useEffect(() => {
@@ -176,6 +204,13 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           </Accordion>
         ))}
       </div>
+      {owner && (
+        <span>
+          <Button color="error" variant="contained" onClick={handleDelete}>
+            Delete League
+          </Button>
+        </span>
+      )}
     </div>
   )
 }

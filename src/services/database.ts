@@ -1,4 +1,5 @@
 import { SupabaseClient, User } from '@supabase/supabase-js'
+
 import {
   F1ConstructorsApiProps,
   F1DriversApiProps,
@@ -177,15 +178,6 @@ export const getRaceResultsByRaceId = async (
 
 export const getTable = async (client: SupabaseClient, table: string) => {
   return await client.from(table).select('*')
-}
-
-export const getTableWithColumn = async (
-  client: SupabaseClient,
-  table: string,
-  columnName: string,
-  match: any
-) => {
-  return await client.from(table).select('*').eq(columnName, match)
 }
 
 export const getRaceResultsByRound = async (

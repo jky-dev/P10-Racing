@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import {
@@ -157,11 +158,11 @@ const AdminPanel: React.FC = () => {
       </ListItem>
       <Divider />
       {Array.from(leaguesMap.entries()).map(([leagueId, league]) => (
-        <>
+        <div key={leagueId}>
           <ListItem sx={{ flexDirection: 'column' }}>
             <Typography variant="h4">{league.name}</Typography>
             {leagueMembersMap.get(leagueId).map((member) => (
-              <div>
+              <div key={member.user_uuid + leagueId}>
                 <Typography variant="body1">
                   {userMap.get(member.user_uuid).name}
                 </Typography>
@@ -169,7 +170,7 @@ const AdminPanel: React.FC = () => {
             ))}
           </ListItem>
           <Divider />
-        </>
+        </div>
       ))}
     </List>
   )

@@ -34,7 +34,7 @@ const Leagues: React.FC = () => {
   const [leagueCode, setLeagueCode] = React.useState('')
   const [leagueId, setLeagueId] = React.useState<number>(-1)
   const { client, user } = useSupabaseContext()
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(true)
   const [joinedLeagues, setJoinedLeagues] = React.useState(
     new Map<number, LeagueDbProps>()
   )
@@ -54,6 +54,7 @@ const Leagues: React.FC = () => {
         crypto.randomUUID().slice(0, 6)
       )
       sendAlert('Successfully created league ' + leagueName)
+      setLeagueName('')
     } catch (exception) {
       sendAlert('Failed to create league, please try again later', 'error')
     }
@@ -93,7 +94,7 @@ const Leagues: React.FC = () => {
     }
 
     setJoinedLeagues(tempLeaguesMap)
-    setLeagueId(tempLeaguesMap.values().next().value.id)
+    setLeagueId(tempLeaguesMap.values().next().value?.id || -1)
     setLoading(false)
   }
 
@@ -101,6 +102,10 @@ const Leagues: React.FC = () => {
     if (user === null) return
     fetchLeagues()
   }, [user])
+
+  const onDelete = () => {
+    fetchLeagues()
+  }
 
   const handleInviteClick = async () => {
     await navigator.clipboard.writeText(
@@ -111,47 +116,66 @@ const Leagues: React.FC = () => {
     sendAlert('Copied invite to clipboard!')
   }
 
+  const validLeague = leagueId !== -1
+
   if (loading) return <Loader />
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>
-        <Typography variant="h4">
-          {joinedLeagues.get(leagueId)?.name}
-        </Typography>
-        {leagueId !== -1 && (
-          <span>
-            <Tooltip title="Copy invite code">
-              <IconButton onClick={handleInviteClick}>
-                <Share color="primary" />
-              </IconButton>
-            </Tooltip>
-          </span>
-        )}
-      </div>
-      <Box sx={{ width: '100%' }}>
-        <Tabs
-          value={leagueId}
-          onChange={(e, v) => setLeagueId(v)}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{
-            '& .MuiTabScrollButton-root': {
-              opacity: '0.8 !important',
-            },
-          }}
-        >
-          {Array.from(joinedLeagues.values()).map((league) => {
-            return <Tab label={league.name} value={league.id} key={league.id} />
-          })}
-        </Tabs>
-      </Box>
-      <LeagueResults leagueId={leagueId} />
+      {validLeague ? (
+        <>
+          <div className={styles.title}>
+            <Typography variant="h4">
+              {joinedLeagues.get(leagueId).name}
+            </Typography>
+            {validLeague && (
+              <span>
+                <Tooltip title="Copy invite code">
+                  <IconButton onClick={handleInviteClick}>
+                    <Share color="primary" />
+                  </IconButton>
+                </Tooltip>
+              </span>
+            )}
+          </div>
+          <Box sx={{ width: '100%' }}>
+            <Tabs
+              value={leagueId}
+              onChange={(e, v) => setLeagueId(v)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                '& .MuiTabScrollButton-root': {
+                  opacity: '0.8 !important',
+                },
+              }}
+            >
+              {Array.from(joinedLeagues.values()).map((league) => {
+                return (
+                  <Tab label={league.name} value={league.id} key={league.id} />
+                )
+              })}
+            </Tabs>
+          </Box>
+        </>
+      ) : (
+        <>
+          <Typography variant="h4">Leagues</Typography>
+          <Typography>Create or join a league to play!</Typography>
+        </>
+      )}
+      <LeagueResults
+        leagueId={leagueId}
+        name={joinedLeagues.get(leagueId)?.name}
+        owner={joinedLeagues.get(leagueId)?.created_by_uuid === user.id}
+        onDelete={onDelete}
+      />
       <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league name"
           value={leagueName}
           onChange={(e) => setLeagueName(e.target.value)}
+          autoComplete="off"
         >
           League name
         </TextField>
@@ -166,6 +190,7 @@ const Leagues: React.FC = () => {
           helperText="Enter your league code here"
           value={leagueCode}
           onChange={(e) => setLeagueCode(e.target.value)}
+          autoComplete="off"
         >
           League code
         </TextField>
