@@ -1,11 +1,27 @@
+import { useMediaQuery } from '@mui/material'
+import { format } from 'date-fns'
+
 import { DriversDbProps } from '../interfaces'
 
-export const formatRaceDateTime = (date: string, time: string) => {
-  return new Date(`${date} ${time}`).toLocaleString()
+export const formatRaceDateTime = (
+  date: string,
+  time: string,
+  isMobile: boolean,
+  dateObject?: Date
+) => {
+  const longFormat = 'eeee, do MMMM - hh:mmaaa'
+  const shortFormat = 'eee, do MMM - hh:mmaaa'
+  const stringFormat = isMobile ? shortFormat : longFormat
+
+  if (dateObject) {
+    return format(dateObject, stringFormat)
+  }
+  return format(new Date(`${date} ${time}`), stringFormat)
 }
 
 export const driverName = (
   driver: DriversDbProps | undefined,
+  isMobile: boolean,
   alt: string = '',
   keepLong: boolean = false
 ) => {
@@ -13,8 +29,7 @@ export const driverName = (
   if (keepLong) {
     return `${driver.given_name} ${driver.last_name}`
   }
-  const width = window.matchMedia('(max-width:600px)')
-  if (width.matches) {
+  if (isMobile) {
     return `${driver.given_name.charAt(0)}. ${driver.last_name}`
   } else {
     return `${driver.given_name} ${driver.last_name}`

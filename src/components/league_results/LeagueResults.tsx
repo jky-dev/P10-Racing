@@ -7,6 +7,7 @@ import {
   Button,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from '@mui/material'
 import React from 'react'
 
@@ -48,6 +49,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({
   )
 
   const { sendAlert } = useUtilsContext()
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   const fetchResults = async () => {
     setLoading(true)
@@ -111,7 +113,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({
       .eq('id', rowId)
 
     if (!error) {
-      sendAlert('Submitted driver: ' + driverName(driversMap.get(driverId)))
+      sendAlert(
+        'Submitted driver: ' + driverName(driversMap.get(driverId), isMobile)
+      )
       fetchResults()
     } else {
       sendAlert('Failed to submit driver - please try again later', 'error')
@@ -178,7 +182,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({
                     )}
                 </Typography>
                 <Typography variant="body2">
-                  {formatRaceDateTime(race.date, race.time)}
+                  {formatRaceDateTime(race.date, race.time, isMobile)}
                 </Typography>
               </div>
             </AccordionSummary>

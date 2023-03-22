@@ -26,3 +26,21 @@
   column-gap: 0.5rem;
   align-items: center;
 }
+
+.raceTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.raceTimeContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

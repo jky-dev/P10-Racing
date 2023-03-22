@@ -1,4 +1,11 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  useMediaQuery,
+} from '@mui/material'
 import React from 'react'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
@@ -21,6 +28,8 @@ const ResultsTable: React.FC<ResultsTable> = ({
   race,
 }) => {
   const { raceResultsDriverMap, driversMap } = useSupabaseContext()
+  const isMobile = useMediaQuery('(max-width:600px)')
+
   const getPointsColumn = (userId: string, raceId: number) => {
     const points = leagueResultsMap.get(userId).get(raceId).points_gained
 
@@ -31,15 +40,6 @@ const ResultsTable: React.FC<ResultsTable> = ({
       .get(leagueResultsMap.get(userId).get(raceId).driver_id).position
 
     return `${points} (${pos})`
-  }
-
-  const pointsTitle = () => {
-    const mq = window.matchMedia('(max-width:600px)')
-    if (mq.matches) {
-      return 'Points'
-    } else {
-      return 'Points (Pos)'
-    }
   }
 
   return (
@@ -67,7 +67,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
               width: '30%',
             }}
           >
-            {pointsTitle()}
+            {isMobile ? 'Points' : 'Points (Pos)'}
           </TableCell>
         </TableRow>
       </TableHead>
@@ -100,6 +100,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
                     driversMap.get(
                       leagueResultsMap.get(uuid).get(race.id).driver_id
                     ),
+                    isMobile,
                     '-'
                   )}
                 </span>

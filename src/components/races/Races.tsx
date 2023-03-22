@@ -1,17 +1,24 @@
-import { Card, CardContent, Divider, Typography } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+  useMediaQuery,
+} from '@mui/material'
 import React, { Key } from 'react'
 
 import {
   SupabaseContextProps,
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
-import { driverName, formatRaceDateTime } from '../../helpers/helpers'
+import { formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
+import RaceResultsTable from './RaceResultsTable'
 import styles from './Races.module.scss'
 
 const Races: React.FC = () => {
-  const { raceResultsMap, races, driversIdMap }: SupabaseContextProps =
-    useSupabaseContext()
+  const { raceResultsMap, races }: SupabaseContextProps = useSupabaseContext()
+  const isMobile = useMediaQuery('(max-width:600px)')
 
   const schedule = (race: RacesDbProps) => {
     const array = []
@@ -40,10 +47,12 @@ const Races: React.FC = () => {
     })
     array.sort((a, b) => a.date.valueOf() - b.date.valueOf())
     return array.map((race) => (
-      <>
-        <Typography variant="h6">{race.name}</Typography>
-        <Typography variant="body1">{race.date.toLocaleString()}</Typography>
-      </>
+      <div className={styles.raceTimeContainer} key={race.name}>
+        <Typography variant="subtitle1">{race.name}</Typography>
+        <Typography variant="subtitle1">
+          {formatRaceDateTime('', '', isMobile, race.date)}
+        </Typography>
+      </div>
     ))
   }
 
@@ -60,43 +69,27 @@ const Races: React.FC = () => {
       </div>
       <div className={styles.container}>
         {races.map((race) => (
-          <span key={race.race_name as Key}>
-            <Card variant="outlined" sx={{ width: '250px' }}>
-              <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Card sx={{ width: '100%' }} key={race.id}>
+            <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+              <div className={styles.raceTitle}>
                 <Typography variant="h5">{raceName(race.race_name)}</Typography>
-                <Divider sx={{ pt: 1, mb: 1 }} />
-                {schedule(race)}
-                <Typography variant="h6">Race Time</Typography>
-                <Typography variant="body1">
-                  {formatRaceDateTime(race.date, race.time)}
+                <Typography variant="subtitle1">
+                  {formatRaceDateTime(race.date, race.time, isMobile)}
                 </Typography>
-                {raceResultsMap.get(race.id).length > 0 && (
-                  <>
-                    <Divider sx={{ pt: 1, mb: 1 }} />
+              </div>
+              <Divider sx={{ pt: 1, mb: 1 }} />
+              {schedule(race)}
+              {raceResultsMap.get(race.id).length > 0 && (
+                <>
+                  <Divider sx={{ pt: 1, mb: 1 }} />
+                  <div className={styles.heading}>
                     <Typography variant="h6">Race Results</Typography>
-                    {raceResultsMap.get(race.id).map((result) => (
-                      <div className={styles.result} key={result.driver_id}>
-                        <Typography variant="body1" key={result.position}>
-                          {result.position}:{' '}
-                          {driverName(
-                            driversIdMap.get(result.driver_id),
-                            '',
-                            true
-                          )}
-                        </Typography>
-                        <img
-                          src={`/images/${
-                            driversIdMap.get(result.driver_id).constructor
-                          }.png`}
-                          height="24"
-                        />
-                      </div>
-                    ))}
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </span>
+                  </div>
+                  <RaceResultsTable raceResults={raceResultsMap.get(race.id)} />
+                </>
+              )}
+            </CardContent>
+          </Card>
         ))}
       </div>
     </>

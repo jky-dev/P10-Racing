@@ -59,6 +59,7 @@ export interface F1ResultsApiProps {
   }
   position: string
   status: string
+  points: number
 }
 
 export interface F1QualifyingApiProps {
@@ -123,6 +124,7 @@ export interface RaceResultsDbProps {
   race_id: number
   status: string
   unique_index: string
+  points: number
 }
 
 export interface RacesWithResultsDbProps extends RacesDbProps {
