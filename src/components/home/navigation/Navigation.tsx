@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 
 const Navigation = () => {
@@ -74,13 +75,13 @@ const Navigation = () => {
   return (
     <>
       <AppBar component="nav">
-        <Toolbar>
+        <Toolbar sx={{ flexDirection: { xs: 'row-reverse', sm: 'row' } }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            edge="start"
+            edge="end"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ ml: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
@@ -106,6 +107,7 @@ const Navigation = () => {
       </AppBar>
       <Box component="nav" />
       <Drawer
+        anchor="right"
         variant="temporary"
         open={open}
         onClose={handleDrawerToggle}
