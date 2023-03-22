@@ -98,6 +98,7 @@ export const insertIntoRaces = async (
   client: SupabaseClient,
   race: F1RaceApiProps
 ) => {
+  console.log(race.round)
   await client.from('races').upsert(
     [
       {
@@ -106,9 +107,19 @@ export const insertIntoRaces = async (
         year: race.season,
         date: race.date,
         time: race.time,
+        fp1_date: race.FirstPractice.date,
+        fp1_time: race.FirstPractice.time,
+        fp2_date: race.SecondPractice.date,
+        fp2_time: race.SecondPractice.time,
+        fp3_date: race.ThirdPractice?.date,
+        fp3_time: race.ThirdPractice?.time,
+        sprint_date: race.Sprint?.date,
+        sprint_time: race.Sprint?.time,
+        quali_date: race.Qualifying.date,
+        quali_time: race.Qualifying.time,
       },
     ],
-    { onConflict: 'race_name', ignoreDuplicates: true }
+    { onConflict: 'race_name', ignoreDuplicates: false }
   )
 }
 
