@@ -25,6 +25,7 @@ import {
 import {
   setConstructors,
   setDrivers,
+  setQualiResultsByRound,
   setRaceResultsByRound,
   setRaces,
 } from '../../services/f1'
@@ -32,7 +33,7 @@ import Loader from '../loader/Loader'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
-  const { client, driversMap } = useSupabaseContext()
+  const { client, driversMap, driversIdMap } = useSupabaseContext()
   const { pointsMap } = useUtilsContext()
 
   const [leaguesMap, setLeaguesMap] =
@@ -113,53 +114,68 @@ const AdminPanel: React.FC = () => {
 
   return (
     <List>
-      <ListItem>
+      <div>
         <Typography variant="body1" mr={2}>
           Set Race Details
         </Typography>
         <Button onClick={() => setRaces(client)} variant="contained">
           Set Races
         </Button>
-      </ListItem>
+      </div>
       <Divider />
-      <ListItem>
-        <TextField
-          inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-          value={round}
-          onChange={(e) => setRound(Number(e.target.value))}
-        />
-        <Button
-          onClick={() => setRaceResultsByRound(client, round)}
-          variant="contained"
-        >
-          Set Results By Round
-        </Button>
-        <Button onClick={() => calculatePoints()}>
-          Calculate Points By Round
-        </Button>
-      </ListItem>
+      <div>
+        <div>
+          <TextField
+            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+            value={round}
+            onChange={(e) => setRound(Number(e.target.value))}
+            sx={{ width: 100 }}
+          />
+        </div>
+        <span>
+          <Button
+            onClick={() => setRaceResultsByRound(client, round)}
+            variant="contained"
+          >
+            Race Results
+          </Button>
+        </span>
+        <span>
+          <Button onClick={() => calculatePoints()} variant="contained">
+            Calculate Points
+          </Button>
+        </span>
+        <span>
+          <Button
+            onClick={() => setQualiResultsByRound(client, round, driversIdMap)}
+            variant="contained"
+          >
+            Quali
+          </Button>
+        </span>
+      </div>
       <Divider />
-      <ListItem>
+      <div>
         <Typography variant="body1" mr={2}>
           Set Constructors
         </Typography>
         <Button onClick={() => setConstructors(client)} variant="contained">
           Set Constructors
         </Button>
-      </ListItem>
+      </div>
       <Divider />
-      <ListItem>
+      <div>
         <Typography variant="body1" mr={2}>
           Set Drivers
         </Typography>
         <Button onClick={() => setDrivers(client)} variant="contained">
           Set Drivers
         </Button>
-      </ListItem>
+      </div>
       <Divider />
       {Array.from(leaguesMap.entries()).map(([leagueId, league]) => (
         <div key={leagueId}>
-          <ListItem sx={{ flexDirection: 'column' }}>
+          <div>
             <Typography variant="h4">{league.name}</Typography>
             {leagueMembersMap.get(leagueId).map((member) => (
               <div key={member.user_uuid + leagueId}>
@@ -168,7 +184,7 @@ const AdminPanel: React.FC = () => {
                 </Typography>
               </div>
             ))}
-          </ListItem>
+          </div>
           <Divider />
         </div>
       ))}

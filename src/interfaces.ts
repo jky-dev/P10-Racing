@@ -61,6 +61,14 @@ export interface F1ResultsApiProps {
   status: string
 }
 
+export interface F1QualifyingApiProps {
+  Driver: { driverId: string }
+  Q1: string
+  Q2: string
+  Q3: string
+  position: number
+}
+
 export interface LeagueResultsDbProps {
   created_at: string
   id: number
@@ -148,4 +156,14 @@ export interface LeagueDbProps {
   name: string
   invite_code: string
   created_by_uuid: string
+}
+
+export interface QualiDbProps {
+  id: number
+  race_id: number
+  driver_id: number
+  q1: string
+  q2?: string
+  q3?: string
+  position: number
 }

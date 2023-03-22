@@ -3,6 +3,7 @@ import { SupabaseClient, User } from '@supabase/supabase-js'
 import {
   F1ConstructorsApiProps,
   F1DriversApiProps,
+  F1QualifyingApiProps,
   F1RaceApiProps,
   F1ResultsApiProps,
   InviteCodeDbProps,
@@ -98,7 +99,6 @@ export const insertIntoRaces = async (
   client: SupabaseClient,
   race: F1RaceApiProps
 ) => {
-  console.log(race.round)
   await client.from('races').upsert(
     [
       {
@@ -167,6 +167,28 @@ export const updateRaceResultWithFinish = async (
         status: result.status,
         driver_id: result.Driver.driverId,
         unique_index: race_id + result.Driver.driverId,
+      },
+    ],
+    { onConflict: 'unique_index', ignoreDuplicates: false }
+  )
+}
+
+export const updateQualiResultWithFinish = async (
+  client: SupabaseClient,
+  result: F1QualifyingApiProps,
+  race_id: number,
+  driverId: number
+) => {
+  await client.from('quali_results').upsert(
+    [
+      {
+        race_id: race_id,
+        position: result.position,
+        driver_id: driverId,
+        unique_index: `${race_id}_${driverId}`,
+        q1: result.Q1,
+        q2: result.Q2,
+        q3: result.Q3,
       },
     ],
     { onConflict: 'unique_index', ignoreDuplicates: false }
