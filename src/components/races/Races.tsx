@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@mui/material'
+import { Card, CardContent, Divider, Typography } from '@mui/material'
 import React, { Key } from 'react'
 
 import {
@@ -13,8 +13,38 @@ const Races: React.FC = () => {
   const { raceResultsMap, races, driversIdMap }: SupabaseContextProps =
     useSupabaseContext()
 
-  const formatDateTime = (race: RacesDbProps) => {
-    return formatRaceDateTime(race.date, race.time)
+  const schedule = (race: RacesDbProps) => {
+    const array = []
+    array.push({
+      name: 'Free Practice 1',
+      date: new Date(`${race.fp1_date} ${race.fp1_time}`),
+    })
+    array.push({
+      name: 'Free Practice 2',
+      date: new Date(`${race.fp2_date} ${race.fp2_time}`),
+    })
+    array.push(
+      race.fp3_date
+        ? {
+            name: 'Free Practice 3',
+            date: new Date(`${race.fp3_date} ${race.fp3_time}`),
+          }
+        : {
+            name: 'Sprint',
+            date: new Date(`${race.sprint_date} ${race.sprint_time}`),
+          }
+    )
+    array.push({
+      name: 'Qualifying',
+      date: new Date(`${race.quali_date} ${race.quali_time}`),
+    })
+    array.sort((a, b) => a.date.valueOf() - b.date.valueOf())
+    return array.map((race) => (
+      <>
+        <Typography variant="h6">{race.name}</Typography>
+        <Typography variant="body1">{race.date.toLocaleString()}</Typography>
+      </>
+    ))
   }
 
   const raceName = (name: string) => {
@@ -33,25 +63,37 @@ const Races: React.FC = () => {
           <span key={race.race_name as Key}>
             <Card variant="outlined" sx={{ width: '250px' }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="h6">{raceName(race.race_name)}</Typography>
-                <Typography variant="body1">{formatDateTime(race)}</Typography>
+                <Typography variant="h5">{raceName(race.race_name)}</Typography>
+                <Divider sx={{ pt: 1, mb: 1 }} />
+                {schedule(race)}
+                <Typography variant="h6">Race Time</Typography>
+                <Typography variant="body1">
+                  {formatRaceDateTime(race.date, race.time)}
+                </Typography>
                 {raceResultsMap.get(race.id).length > 0 && (
-                  <Typography variant="body1">Results</Typography>
+                  <>
+                    <Divider sx={{ pt: 1, mb: 1 }} />
+                    <Typography variant="h6">Race Results</Typography>
+                    {raceResultsMap.get(race.id).map((result) => (
+                      <div className={styles.result} key={result.driver_id}>
+                        <Typography variant="body1" key={result.position}>
+                          {result.position}:{' '}
+                          {driverName(
+                            driversIdMap.get(result.driver_id),
+                            '',
+                            true
+                          )}
+                        </Typography>
+                        <img
+                          src={`/images/${
+                            driversIdMap.get(result.driver_id).constructor
+                          }.png`}
+                          height="24"
+                        />
+                      </div>
+                    ))}
+                  </>
                 )}
-                {raceResultsMap.get(race.id)!.map((result) => (
-                  <div className={styles.result} key={result.driver_id}>
-                    <Typography variant="body2" key={result.position}>
-                      {result.position}:{' '}
-                      {driverName(driversIdMap.get(result.driver_id), '', true)}
-                    </Typography>
-                    <img
-                      src={`/images/${
-                        driversIdMap.get(result.driver_id).constructor
-                      }.png`}
-                      height="20"
-                    />
-                  </div>
-                ))}
               </CardContent>
             </Card>
           </span>

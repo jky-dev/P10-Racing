@@ -5,6 +5,7 @@ import {
   PaletteMode,
   Snackbar,
   createTheme,
+  responsiveFontSizes,
 } from '@mui/material'
 import React, { ReactNode, createContext } from 'react'
 
@@ -54,11 +55,18 @@ const useContext = () => {
 
   const theme = React.useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode: mode,
-        },
-      }),
+      responsiveFontSizes(
+        createTheme({
+          typography: {
+            h6: {
+              fontWeight: 400,
+            },
+          },
+          palette: {
+            mode: mode,
+          },
+        })
+      ),
     [mode]
   )
 
