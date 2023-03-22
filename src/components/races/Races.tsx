@@ -51,7 +51,11 @@ const Races: React.FC = () => {
                       <div className={styles.result} key={result.driver_id}>
                         <Typography variant="body2" key={result.position}>
                           {result.position}:{' '}
-                          {driverName(driversIdMap.get(result.driver_id))}
+                          {driverName(
+                            driversIdMap.get(result.driver_id),
+                            '',
+                            true
+                          )}
                         </Typography>
                         <img
                           src={`/images/${
