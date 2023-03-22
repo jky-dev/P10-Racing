@@ -1,5 +1,6 @@
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js'
-import React, { createContext, ReactNode } from 'react'
+import { SupabaseClient, User, createClient } from '@supabase/supabase-js'
+import React, { ReactNode, createContext } from 'react'
+
 import { DriversDbProps, RaceResultsDbProps, RacesDbProps } from '../interfaces'
 
 const SupabaseContext = createContext<SupabaseContextProps | null>(null)
@@ -55,12 +56,15 @@ const useContext: () => SupabaseContextProps | null = () => {
       .from('drivers')
       .select('*')
 
-    const { data: dbRaces }: { data: RacesDbProps[] | null } = await client
+    const { data: dbRaces } = await client
       .from('races')
       .select('*')
+      .order('round_number', { ascending: true })
 
-    const { data: raceResults }: { data: RaceResultsDbProps[] | null } =
-      await client.from('race_results').select('*')
+    const { data: raceResults } = await client
+      .from('race_results')
+      .select('*')
+      .order('position', { ascending: true })
 
     if (!drivers || !dbRaces || !raceResults)
       throw new Error('failed to initialize')
@@ -75,21 +79,19 @@ const useContext: () => SupabaseContextProps | null = () => {
     const rrdMap = new Map<number, Map<number, RaceResultsDbProps>>()
     const rrMap = new Map<number, RaceResultsDbProps[]>()
     const rMap = new Map()
-    for (const race of dbRaces.sort(
-      (a, b) => a.round_number - b.round_number
-    )) {
+    for (const race of dbRaces as RacesDbProps[]) {
       rMap.set(race.id, race)
       rrMap.set(race.id, [])
       rrdMap.set(race.id, new Map<number, RaceResultsDbProps>())
     }
-    for (const raceResult of raceResults) {
+    for (const raceResult of raceResults as RaceResultsDbProps[]) {
       rrMap.get(raceResult.race_id)!.push(raceResult)
       rrdMap
         .get(raceResult.race_id)
         .set(dIdMap.get(raceResult.driver_id).id, raceResult)
     }
     setRacesMap(rMap)
-    setRaces(dbRaces)
+    setRaces(dbRaces as RacesDbProps[])
     setRaceResultsMap(rrMap)
     setRaceResultsDriverMap(rrdMap)
 
