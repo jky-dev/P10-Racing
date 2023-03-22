@@ -13,7 +13,7 @@ import {
 } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
-import RaceResultsTable from './RaceResultsTable'
+import RaceResultsTable from './RaceResultsTable/RaceResultsTable'
 import styles from './Races.module.scss'
 
 const Races: React.FC = () => {

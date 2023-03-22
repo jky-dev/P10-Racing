@@ -9,10 +9,10 @@ import {
 import { Box } from '@mui/system'
 import React from 'react'
 
-import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { useUtilsContext } from '../../contexts/UtilsContext'
-import { driverName } from '../../helpers/helpers'
-import { RaceResultsDbProps } from '../../interfaces'
+import { useSupabaseContext } from '../../../contexts/SupabaseContext'
+import { useUtilsContext } from '../../../contexts/UtilsContext'
+import { driverName } from '../../../helpers/helpers'
+import { RaceResultsDbProps } from '../../../interfaces'
 import styles from './RaceResultsTable.module.scss'
 
 interface RaceResultsTable {
