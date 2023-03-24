@@ -5,8 +5,8 @@ import {
   Html,
   OrbitControls,
 } from '@react-three/drei'
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
-import React, { Suspense, useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
@@ -54,7 +54,7 @@ const About: React.FC = () => {
 
   return (
     <Canvas
-      camera={{ fov: 45, near: 0.1, far: 500, position: [8, 1, 2] }}
+      camera={{ fov: 40, near: 0.1, far: 500, position: [8, 1, 2] }}
       style={{
         width: '100vw',
         height: '100vh',
@@ -93,7 +93,7 @@ const About: React.FC = () => {
         blur={2}
         far={5}
       />
-      <OrbitControls />
+      <OrbitControls enablePan={false} enableZoom={false} />
     </Canvas>
   )
 }
