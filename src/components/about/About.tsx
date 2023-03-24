@@ -4,7 +4,6 @@ import {
   Environment,
   Html,
   OrbitControls,
-  useGLTF,
 } from '@react-three/drei'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import React, { Suspense, useRef } from 'react'
@@ -12,11 +11,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import styles from './About.module.scss'
+import { Car } from './Car/Car'
 
 const About: React.FC = () => {
   const { user, client } = useSupabaseContext()
   const navigate = useNavigate()
-  const gltf = useGLTF('/models/car.glb')
 
   const handleClick = () => {
     if (user) {
@@ -47,7 +46,7 @@ const About: React.FC = () => {
     return (
       <group ref={ref}>
         <mesh castShadow receiveShadow>
-          <primitive object={gltf.scene} />
+          <Car />
         </mesh>
       </group>
     )
@@ -67,7 +66,7 @@ const About: React.FC = () => {
     >
       <Html className={styles.html} center>
         <div className={styles.heading}>
-          <Typography variant="h1">P10 Racing</Typography>
+          <Typography variant={'h1'}>P10 Racing</Typography>
           <Typography component="span" variant="h4">
             the ultimate F1 fantasy league!
           </Typography>
