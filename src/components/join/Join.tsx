@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { InviteCodeDbProps, LeagueDbProps } from '../../interfaces'
@@ -70,7 +71,7 @@ const Join = () => {
     )
 
   return (
-    <div className={styles.container}>
+    <div className={(styles.container, 'fadeIn')}>
       <Typography variant="h5">You have been invited to join</Typography>
       <Typography variant="h4">{invitedLeague.leagues.name}!</Typography>
       {!user && (

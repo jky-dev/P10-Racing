@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 
 const Logout: React.FC = () => {
@@ -14,7 +15,7 @@ const Logout: React.FC = () => {
   }
 
   return (
-    <span>
+    <span className="fadeIn">
       <Button onClick={() => goodbye()} variant="contained">
         Log out
       </Button>

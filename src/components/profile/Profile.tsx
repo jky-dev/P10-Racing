@@ -64,6 +64,7 @@ const Profile = () => {
         flexDirection: 'column',
         gap: 1,
       }}
+      className="fadeIn"
     >
       <Typography variant="h4" sx={{ mb: 1 }}>
         My Profile

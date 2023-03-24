@@ -121,7 +121,7 @@ const Leagues: React.FC = () => {
   if (loading) return <Loader />
 
   return (
-    <div className={styles.container}>
+    <div className={'fadeIn'}>
       {validLeague ? (
         <>
           <div className={styles.title}>

@@ -1,6 +1,7 @@
 import { Button } from '@mui/material'
 import { SupabaseClient } from '@supabase/supabase-js'
 import React from 'react'
+
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 
 const signIn = (client: SupabaseClient) => {
@@ -16,11 +17,11 @@ const Login: React.FC = () => {
   const { client } = useSupabaseContext()
 
   return (
-    <>
+    <div className="fadeIn">
       <Button variant="contained" onClick={() => signIn(client)}>
         Log in with Google
       </Button>
-    </>
+    </div>
   )
 }
 
