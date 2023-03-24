@@ -1,5 +1,14 @@
 import { Button, Typography } from '@mui/material'
-import React from 'react'
+import {
+  ContactShadows,
+  Environment,
+  Html,
+  Loader,
+  OrbitControls,
+  useGLTF,
+} from '@react-three/drei'
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import React, { Suspense, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
@@ -8,6 +17,7 @@ import styles from './About.module.scss'
 const About: React.FC = () => {
   const { user, client } = useSupabaseContext()
   const navigate = useNavigate()
+  const gltf = useGLTF('./redbull_formula_1_2022_car.glb')
 
   const handleClick = () => {
     if (user) {
@@ -22,61 +32,71 @@ const About: React.FC = () => {
     }
   }
 
+  const Model = () => {
+    const ref = useRef()
+    useFrame((state) => {
+      const t = state.clock.getElapsedTime()
+      //@ts-ignore
+      ref.current.rotation.set(
+        Math.cos(t / 4) / 8,
+        Math.sin(t / 3) / 4,
+        0.15 + Math.sin(t / 2) / 8
+      )
+      //@ts-ignore
+      ref.current.position.y = (0.5 + Math.cos(t / 2)) / 7
+    })
+    return (
+      <group ref={ref}>
+        <mesh castShadow receiveShadow>
+          <primitive object={gltf.scene} />
+        </mesh>
+      </group>
+    )
+  }
+
   return (
-    <div className={styles.container}>
-      <Typography variant="h3" className={styles.heading}>
-        P10 Racing
-        <br />
-        the ultimate F1 fantasy league!
-      </Typography>
+    <Canvas
+      camera={{ fov: 45, near: 0.1, far: 500, position: [8, 1, 2] }}
+      style={{
+        width: '100vw',
+        height: '100vh',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+      }}
+      className={styles.canvas}
+    >
+      <Html className={styles.html} center>
+        <div className={styles.heading}>
+          <Typography variant="h1">P10 Racing</Typography>
+          <Typography component="span" variant="h4">
+            the ultimate F1 fantasy league!
+          </Typography>
+        </div>
 
-      <div className={styles.button}>
-        <Button variant="contained" onClick={handleClick}>
-          {user ? 'Join a league' : 'Get started'}
-        </Button>
-      </div>
-
-      <Typography variant="h6">
-        P10 Racing is a unique F1 fantasy league where participants pick a
-        driver every week that they think will finish P10, to earn the most
-        points. It's a game of skill, strategy, and luck, where you can compete
-        against other F1 fans from around the world
-      </Typography>
-
-      <Typography variant="h6">How it works:</Typography>
-
-      <Typography variant="body1">
-        Each week, you pick a driver that you think will finish in P10 or as
-        close to P10 as possible
-      </Typography>
-
-      <Typography variant="body1">
-        You earn points based on the difference between your chosen driver's
-        finishing position and P10
-      </Typography>
-
-      <Typography variant="body1">
-        The closer your driver finishes to P10, the more points you earn. If
-        your driver finishes in P10, you earn the maximum points
-      </Typography>
-
-      <Typography variant="h6">
-        It's that simple! But don't be fooled, predicting the outcome of a
-        Formula 1 race is not easy. With multiple factors that can influence the
-        result, such as weather, track conditions, and driver performance, it's
-        a challenge that requires careful analysis and strategy
-      </Typography>
-
-      <Typography variant="h6">
-        Joining P10 Racing is easy. Simply sign up for an account and start
-        playing. You can create or join leagues with your friends and family!
-      </Typography>
-
-      <Typography variant="h6">
-        So what are you waiting for? Sign up now and start playing P10 Racing,
-        the ultimate F1 fantasy league!
-      </Typography>
-    </div>
+        <div className={styles.button}>
+          <Button
+            variant="outlined"
+            onClick={handleClick}
+            sx={{ color: 'white', borderColor: 'white' }}
+          >
+            {user ? 'Join a league' : 'Get started'}
+          </Button>
+        </div>
+      </Html>
+      <pointLight position={[10, 10, 10]} castShadow />
+      <Environment preset="sunset" background blur={100} />
+      <Model />
+      <ContactShadows
+        resolution={512}
+        position={[0, -1, 0]}
+        opacity={1}
+        scale={10}
+        blur={2}
+        far={5}
+      />
+      <OrbitControls />
+    </Canvas>
   )
 }
 

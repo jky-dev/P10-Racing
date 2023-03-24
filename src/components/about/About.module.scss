@@ -8,12 +8,47 @@
   > * {
     text-align: center;
   }
+  position: relative;
 }
 
 .heading {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  mix-blend-mode: difference;
+  color: rgb(245, 244, 255);
+  text-shadow: 2px 2px 5px black;
+  user-select: none;
 }
 
 .button {
   padding: 3rem 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.canvas {
+  opacity: 0;
+  animation: fade-in 5s ease 1s forwards;
+}
+
+.html {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
