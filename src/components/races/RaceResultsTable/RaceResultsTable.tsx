@@ -6,7 +6,6 @@ import {
   TableRow,
   useMediaQuery,
 } from '@mui/material'
-import { Box } from '@mui/system'
 import React from 'react'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'

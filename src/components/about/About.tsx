@@ -3,7 +3,6 @@ import {
   ContactShadows,
   Environment,
   Html,
-  Loader,
   OrbitControls,
   useGLTF,
 } from '@react-three/drei'
@@ -17,7 +16,7 @@ import styles from './About.module.scss'
 const About: React.FC = () => {
   const { user, client } = useSupabaseContext()
   const navigate = useNavigate()
-  const gltf = useGLTF('./redbull_formula_1_2022_car.glb')
+  const gltf = useGLTF('/models/car.glb')
 
   const handleClick = () => {
     if (user) {
