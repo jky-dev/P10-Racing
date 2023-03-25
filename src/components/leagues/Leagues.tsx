@@ -1,4 +1,4 @@
-import { Share } from '@mui/icons-material'
+import { Delete, Share } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -103,10 +103,6 @@ const Leagues: React.FC = () => {
     fetchLeagues()
   }, [user])
 
-  const onDelete = () => {
-    fetchLeagues()
-  }
-
   const handleInviteClick = async () => {
     await navigator.clipboard.writeText(
       window.location.origin +
@@ -115,6 +111,23 @@ const Leagues: React.FC = () => {
     )
     sendAlert('Copied invite to clipboard!')
   }
+
+  const handleDelete = async () => {
+    if (
+      !confirm(
+        `Are you sure you want to delete league '${
+          joinedLeagues.get(leagueId).name
+        }'? This action CANNOT be undone.`
+      )
+    )
+      return
+
+    await client.rpc('delete_league', { league_id: leagueId })
+
+    fetchLeagues()
+  }
+
+  const isOwner = joinedLeagues.get(leagueId)?.created_by_uuid === user.id
 
   const validLeague = leagueId !== -1
 
@@ -130,11 +143,22 @@ const Leagues: React.FC = () => {
             </Typography>
             {validLeague && (
               <span>
-                <Tooltip title="Copy invite code">
-                  <IconButton onClick={handleInviteClick}>
-                    <Share color="primary" />
-                  </IconButton>
-                </Tooltip>
+                <span>
+                  <Tooltip title="Copy invite code">
+                    <IconButton onClick={handleInviteClick}>
+                      <Share color="primary" />
+                    </IconButton>
+                  </Tooltip>
+                </span>
+                {isOwner && (
+                  <span>
+                    <Tooltip title="Delete league">
+                      <IconButton onClick={handleDelete}>
+                        <Delete color="primary" />
+                      </IconButton>
+                    </Tooltip>
+                  </span>
+                )}
               </span>
             )}
           </div>
@@ -164,12 +188,7 @@ const Leagues: React.FC = () => {
           <Typography>Create or join a league to play!</Typography>
         </>
       )}
-      <LeagueResults
-        leagueId={leagueId}
-        name={joinedLeagues.get(leagueId)?.name}
-        owner={joinedLeagues.get(leagueId)?.created_by_uuid === user.id}
-        onDelete={onDelete}
-      />
+      <LeagueResults leagueId={leagueId} />
       <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league name"
