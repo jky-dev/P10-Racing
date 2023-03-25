@@ -11,10 +11,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import Loader from '../loader/Loader'
-import styles from './About.module.scss'
 import { Car } from './Car/Car'
+import styles from './Landing.module.scss'
 
-const About: React.FC = () => {
+const Landing: React.FC = () => {
   const { user, client } = useSupabaseContext()
   const navigate = useNavigate()
   const [loading, setLoading] = React.useState(true)
@@ -109,4 +109,4 @@ const About: React.FC = () => {
   )
 }
 
-export default About
+export default Landing
