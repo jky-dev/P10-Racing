@@ -22,6 +22,7 @@ import {
 import { createLeague, joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
+import DeleteDialog from './DeleteDialog/DeleteDialog'
 import styles from './Leagues.module.scss'
 
 interface JoinedLeagueProps extends LeagueMembersDbProps {
@@ -38,6 +39,7 @@ const Leagues: React.FC = () => {
   const [joinedLeagues, setJoinedLeagues] = React.useState(
     new Map<number, LeagueDbProps>()
   )
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
   const { sendAlert } = useUtilsContext()
 
   const onCreateHandler = async () => {
@@ -113,17 +115,7 @@ const Leagues: React.FC = () => {
   }
 
   const handleDelete = async () => {
-    if (
-      !confirm(
-        `Are you sure you want to delete league '${
-          joinedLeagues.get(leagueId).name
-        }'? This action CANNOT be undone.`
-      )
-    )
-      return
-
     await client.rpc('delete_league', { league_id: leagueId })
-
     fetchLeagues()
   }
 
@@ -137,6 +129,12 @@ const Leagues: React.FC = () => {
     <div className={`${styles.container} 'fadeIn'`}>
       {validLeague ? (
         <>
+          <DeleteDialog
+            open={deleteDialogOpen}
+            setOpen={setDeleteDialogOpen}
+            name={joinedLeagues.get(leagueId).name}
+            handleDelete={handleDelete}
+          />
           <div className={styles.title}>
             <Typography variant="h4">
               {joinedLeagues.get(leagueId).name}
@@ -153,7 +151,7 @@ const Leagues: React.FC = () => {
                 {isOwner && (
                   <span>
                     <Tooltip title="Delete league">
-                      <IconButton onClick={handleDelete}>
+                      <IconButton onClick={() => setDeleteDialogOpen(true)}>
                         <Delete color="primary" />
                       </IconButton>
                     </Tooltip>
