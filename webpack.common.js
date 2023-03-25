@@ -94,6 +94,7 @@ module.exports = {
       patterns: [
         { from: './src/img', to: 'images' },
         { from: './src/models', to: 'models' },
+        { from: './src/favicon', to: 'favicon' },
       ],
     }),
   ],
