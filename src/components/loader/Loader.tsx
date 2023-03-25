@@ -7,7 +7,7 @@ const Loader: React.FC = () => {
   return (
     <div className={styles.container}>
       <CircularProgress />
-      <Typography variant="h6">Loading...</Typography>
+      <Typography variant="body1">Loading...</Typography>
     </div>
   )
 }

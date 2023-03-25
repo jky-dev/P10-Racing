@@ -1,0 +1,176 @@
+import { ExpandMore } from '@mui/icons-material'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material'
+import React from 'react'
+
+import { useUtilsContext } from '../../contexts/UtilsContext'
+import styles from './About.module.scss'
+
+interface FaqProps {
+  heading: string
+  faqs: { q: string; a: string; custom?: JSX.Element }[]
+}
+
+const About = () => {
+  const { pointsMap } = useUtilsContext()
+
+  const faqs: FaqProps[] = [
+    {
+      heading: 'Joining',
+      faqs: [
+        {
+          q: 'How do I sign up?',
+          a: 'You can sign up by navigating to the "Login" tab in the top right of the navigation bar on desktop, or via the hamburger menu on mobile.',
+        },
+        {
+          q: 'Why can I only login via Google?',
+          a: 'Currently we only allow logging in with a Google account, however there will be more login options coming soon.',
+        },
+        {
+          q: 'When I go to sign up why does it try to sign me into <gibberish>.supabase.co?',
+          a: 'We use Supabase to handle our authentication and database needs. You can find more information at https://supabase.com.',
+        },
+        {
+          q: 'What information do you collect from me when I sign up with Google?',
+          a: 'We only get email you used to sign up with as a unique identifier for your user account. You can later customise your username by navigating to the "Profile" tab.',
+        },
+        {
+          q: 'Can I sign up with my own credentials?',
+          a: 'Currently we only allow signing up with a Google account.',
+        },
+      ],
+    },
+    {
+      heading: 'Leagues',
+      faqs: [
+        {
+          q: 'How do I create a league?',
+          a: 'You can join a league by visiting the "Leagues" tab once you have logged in to your account. From there, you are able to create a new fantasy league by providing a name for the new league and clicking the "Create a League" button.',
+        },
+        {
+          q: 'How do I join a league?',
+          a: 'You can join a league by receiving an invite link from a league creator, or inputting the invite code from the link in the relevant field on the "Leagues" tab.',
+        },
+        {
+          q: 'How do I invite my friends to a league?',
+          a: 'There is a share icon in the top right of the "Leagues" tab that copies an invite link to your clipboard, ready for sharing.',
+        },
+      ],
+    },
+    {
+      heading: 'Picks',
+      faqs: [
+        {
+          q: 'How many points do I get if my driver finishes X?',
+          a: 'test',
+          custom: (
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Position</TableCell>
+                  <TableCell align="right">Points Gained</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.from(pointsMap.entries())
+                  .sort((a, b) => a[0] - b[0])
+                  .map(([key, value]) => (
+                    <TableRow>
+                      <TableCell>{key}</TableCell>
+                      <TableCell align="right">{value}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          ),
+        },
+        {
+          q: 'Is there any other way to earn points?',
+          a: 'There will be additional ways to earn points in the future. You will be able to pick a driver you think will DNF first for an additional 10 points, and locking in your main driver before qualifying starts and keeping said driver locked in will net you 1.5x points.',
+        },
+      ],
+    },
+    {
+      heading: 'Misc.',
+      faqs: [
+        {
+          q: 'Where do I give feedback/suggestions?',
+          a: 'There will be a form at the bottom of the page where you can submit feedback, otherwise you can email p10racingleague AT gmail DOT com',
+        },
+      ],
+    },
+  ]
+
+  return (
+    <div className={`fadeIn ${styles.container}`}>
+      <Typography variant="h4">About</Typography>
+      <Card>
+        <CardContent className={styles.cardContent}>
+          <Typography variant="body1">
+            Welcome to P10 Racing, the premier fantasy league for Formula 1 fans
+            who love the thrill of the race and the strategic challenge of
+            picking the perfect drivers.
+          </Typography>
+          <Typography variant="body1">
+            At P10 Racing, we focus on the battle for the 10th position on the
+            starting grid, the position that often goes overlooked in the
+            excitement of the top spots. But for fantasy players, this position
+            can make all the difference. That's why we've made it the heart of
+            our game.
+          </Typography>
+          <Typography variant="body1">
+            Our fantasy league is simple: players select the drivers they think
+            will finish 10th in qualifying, and earn points based on how well
+            their picks perform. But don't be fooled by the simplicity of the
+            concept - the game is packed with strategic depth and excitement.
+            Every race presents new challenges and opportunities, and players
+            must stay on their toes to stay ahead of the competition.
+          </Typography>
+          <Typography variant="body1">
+            At P10 Racing, we pride ourselves on providing an engaging and
+            immersive experience for all our players. Our platform is designed
+            to be intuitive and user-friendly, and our community is friendly and
+            supportive. Whether you're a hardcore F1 fan or just getting
+            started, you'll find a warm welcome here.
+          </Typography>
+          <Typography variant="body1">
+            So why not join us today and put your F1 knowledge to the test? With
+            P10 Racing, you'll experience the thrill of the race in a whole new
+            way.
+          </Typography>
+        </CardContent>
+      </Card>
+      <Typography variant="h4">FAQs</Typography>
+      {faqs.map((faq) => (
+        <>
+          <Typography variant="h5">{faq.heading}</Typography>
+          <div>
+            {faq.faqs.map((qa) => (
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography>{qa.q}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {qa.custom ? qa.custom : <Typography>{qa.a}</Typography>}
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </div>
+        </>
+      ))}
+    </div>
+  )
+}
+
+export default About

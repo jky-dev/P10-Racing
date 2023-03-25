@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import styles from './App.module.scss'
 import ProtectedRoute from './ProtectedRoute'
+import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
 import Home from './components/home/Home'
@@ -82,6 +83,7 @@ const router = createBrowserRouter([
         element: <Join />,
         errorElement: <GenericError />,
       },
+      { path: 'about', element: <About />, errorElement: <GenericError /> },
     ],
   },
 ])

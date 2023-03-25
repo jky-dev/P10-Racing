@@ -30,7 +30,7 @@ const Navigation = () => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', mb: 3 }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="body1" sx={{ my: 2 }}>
         P10 Racing
       </Typography>
       <Divider />
@@ -57,6 +57,7 @@ const Navigation = () => {
     Admin: 'admin',
     Login: 'login',
     Logout: 'logout',
+    About: 'about',
   }
 
   React.useEffect(() => {
@@ -68,6 +69,7 @@ const Navigation = () => {
     } else {
       temp.push('Login')
     }
+    temp.push('About')
 
     setNavItems(temp)
   }, [user])
@@ -86,7 +88,7 @@ const Navigation = () => {
             <MenuIcon />
           </IconButton>
           <Typography
-            variant="h6"
+            variant="body1"
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >

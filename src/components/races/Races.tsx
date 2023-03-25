@@ -83,7 +83,7 @@ const Races: React.FC = () => {
                 <>
                   <Divider sx={{ pt: 1, mb: 1 }} />
                   <div className={styles.heading}>
-                    <Typography variant="h6">Race Results</Typography>
+                    <Typography variant="body1">Race Results</Typography>
                   </div>
                   <RaceResultsTable raceResults={raceResultsMap.get(race.id)} />
                 </>
