@@ -126,7 +126,7 @@ const Leagues: React.FC = () => {
   if (loading) return <Loader />
 
   return (
-    <div className={`${styles.container} 'fadeIn'`}>
+    <div className={`${styles.container} fadeIn`}>
       {validLeague ? (
         <>
           <DeleteDialog
