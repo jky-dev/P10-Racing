@@ -144,7 +144,12 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({
 
   if (leagueId === -1) return null
 
-  if (loading) return <Loader />
+  if (loading)
+    return (
+      <div className={styles.loaderContainer}>
+        <Loader />
+      </div>
+    )
 
   return (
     <div className={styles.container}>

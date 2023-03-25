@@ -6,6 +6,7 @@ import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { UserDbProps } from '../../interfaces'
 import Loader from '../loader/Loader'
+import Logout from '../logout/Logout'
 import styles from './Profile.module.scss'
 
 const Profile = () => {
@@ -94,6 +95,7 @@ const Profile = () => {
               {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
             </IconButton>
           </div>
+          <Logout />
         </>
       )}
     </Box>

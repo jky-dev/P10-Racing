@@ -1,6 +1,8 @@
 import { EmojiEvents } from '@mui/icons-material'
 import {
   Avatar,
+  Card,
+  CardContent,
   List,
   ListItem,
   ListItemAvatar,
@@ -55,24 +57,28 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
   return (
     <>
-      <Typography variant="h4">Leaderboard</Typography>
-      <List>
-        {leaderboardArray.map((obj, index) => (
-          <ListItem disableGutters key={obj.user}>
-            {index < 3 && (
-              <ListItemAvatar>
-                <EmojiEvents htmlColor={colorMap[index]} />
-              </ListItemAvatar>
-            )}
-            <ListItemText
-              primary={obj.user}
-              secondary={obj.total}
-              inset={index > 2}
-              sx={{ width: 500 }}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <Typography variant="h4" sx={{ mt: 2 }}>
+        Leaderboard
+      </Typography>
+      <Card variant="outlined" sx={{ pt: 0, pl: 2 }}>
+        <List sx={{ pt: 0, pb: 0 }}>
+          {leaderboardArray.map((obj, index) => (
+            <ListItem disableGutters key={obj.user}>
+              {index < 3 && (
+                <ListItemAvatar>
+                  <EmojiEvents htmlColor={colorMap[index]} />
+                </ListItemAvatar>
+              )}
+              <ListItemText
+                primary={obj.user}
+                secondary={obj.total}
+                inset={index > 2}
+                sx={{ width: 500 }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Card>
     </>
   )
 }

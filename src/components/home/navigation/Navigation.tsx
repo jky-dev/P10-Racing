@@ -56,14 +56,13 @@ const Navigation = () => {
     'My Profile': 'profile',
     Admin: 'admin',
     Login: 'login',
-    Logout: 'logout',
     About: 'about',
   }
 
   React.useEffect(() => {
     const temp = ['Home', 'Races']
     if (user) {
-      temp.push('Leagues', 'My Profile', 'Logout')
+      temp.push('Leagues', 'My Profile')
 
       user.email === 'battlefield200@gmail.com' && temp.push('Admin')
     } else {
