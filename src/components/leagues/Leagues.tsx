@@ -181,6 +181,7 @@ const Leagues: React.FC = () => {
               })}
             </Tabs>
           </Box>
+          <LeagueResults leagueId={leagueId} />
         </>
       ) : (
         <>
@@ -188,7 +189,6 @@ const Leagues: React.FC = () => {
           <Typography>Create or join a league to play!</Typography>
         </>
       )}
-      <LeagueResults leagueId={leagueId} />
       <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league name"

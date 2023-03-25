@@ -57,9 +57,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
   return (
     <>
-      <Typography variant="h4" sx={{ mt: 2 }}>
-        Leaderboard
-      </Typography>
+      <Typography variant="h4">Leaderboard</Typography>
       <Card variant="outlined" sx={{ pt: 0, pl: 2 }}>
         <List sx={{ pt: 0, pb: 0 }}>
           {leaderboardArray.map((obj, index) => (
