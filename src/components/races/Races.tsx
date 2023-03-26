@@ -64,7 +64,7 @@ const Races: React.FC = () => {
     <div className={'fadeIn'}>
       <div className={styles.heading}>
         <Typography variant="h4" sx={{ mb: 2 }}>
-          Races
+          Races Results
         </Typography>
       </div>
       <div className={styles.container}>

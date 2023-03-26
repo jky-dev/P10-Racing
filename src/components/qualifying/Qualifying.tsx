@@ -3,7 +3,7 @@ import React from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
-import QualiResultsTable from '../races/QualiResultsTable/QualiResultsTable'
+import QualiResultsTable from './QualiResultsTable/QualiResultsTable'
 import styles from './Qualifying.module.scss'
 
 const Qualifying: React.FC = () => {
@@ -21,20 +21,22 @@ const Qualifying: React.FC = () => {
 
   return (
     <div className={`${styles.container} fadeIn`}>
-      <Typography variant="h4">Qualifying</Typography>
+      <Typography variant="h4">Qualifying Results</Typography>
       {Array.from(qualiResultsMap.entries()).map(([race_id, resultsArray]) => (
-        <Card key={race_id}>
+        <Card key={race_id} className={styles.card}>
           <CardContent>
-            <Typography variant="h5">
-              {racesMap.get(race_id).race_name}
-            </Typography>
-            <Typography variant="subtitle1">
-              {formatRaceDateTime(
-                getQualiDate(race_id),
-                getQualiTime(race_id),
-                isMobile
-              )}
-            </Typography>
+            <div className={styles.cardTitle}>
+              <Typography variant="h5">
+                {racesMap.get(race_id).race_name}
+              </Typography>
+              <Typography variant="subtitle1">
+                {formatRaceDateTime(
+                  getQualiDate(race_id),
+                  getQualiTime(race_id),
+                  isMobile
+                )}
+              </Typography>
+            </div>
             <QualiResultsTable qualiResults={resultsArray}></QualiResultsTable>
           </CardContent>
         </Card>

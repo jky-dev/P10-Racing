@@ -1,6 +1,4 @@
 import {
-  Card,
-  CardContent,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +20,7 @@ interface QualiResultsTableProps {
 const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
   qualiResults,
 }) => {
-  const { qualiResultsMap, driversMap, racesMap } = useSupabaseContext()
+  const { driversMap } = useSupabaseContext()
   const headers = ['Position', 'Driver', 'Q1', 'Q2', 'Q3']
 
   const isMobile = useMediaQuery('(max-width:600px)')
