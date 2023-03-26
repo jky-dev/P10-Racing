@@ -52,6 +52,13 @@ const Join = () => {
         sendAlert('Failed to join league', 'error')
       }
     } else {
+      localStorage.setItem(
+        'inviteToken',
+        JSON.stringify({
+          code: inviteCode,
+          time: new Date().valueOf() + 1800000, // new invite code lasts 30 mins for auto redirect
+        })
+      )
       client.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -71,17 +78,19 @@ const Join = () => {
     )
 
   return (
-    <div className={(styles.container, 'fadeIn')}>
-      <Typography variant="h5">You have been invited to join</Typography>
-      <Typography variant="h4">{invitedLeague.leagues.name}!</Typography>
+    <div className={`${styles.container} fadeIn`}>
+      <Typography variant="h4">You have been invited to join</Typography>
+      <Typography variant="h5" sx={{ mt: 6, mb: 6 }}>
+        {invitedLeague.leagues.name}!
+      </Typography>
       {!user && (
         <Typography variant="body1">
-          You must be signed in to join the league
+          You must be signed in to join the league.
         </Typography>
       )}
       <div>
         <Button onClick={handleClick} variant="contained">
-          {user ? 'Join league' : 'Login'}
+          {user ? 'Join league' : 'Sign in with Google'}
         </Button>
       </div>
     </div>
