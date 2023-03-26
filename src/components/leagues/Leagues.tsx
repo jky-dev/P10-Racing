@@ -160,7 +160,7 @@ const Leagues: React.FC = () => {
               </span>
             )}
           </div>
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ width: '100%', borderBottom: 1, borderColor: 'divider' }}>
             <Tabs
               value={leagueId}
               onChange={(e, v) => setLeagueId(v)}
