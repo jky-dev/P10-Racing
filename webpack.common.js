@@ -95,6 +95,7 @@ module.exports = {
         { from: './src/img', to: 'images' },
         { from: './src/models', to: 'models' },
         { from: './src/favicon', to: 'favicon' },
+        { from: './src/public', to: '/' },
       ],
     }),
   ],
