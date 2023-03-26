@@ -19,7 +19,7 @@ const Login: React.FC = () => {
   return (
     <div className="fadeIn">
       <Button variant="contained" onClick={() => signIn(client)}>
-        Log in with Google
+        Sign in with Google
       </Button>
     </div>
   )
