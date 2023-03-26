@@ -21,6 +21,8 @@ interface LeaderboardProps {
 interface LeaderboardArrayProp {
   user: string
   total: number
+  p10Total: number
+  dnfTotal: number
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({
@@ -34,11 +36,19 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   const init = () => {
     const tempArray: LeaderboardArrayProp[] = []
     for (const [id, raceMap] of Array.from(leagueResultsMap.entries())) {
-      let total = 0
+      let p10Total = 0
+      let dnfTotal = 0
       for (const race of Array.from(raceMap.values())) {
-        total += race.points_gained
+        p10Total += race.points_gained
+        dnfTotal += race.dnf_points_gained
       }
-      const obj = { user: usersMap.get(id).users.name, total: total }
+      const total = dnfTotal + p10Total
+      const obj = {
+        user: usersMap.get(id).users.name,
+        total: total,
+        dnfTotal: dnfTotal,
+        p10Total: p10Total,
+      }
       tempArray.push(obj)
     }
     tempArray.sort((a, b) => b.total - a.total)
@@ -69,7 +79,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
               )}
               <ListItemText
                 primary={obj.user}
-                secondary={obj.total}
+                secondary={`${obj.total} | P10 - ${obj.p10Total} | DNF - ${obj.dnfTotal}`}
                 inset={index > 2}
                 sx={{ width: 500 }}
               />

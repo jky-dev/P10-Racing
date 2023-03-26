@@ -96,8 +96,12 @@ const About = () => {
           ),
         },
         {
+          q: 'How many points do I earn for my DNF pick?',
+          a: 'If your DNF pick is the first DNF of the race (or P20, in the case of simultaneous DNFs), you will earn 10 points. If you choose "No DNF" and there happens to be no DNFs in the race, you will earn an additional 25 points! Although choose wisely, there have only been a handful of races in F1 history with no DNFs.',
+        },
+        {
           q: 'Is there any other way to earn points?',
-          a: 'There will be additional ways to earn points in the future. You will be able to pick a driver you think will DNF first for an additional 10 points, and locking in your main driver before qualifying starts and keeping said driver locked in will net you 1.5x points.',
+          a: 'There will be additional ways to earn points in the future. Locking in your P10 driver before qualifying starts and keeping said driver locked in will net you 1.5x points. Coming soon!',
         },
       ],
     },
