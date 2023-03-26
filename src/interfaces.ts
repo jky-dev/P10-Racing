@@ -86,6 +86,7 @@ export interface LeagueResultsDbProps {
   user_uuid: string
   users: UserDbProps
   dnf_driver_id: number | null
+  dnf_points_gained: number | null
 }
 
 export interface LeagueMembersDbProps {

@@ -76,26 +76,44 @@ const AdminPanel: React.FC = () => {
     const { data } = await getRaceResultsByRound(client, round)
 
     const driverResultMap = new Map<number, RaceResultsDbProps>()
-
+    let dnfDriverId = 241
     for (const result of data as RaceResultsDbProps[]) {
       driverResultMap.set(result.driver_id, result)
+      if (result.position === 20 && isDnf(result.status)) {
+        dnfDriverId = result.driver_id
+      }
     }
 
     const { data: leagueResults } = await client
       .from('league_results')
       .select('*')
       .eq('race_id', raceId)
-      .not('driver_id', 'is', null)
 
     for (const result of leagueResults as LeagueResultsDbProps[]) {
-      const position = driverResultMap.get(result.driver_id).position
-      const pointsGained = pointsMap.get(position)
+      const position = driverResultMap.get(result?.driver_id)?.position
+      const pointsGained = pointsMap.get(position) ?? 0
+      const dnfPointsGained = calcDnfPoints(result?.dnf_driver_id, dnfDriverId)
 
       const { error } = await client
         .from('league_results')
-        .update({ points_gained: pointsGained })
+        .update({
+          points_gained: pointsGained,
+          dnf_points_gained: dnfPointsGained,
+        })
         .eq('id', result.id)
     }
+  }
+
+  const isDnf = (status: string) => {
+    const lowered = status.toLowerCase()
+    return !(lowered.includes('lap') || lowered.includes('finish'))
+  }
+
+  const calcDnfPoints = (driverId: number | null, dnfDriverId: number) => {
+    if (null) return 0
+    if (driverId != dnfDriverId) return 0
+    if (driverId === 241) return 25
+    return 10
   }
 
   React.useEffect(() => {
