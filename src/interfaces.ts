@@ -81,10 +81,11 @@ export interface LeagueResultsDbProps {
     name: string
     invite_code: string
   }
-  points_gained: number
+  points_gained: number | null
   races: RacesDbProps
   user_uuid: string
   users: UserDbProps
+  dnf_driver_id: number | null
 }
 
 export interface LeagueMembersDbProps {

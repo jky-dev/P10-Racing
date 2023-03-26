@@ -60,9 +60,12 @@ const useContext: () => SupabaseContextProps | null = () => {
   }
 
   const setData = async () => {
-    const { data: drivers }: { data: DriversDbProps[] | null } = await client
+    const { data: drivers }: any = await client
       .from('drivers')
       .select('*')
+      .not('id', 'eq', 241)
+      .order('constructor')
+      .order('id')
 
     const { data: dbRaces } = await client
       .from('races')

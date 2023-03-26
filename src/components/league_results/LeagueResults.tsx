@@ -109,6 +109,26 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     }
   }
 
+  const submitDnfPick = async (driverId: number, rowId: number) => {
+    const { error } = await client
+      .from('league_results')
+      .update({
+        dnf_driver_id: driverId,
+      })
+      .eq('id', rowId)
+
+    if (!error) {
+      const nameOrDnf =
+        driverId === 241
+          ? 'NO DNF!'
+          : driverName(driversMap.get(driverId), isMobile)
+      sendAlert('Submitted DNF Pick: ' + nameOrDnf)
+      fetchResults()
+    } else {
+      sendAlert('Failed to submit pick - please try again later', 'error')
+    }
+  }
+
   React.useEffect(() => {
     if (leagueId === -1) return
     fetchResults()
@@ -176,10 +196,9 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                 rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
                 drivers={driversMap}
                 submitHandler={submitDriver}
-                preSelectedDriver={
-                  leagueResultsMap.get(user.id).get(race.id)?.driver_id
-                }
+                resultsRow={leagueResultsMap.get(user.id).get(race.id)}
                 disabled={disabled(race)}
+                submitDnfHandler={submitDnfPick}
               />
             </AccordionDetails>
           </Accordion>
