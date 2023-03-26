@@ -31,7 +31,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
   const isMobile = useMediaQuery('(max-width:600px)')
 
   const getPointsColumn = (userId: string, raceId: number) => {
-    const points = leagueResultsMap.get(userId).get(raceId).points_gained
+    const points = leagueResultsMap.get(userId).get(raceId)?.points_gained
 
     if (points === null) return '-'
 
@@ -39,9 +39,9 @@ const ResultsTable: React.FC<ResultsTable> = ({
       raceResultsDriverMap
         .get(raceId)
         .get(leagueResultsMap.get(userId).get(raceId).driver_id)?.position ??
-      '-'
+      null
 
-    return `${points} (${pos})`
+    return `${points} ${pos != null ? `(${pos})` : ''}`
   }
 
   const getDnfPointsColumn = (userId: string, raceId: number) => {
@@ -145,17 +145,21 @@ const ResultsTable: React.FC<ResultsTable> = ({
               </TableCell>
             </TableRow>
             <TableRow key={uuid + 'dnf'}>
-              <TableCell></TableCell>
-              <TableCell align="right">
+              <TableCell sx={{ borderBottom: 'none' }}></TableCell>
+              <TableCell align="right" sx={{ borderBottom: 'none' }}>
                 <div className={styles.driverName}>
                   <span className={styles.text}>
-                    {driverName(
-                      driversMap.get(
-                        leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
-                      ),
-                      isMobile,
-                      '-'
-                    )}
+                    {leagueResultsMap.get(uuid).get(race.id).dnf_driver_id ===
+                    241
+                      ? 'NO DNF!'
+                      : driverName(
+                          driversMap.get(
+                            leagueResultsMap.get(uuid).get(race.id)
+                              .dnf_driver_id
+                          ),
+                          isMobile,
+                          '-'
+                        )}
                   </span>
                   {!!driversMap.get(
                     leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
@@ -178,6 +182,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   maxWidth: 0,
+                  borderBottom: 'none',
                 }}
               >
                 {getDnfPointsColumn(uuid, race.id)}

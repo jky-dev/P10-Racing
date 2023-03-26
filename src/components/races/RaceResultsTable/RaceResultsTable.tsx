@@ -45,11 +45,14 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
       <TableBody>
         {raceResults.map((result) => (
           <TableRow key={result.driver_id}>
-            <TableCell>{result.position}.</TableCell>
+            <TableCell sx={{ borderBottom: 'none' }}>
+              {result.position}
+            </TableCell>
             <TableCell
               sx={{
                 maxWidth: 0,
                 verticalAlign: 'middle',
+                borderBottom: 'none',
               }}
               align="right"
             >
@@ -79,11 +82,12 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     maxWidth: 0,
+                    borderBottom: 'none',
                   }}
                 >
                   {result.points}
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="right" sx={{ borderBottom: 'none' }}>
                   {pointsMap.get(result.position)}
                 </TableCell>
               </>
