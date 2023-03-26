@@ -102,9 +102,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     }
     for (const raceResult of raceResults as RaceResultsDbProps[]) {
       rrMap.get(raceResult.race_id)!.push(raceResult)
-      rrdMap
-        .get(raceResult.race_id)
-        .set(dIdMap.get(raceResult.driver_id).id, raceResult)
+      rrdMap.get(raceResult.race_id).set(raceResult.driver_id, raceResult)
     }
     for (const qualiResult of qualiResults as QualiDbProps[]) {
       qMap.get(qualiResult.race_id).push(qualiResult)

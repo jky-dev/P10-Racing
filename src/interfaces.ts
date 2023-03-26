@@ -118,7 +118,7 @@ export interface RacesDbProps {
 
 export interface RaceResultsDbProps {
   created_at: string
-  driver_id: string
+  driver_id: number
   id: number
   position: number
   race_id: number

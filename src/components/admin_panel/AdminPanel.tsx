@@ -33,7 +33,7 @@ import Loader from '../loader/Loader'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
-  const { client, driversMap, driversIdMap } = useSupabaseContext()
+  const { client, driversIdMap } = useSupabaseContext()
   const { pointsMap } = useUtilsContext()
 
   const [leaguesMap, setLeaguesMap] =
@@ -82,7 +82,7 @@ const AdminPanel: React.FC = () => {
 
     const { data } = await getRaceResultsByRound(client, round)
 
-    const driverResultMap = new Map<string, RaceResultsDbProps>()
+    const driverResultMap = new Map<number, RaceResultsDbProps>()
 
     for (const result of data as RaceResultsDbProps[]) {
       driverResultMap.set(result.driver_id, result)
@@ -95,8 +95,7 @@ const AdminPanel: React.FC = () => {
       .not('driver_id', 'is', null)
 
     for (const result of leagueResults as LeagueResultsDbProps[]) {
-      const driverIdString = driversMap.get(result.driver_id).driver_id // get the string
-      const position = driverResultMap.get(driverIdString).position
+      const position = driverResultMap.get(result.driver_id).position
       const pointsGained = pointsMap.get(position)
 
       const { error } = await client
@@ -134,7 +133,7 @@ const AdminPanel: React.FC = () => {
         </div>
         <span>
           <Button
-            onClick={() => setRaceResultsByRound(client, round)}
+            onClick={() => setRaceResultsByRound(client, round, driversIdMap)}
             variant="contained"
           >
             Race Results

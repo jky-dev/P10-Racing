@@ -1,6 +1,7 @@
 import { SupabaseClient, User } from '@supabase/supabase-js'
 
 import {
+  DriversDbProps,
   F1ConstructorsApiProps,
   F1DriversApiProps,
   F1QualifyingApiProps,
@@ -157,7 +158,8 @@ export const insertIntoDrivers = async (
 export const updateRaceResultWithFinish = async (
   client: SupabaseClient,
   result: F1ResultsApiProps,
-  race_id: number
+  race_id: number,
+  driversIdMap: Map<string, DriversDbProps>
 ) => {
   await client.from('race_results').upsert(
     [
@@ -165,7 +167,7 @@ export const updateRaceResultWithFinish = async (
         race_id: race_id,
         position: result.position,
         status: result.status,
-        driver_id: result.Driver.driverId,
+        driver_id: driversIdMap.get(result.Driver.driverId).id,
         unique_index: race_id + result.Driver.driverId,
         points: result.points,
       },

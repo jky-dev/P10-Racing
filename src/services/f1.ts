@@ -51,7 +51,8 @@ export const setDrivers = (client: SupabaseClient) => {
 
 export const setRaceResultsByRound = (
   client: SupabaseClient,
-  round: number
+  round: number,
+  driversIdMap: Map<string, DriversDbProps>
 ) => {
   if (round < 1) return
 
@@ -64,7 +65,12 @@ export const setRaceResultsByRound = (
       const race = await getRaceByRoundNumber(client, round)
 
       results.forEach((result) => {
-        updateRaceResultWithFinish(client, result, race.data[0].id)
+        updateRaceResultWithFinish(
+          client,
+          result,
+          race.data[0].id,
+          driversIdMap
+        )
       })
     })
 }

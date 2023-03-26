@@ -19,7 +19,7 @@ interface RaceResultsTable {
 }
 
 const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
-  const { driversIdMap } = useSupabaseContext()
+  const { driversMap } = useSupabaseContext()
   const { pointsMap } = useUtilsContext()
   const isMobile = useMediaQuery('(max-width:600px)')
   return (
@@ -56,7 +56,7 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
               <div className={styles.driverName}>
                 <span className={styles.text}>
                   {driverName(
-                    driversIdMap.get(result.driver_id),
+                    driversMap.get(result.driver_id),
                     isMobile,
                     '-',
                     true
@@ -64,7 +64,7 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
                 </span>
                 <img
                   src={`/images/${
-                    driversIdMap.get(result.driver_id).constructor
+                    driversMap.get(result.driver_id).constructor
                   }.png`}
                   height={20}
                 />
