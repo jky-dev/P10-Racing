@@ -1,4 +1,10 @@
-import { Card, CardContent, Typography, useMediaQuery } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+  useMediaQuery,
+} from '@mui/material'
 import React from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
@@ -37,6 +43,7 @@ const Qualifying: React.FC = () => {
                 )}
               </Typography>
             </div>
+            <Divider sx={{ pt: 1, mb: 1 }} />
             <QualiResultsTable qualiResults={resultsArray}></QualiResultsTable>
           </CardContent>
         </Card>
