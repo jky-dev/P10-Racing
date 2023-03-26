@@ -168,7 +168,9 @@ export const updateRaceResultWithFinish = async (
         position: result.position,
         status: result.status,
         driver_id: driversIdMap.get(result.Driver.driverId).id,
-        unique_index: race_id + result.Driver.driverId,
+        unique_index: `${race_id}_${
+          driversIdMap.get(result.Driver.driverId).id
+        }`,
         points: result.points,
       },
     ],

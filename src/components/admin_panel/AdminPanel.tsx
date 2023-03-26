@@ -1,11 +1,4 @@
-import {
-  Button,
-  Divider,
-  List,
-  ListItem,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Button, Divider, List, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
