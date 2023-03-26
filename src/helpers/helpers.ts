@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@mui/material'
 import { format } from 'date-fns'
 
 import { DriversDbProps } from '../interfaces'

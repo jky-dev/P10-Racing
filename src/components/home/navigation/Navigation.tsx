@@ -57,10 +57,11 @@ const Navigation = () => {
     Admin: 'admin',
     Login: 'login',
     About: 'about',
+    Quali: 'qualifying',
   }
 
   React.useEffect(() => {
-    const temp = ['Home', 'Races']
+    const temp = ['Home', 'Races', 'Quali']
     if (user) {
       temp.push('Leagues', 'My Profile')
 

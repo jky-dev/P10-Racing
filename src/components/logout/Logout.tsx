@@ -15,7 +15,7 @@ const Logout: React.FC = () => {
   }
 
   return (
-    <span className="fadeIn">
+    <span>
       <Button onClick={() => goodbye()} variant="contained">
         Log out
       </Button>
