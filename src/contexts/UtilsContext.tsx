@@ -36,6 +36,14 @@ const useContext = () => {
   const [mode, setMode] = React.useState<PaletteMode>(
     (localStorage.getItem('theme') as PaletteMode) || 'light'
   )
+  const [threeJsHome, setThreeJsHome] = React.useState<boolean>(
+    localStorage.getItem('3dHome') === 'true' || false
+  )
+
+  const handleThreeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    localStorage.setItem('3dHome', e.target.checked.toString())
+    setThreeJsHome(e.target.checked)
+  }
 
   const sendAlert: (message: string, variant?: AlertColor) => void = (
     message: string,
@@ -57,6 +65,18 @@ const useContext = () => {
     () =>
       responsiveFontSizes(
         createTheme({
+          components: {
+            MuiCssBaseline: {
+              styleOverrides: {
+                body: {
+                  backgroundImage:
+                    mode === 'light'
+                      ? `linear-gradient(141deg, #f2f2f2, #6dc9ff)`
+                      : `linear-gradient(141deg, #433c3c, #024d79)`,
+                },
+              },
+            },
+          },
           typography: {
             h6: {
               fontWeight: 400,
@@ -87,7 +107,16 @@ const useContext = () => {
     </Snackbar>
   )
 
-  return { SnackBar, sendAlert, pointsMap, theme, toggleColorMode, mode }
+  return {
+    SnackBar,
+    sendAlert,
+    pointsMap,
+    theme,
+    toggleColorMode,
+    mode,
+    handleThreeToggle,
+    threeJsHome,
+  }
 }
 
 interface UtilsContextProps {
@@ -97,6 +126,8 @@ interface UtilsContextProps {
   theme: Theme
   toggleColorMode: () => void
   mode: PaletteMode
+  handleThreeToggle: (e: React.ChangeEvent<HTMLInputElement>) => void
+  threeJsHome: boolean
 }
 
 export const useUtilsContext: () => UtilsContextProps = () => {

@@ -1,5 +1,12 @@
 import { Brightness4, Brightness7 } from '@mui/icons-material'
-import { Box, Button, IconButton, TextField, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  Switch,
+  TextField,
+  Typography,
+} from '@mui/material'
 import React from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
@@ -14,7 +21,8 @@ const Profile = () => {
   const [profile, setProfile] = React.useState<UserDbProps | null>(null)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [name, setName] = React.useState('')
-  const { sendAlert, toggleColorMode, mode } = useUtilsContext()
+  const { sendAlert, toggleColorMode, mode, threeJsHome, handleThreeToggle } =
+    useUtilsContext()
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -94,6 +102,13 @@ const Profile = () => {
             <IconButton onClick={toggleColorMode}>
               {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
             </IconButton>
+          </div>
+          <div className={styles.themeToggleContainer}>
+            <Typography>3D Homepage</Typography>
+            <Switch
+              checked={threeJsHome}
+              onChange={(e) => handleThreeToggle(e)}
+            />
           </div>
           <Logout />
         </>
