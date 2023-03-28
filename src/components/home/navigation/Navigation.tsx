@@ -114,7 +114,13 @@ const Navigation = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Button onClick={() => navigate('/')} sx={{ color: topbarTextColor }}>
+          <Button
+            onClick={() => navigate('/')}
+            sx={{
+              color: topbarTextColor,
+              display: { xs: 'none', sm: 'inline' },
+            }}
+          >
             P10 Racing
           </Button>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
