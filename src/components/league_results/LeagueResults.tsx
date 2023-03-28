@@ -149,8 +149,10 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         leagueResultsMap={leagueResultsMap}
         usersMap={leagueMembers}
       />
-      <Typography variant="h4">Races</Typography>
-      <div>
+      <div className="fadeIn">
+        <Typography variant="h4" sx={{ mb: 2 }}>
+          Races
+        </Typography>
         {leagueResultsMap.get(user.id).size !== 23 && (
           <div>Error - missing some results</div>
         )}

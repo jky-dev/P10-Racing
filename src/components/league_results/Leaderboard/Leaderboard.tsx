@@ -67,8 +67,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
   return (
     <>
-      <Typography variant="h4">Leaderboard</Typography>
-      <Card elevation={2} sx={{ pt: 0, pl: 2 }}>
+      <Typography variant="h4" className="fadeIn">
+        Leaderboard
+      </Typography>
+      <Card elevation={2} sx={{ pt: 0, pl: 2 }} className="fadeIn">
         <List sx={{ pt: 0, pb: 0 }}>
           {leaderboardArray.map((obj, index) => (
             <ListItem disableGutters key={obj.user}>
