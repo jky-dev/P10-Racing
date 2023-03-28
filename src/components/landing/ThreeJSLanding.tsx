@@ -23,12 +23,7 @@ const ThreeJSLanding = () => {
     if (user) {
       navigate('/leagues')
     } else {
-      client.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-        },
-      })
+      navigate('/login')
     }
   }
 
@@ -75,11 +70,6 @@ const ThreeJSLanding = () => {
               The ultimate F1 fantasy league!
             </Typography>
           </div>
-          <meta
-            name="description"
-            content="P10 Racing, the ultimate F1 fantasy league! Pick drivers before each race and compete against others in fun, competitive fantasy leagues."
-          />
-
           <div className={styles.button}>
             <Button
               variant="outlined"

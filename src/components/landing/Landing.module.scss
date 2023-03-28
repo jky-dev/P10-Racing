@@ -24,13 +24,13 @@
 
 .subtitle {
   opacity: 0;
-  animation: fade 1s ease-out 1s forwards;
+  animation: fade 1s ease-out 0.5s forwards;
   user-select: none;
 }
 
 .button {
   opacity: 0;
-  animation: fade 1s ease-out 2s forwards;
+  animation: fade 1s ease-out 1s forwards;
 }
 
 @keyframes fade {

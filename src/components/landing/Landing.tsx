@@ -9,19 +9,14 @@ import ThreeJSLanding from './ThreeJSLanding'
 
 const Landing: React.FC = () => {
   const { threeJsHome } = useUtilsContext()
-  const { user, client } = useSupabaseContext()
+  const { user } = useSupabaseContext()
   const navigate = useNavigate()
 
   const handleClick = () => {
     if (user) {
       navigate('/leagues')
     } else {
-      client.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin,
-        },
-      })
+      navigate('/login')
     }
   }
 
