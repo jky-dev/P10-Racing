@@ -17,8 +17,8 @@ import {
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useSupabaseContext } from '../../../contexts/SupabaseContext'
-import { useUtilsContext } from '../../../contexts/UtilsContext'
+import { useSupabaseContext } from '../../contexts/SupabaseContext'
+import { useUtilsContext } from '../../contexts/UtilsContext'
 
 const Navigation = () => {
   const [open, setOpen] = React.useState(false)
@@ -33,9 +33,16 @@ const Navigation = () => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', mb: 3 }}>
-      <Typography variant="body1" sx={{ my: 2, userSelect: 'none' }}>
-        P10 Racing
-      </Typography>
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: 'center' }}
+            onClick={() => navigate('/')}
+          >
+            <ListItemText primary="P10 Racing" />
+          </ListItemButton>
+        </ListItem>
+      </List>
       <Divider />
       <List>
         {navItems.map((item) => (

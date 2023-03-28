@@ -7,6 +7,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
+import { InView, useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../../contexts/UtilsContext'
@@ -22,6 +23,16 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
   const { driversMap } = useSupabaseContext()
   const { pointsMap } = useUtilsContext()
   const isMobile = useMediaQuery('(max-width:600px)')
+
+  const { ref, inView, entry } = useInView()
+
+  React.useEffect(() => {
+    inView &&
+      Array.from(entry.target.children).forEach((child) =>
+        child.classList.add(`${styles.tableRow}`)
+      )
+  }, [inView])
+
   return (
     <Table sx={{ width: '100%', overflow: 'auto' }} size="small">
       <TableHead>
@@ -42,7 +53,7 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
           )}
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody ref={ref}>
         {raceResults.map((result) => (
           <TableRow key={result.driver_id}>
             <TableCell sx={{ borderBottom: 'none' }}>

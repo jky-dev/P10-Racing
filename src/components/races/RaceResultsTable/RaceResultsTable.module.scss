@@ -16,3 +16,27 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.tableRow {
+  animation: fade-in 1s ease-out 0s forwards;
+  opacity: 0;
+}
+
+@for $i from 1 through 20 {
+  .tableRow:nth-child(#{$i}) {
+    animation-delay: #{$i * 50}ms;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateX(-10px);
+    opacity: 0;
+    filter: blur(2px);
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
