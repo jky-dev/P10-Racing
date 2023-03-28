@@ -1,3 +1,4 @@
+import { DarkMode, LightMode } from '@mui/icons-material'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
@@ -17,10 +18,12 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
+import { useUtilsContext } from '../../../contexts/UtilsContext'
 
 const Navigation = () => {
   const [open, setOpen] = React.useState(false)
   const { user } = useSupabaseContext()
+  const { mode, toggleColorMode } = useUtilsContext()
   const [navItems, setNavItems] = React.useState<string[]>([])
   const navigate = useNavigate()
 
@@ -45,12 +48,20 @@ const Navigation = () => {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: 'center', justifyContent: 'center' }}
+            onClick={toggleColorMode}
+          >
+            {mode === 'light' ? <LightMode /> : <DarkMode />}
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   )
 
   const navMap: { [key: string]: string } = {
-    Home: '',
+    'P10 Racing': '',
     Races: 'races',
     Leagues: 'leagues',
     'My Profile': 'profile',
@@ -61,7 +72,7 @@ const Navigation = () => {
   }
 
   React.useEffect(() => {
-    const temp = ['Home', 'Races', 'Quali']
+    const temp = ['Races', 'Quali']
     if (user) {
       temp.push('Leagues', 'My Profile')
 
@@ -74,40 +85,54 @@ const Navigation = () => {
     setNavItems(temp)
   }, [user])
 
+  const topbarTextColor = mode === 'light' ? '#262626' : '#FFF'
+
   return (
     <>
-      <AppBar component="nav">
-        <Toolbar sx={{ flexDirection: { xs: 'row-reverse', sm: 'row' } }}>
+      <AppBar
+        component="nav"
+        sx={{ background: 'transparent' }}
+        elevation={0}
+        position="static"
+      >
+        <Toolbar
+          sx={{
+            flexDirection: { xs: 'row-reverse', sm: 'row' },
+            justifyContent: 'space-between',
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="end"
             onClick={handleDrawerToggle}
-            sx={{ ml: 2, display: { sm: 'none' } }}
+            sx={{
+              ml: 2,
+              display: { sm: 'none' },
+              color: topbarTextColor,
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="body1"
-            component="div"
-            sx={{
-              flexGrow: 1,
-              display: { xs: 'none', sm: 'block' },
-              userSelect: 'none',
-            }}
-          >
+          <Button onClick={() => navigate('/')} sx={{ color: topbarTextColor }}>
             P10 Racing
-          </Typography>
+          </Button>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button
                 key={item}
-                sx={{ color: '#fff' }}
+                sx={{ color: topbarTextColor }}
                 onClick={() => navigate('/' + navMap[item])}
               >
                 {item}
               </Button>
             ))}
+            <IconButton
+              onClick={toggleColorMode}
+              sx={{ color: topbarTextColor, flex: 1 }}
+            >
+              {mode === 'light' ? <LightMode /> : <DarkMode />}
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>

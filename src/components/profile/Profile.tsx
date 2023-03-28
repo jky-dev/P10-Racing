@@ -95,15 +95,7 @@ const Profile = () => {
               </Button>
             </span>
           </div>
-          <div className={styles.themeToggleContainer}>
-            <Typography>
-              {mode === 'light' ? 'Light mode' : 'Dark mode'}
-            </Typography>
-            <IconButton onClick={toggleColorMode}>
-              {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
-            </IconButton>
-          </div>
-          <div className={styles.themeToggleContainer}>
+          <div className={styles.toggleContainer}>
             <Typography>3D Homepage</Typography>
             <Switch
               checked={threeJsHome}
