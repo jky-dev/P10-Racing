@@ -74,6 +74,20 @@ const useContext = () => {
       responsiveFontSizes(
         createTheme({
           components: {
+            MuiCard: {
+              styleOverrides: {
+                root: {
+                  background: 'transparent',
+                },
+              },
+            },
+            MuiAccordion: {
+              styleOverrides: {
+                root: {
+                  background: 'transparent',
+                },
+              },
+            },
             MuiCssBaseline: {
               styleOverrides: {
                 body: {

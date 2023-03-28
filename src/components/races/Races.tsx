@@ -69,7 +69,7 @@ const Races: React.FC = () => {
       </div>
       <div className={styles.container}>
         {races.map((race) => (
-          <Card sx={{ width: '100%' }} key={race.id}>
+          <Card sx={{ width: '100%' }} key={race.id} elevation={2}>
             <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
               <div className={styles.raceTitle}>
                 <Typography variant="h5">{raceName(race.race_name)}</Typography>

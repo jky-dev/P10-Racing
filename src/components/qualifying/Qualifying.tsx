@@ -29,7 +29,7 @@ const Qualifying: React.FC = () => {
     <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">Qualifying Results</Typography>
       {Array.from(qualiResultsMap.entries()).map(([race_id, resultsArray]) => (
-        <Card key={race_id} className={styles.card}>
+        <Card key={race_id} sx={{ width: '100%' }} elevation={2}>
           <CardContent>
             <div className={styles.cardTitle}>
               <Typography variant="h5">

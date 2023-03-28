@@ -91,7 +91,7 @@ const Profile = () => {
             />
             <span>
               <Button onClick={handleSubmit} variant="contained">
-                Change
+                Update name
               </Button>
             </span>
           </div>

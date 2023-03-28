@@ -111,7 +111,7 @@ const About = () => {
   return (
     <div className={`fadeIn ${styles.container}`}>
       <Typography variant="h4">About</Typography>
-      <Card>
+      <Card sx={{ width: '100%' }} elevation={2}>
         <CardContent className={styles.cardContent}>
           <Typography variant="body1">
             Welcome to P10 Racing, the premier fantasy league for Formula 1 fans

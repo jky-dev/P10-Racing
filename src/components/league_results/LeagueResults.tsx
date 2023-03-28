@@ -158,6 +158,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <Accordion
             key={race.race_name}
             defaultExpanded={nextRaceRoundId === race.id}
+            elevation={2}
           >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
