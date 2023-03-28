@@ -17,6 +17,7 @@ interface SnackBarStateProps {
   open: boolean
   message: string
   variant: AlertColor
+  timeout: number | null
 }
 
 const pointsMap = new Map<number, number>()
@@ -32,6 +33,7 @@ const useContext = () => {
     open: false,
     message: '',
     variant: 'success',
+    timeout: 6000,
   })
   const [mode, setMode] = React.useState<PaletteMode>(
     (localStorage.getItem('theme') as PaletteMode) || 'light'
@@ -45,15 +47,21 @@ const useContext = () => {
     setThreeJsHome(e.target.checked)
   }
 
-  const sendAlert: (message: string, variant?: AlertColor) => void = (
+  const sendAlert: (
     message: string,
-    variant: AlertColor = 'success'
+    variant?: AlertColor,
+    timeout?: number
+  ) => void = (
+    message: string,
+    variant: AlertColor = 'success',
+    timeout = 6000
   ) => {
     setSnackBarState((prev) => ({
       ...prev,
       open: true,
       message: message,
       variant: variant,
+      timeout: timeout,
     }))
   }
 
@@ -98,7 +106,7 @@ const useContext = () => {
   const SnackBar = () => (
     <Snackbar
       open={snackBarState.open}
-      autoHideDuration={6000}
+      autoHideDuration={snackBarState.timeout}
       onClose={handleClose}
     >
       <Alert onClose={handleClose} severity={snackBarState.variant}>
@@ -120,7 +128,11 @@ const useContext = () => {
 }
 
 interface UtilsContextProps {
-  sendAlert: (message: string, variant?: AlertColor) => void
+  sendAlert: (
+    message: string,
+    variant?: AlertColor,
+    timeout?: number | null
+  ) => void
   SnackBar: () => JSX.Element
   pointsMap: Map<number, number>
   theme: Theme

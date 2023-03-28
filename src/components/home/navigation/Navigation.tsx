@@ -30,7 +30,7 @@ const Navigation = () => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', mb: 3 }}>
-      <Typography variant="body1" sx={{ my: 2 }}>
+      <Typography variant="body1" sx={{ my: 2, userSelect: 'none' }}>
         P10 Racing
       </Typography>
       <Divider />
@@ -90,7 +90,11 @@ const Navigation = () => {
           <Typography
             variant="body1"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', sm: 'block' },
+              userSelect: 'none',
+            }}
           >
             P10 Racing
           </Typography>
