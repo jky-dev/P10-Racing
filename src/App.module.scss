@@ -11,12 +11,18 @@
   animation: fade-in 0.5s ease 0s forwards, slide-in 0.5s ease 0s forwards;
 }
 
+:global(.fadeInTop) {
+  animation: fade-in 0.5s ease 0s forwards, slide-in-top 0.5s ease 0s forwards;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
+    blur: 5px;
   }
   to {
     opacity: 1;
+    blur: 0px;
   }
 }
 
@@ -26,5 +32,14 @@
   }
   to {
     transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-top {
+  from {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(0);
   }
 }

@@ -6,6 +6,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
+import { InView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
@@ -25,28 +26,38 @@ const Qualifying: React.FC = () => {
 
   const isMobile = useMediaQuery('(max-width:600px)')
 
+  const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    if (inView) {
+      entry.target.classList.add('fadeIn')
+    }
+  }
+
   return (
     <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">Qualifying Results</Typography>
       {Array.from(qualiResultsMap.entries()).map(([race_id, resultsArray]) => (
-        <Card key={race_id} sx={{ width: '100%' }} elevation={2}>
-          <CardContent>
-            <div className={styles.cardTitle}>
-              <Typography variant="h5">
-                {racesMap.get(race_id).race_name}
-              </Typography>
-              <Typography variant="subtitle1">
-                {formatRaceDateTime(
-                  getQualiDate(race_id),
-                  getQualiTime(race_id),
-                  isMobile
-                )}
-              </Typography>
-            </div>
-            <Divider sx={{ pt: 1, mb: 1 }} />
-            <QualiResultsTable qualiResults={resultsArray}></QualiResultsTable>
-          </CardContent>
-        </Card>
+        <InView style={{ width: '100%' }} onChange={onChange}>
+          <Card key={race_id} sx={{ width: '100%' }} elevation={2}>
+            <CardContent>
+              <div className={styles.cardTitle}>
+                <Typography variant="h5">
+                  {racesMap.get(race_id).race_name}
+                </Typography>
+                <Typography variant="subtitle1">
+                  {formatRaceDateTime(
+                    getQualiDate(race_id),
+                    getQualiTime(race_id),
+                    isMobile
+                  )}
+                </Typography>
+              </div>
+              <Divider sx={{ pt: 1, mb: 1 }} />
+              <QualiResultsTable
+                qualiResults={resultsArray}
+              ></QualiResultsTable>
+            </CardContent>
+          </Card>
+        </InView>
       ))}
     </div>
   )

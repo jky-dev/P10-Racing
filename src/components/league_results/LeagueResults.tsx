@@ -9,6 +9,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
+import { InView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
@@ -138,10 +139,16 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   if (loading)
     return (
-      <div className={styles.loaderContainer}>
+      <div className={`fadeIn ${styles.loaderContainer}`}>
         <Loader />
       </div>
     )
+
+  const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    if (inView) {
+      entry.target.classList.add('fadeInTop')
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -157,54 +164,56 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <div>Error - missing some results</div>
         )}
         {races.map((race) => (
-          <Accordion
-            key={race.race_name}
-            defaultExpanded={nextRaceRoundId === race.id}
-            elevation={2}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              sx={{
-                '& .MuiAccordionSummary-content': {
-                  justifyContent: 'space-between',
-                },
-              }}
+          <InView onChange={onChange}>
+            <Accordion
+              key={race.race_name}
+              defaultExpanded={nextRaceRoundId === race.id}
+              elevation={2}
             >
-              <div className={styles.accordionText}>
-                <Typography className={styles.raceName}>
-                  {race.race_name}{' '}
-                  {nextRaceRoundId === race.id &&
-                    leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
-                      null && (
-                      <Tooltip title="Lock in a driver before the race starts!">
-                        <PriorityHigh color="error" />
-                      </Tooltip>
-                    )}
-                </Typography>
-                <Typography variant="body2">
-                  {formatRaceDateTime(race.date, race.time, isMobile)}
-                </Typography>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails>
-              <div className={styles.racePicks}>
-                <ResultsTable
-                  leagueMembers={leagueMembers}
-                  leagueResultsMap={leagueResultsMap}
-                  race={race}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  '& .MuiAccordionSummary-content': {
+                    justifyContent: 'space-between',
+                  },
+                }}
+              >
+                <div className={styles.accordionText}>
+                  <Typography className={styles.raceName}>
+                    {race.race_name}{' '}
+                    {nextRaceRoundId === race.id &&
+                      leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
+                        null && (
+                        <Tooltip title="Lock in a driver before the race starts!">
+                          <PriorityHigh color="error" />
+                        </Tooltip>
+                      )}
+                  </Typography>
+                  <Typography variant="body2">
+                    {formatRaceDateTime(race.date, race.time, isMobile)}
+                  </Typography>
+                </div>
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className={styles.racePicks}>
+                  <ResultsTable
+                    leagueMembers={leagueMembers}
+                    leagueResultsMap={leagueResultsMap}
+                    race={race}
+                  />
+                </div>
+                <Picker
+                  id={race.race_name}
+                  rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
+                  drivers={driversMap}
+                  submitHandler={submitDriver}
+                  resultsRow={leagueResultsMap.get(user.id).get(race.id)}
+                  disabled={disabled(race)}
+                  submitDnfHandler={submitDnfPick}
                 />
-              </div>
-              <Picker
-                id={race.race_name}
-                rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
-                drivers={driversMap}
-                submitHandler={submitDriver}
-                resultsRow={leagueResultsMap.get(user.id).get(race.id)}
-                disabled={disabled(race)}
-                submitDnfHandler={submitDnfPick}
-              />
-            </AccordionDetails>
-          </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          </InView>
         ))}
       </div>
     </div>

@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 import React from 'react'
+import { InView } from 'react-intersection-observer'
 
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import styles from './About.module.scss'
@@ -108,10 +109,18 @@ const About = () => {
     },
   ]
 
+  const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    if (inView) {
+      entry.target.classList.add('fadeInTop')
+    }
+  }
+
   return (
-    <div className={`fadeIn ${styles.container}`}>
-      <Typography variant="h4">About</Typography>
-      <Card sx={{ width: '100%' }} elevation={2}>
+    <div className={`${styles.container} fadeIn`}>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        About
+      </Typography>
+      <Card sx={{ width: '100%', mb: 2 }} elevation={2}>
         <CardContent className={styles.cardContent}>
           <Typography variant="body1">
             Welcome to P10 Racing, the premier fantasy league for Formula 1 fans
@@ -149,23 +158,21 @@ const About = () => {
       </Card>
       <Typography variant="h4">FAQs</Typography>
       {faqs.map((faq) => (
-        <div key={faq.heading}>
-          <Typography variant="h5" sx={{ mb: 2 }}>
+        <InView onChange={onChange}>
+          <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
             {faq.heading}
           </Typography>
-          <div>
-            {faq.faqs.map((qa) => (
-              <Accordion key={qa.q}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography>{qa.q}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {qa.custom ? qa.custom : <Typography>{qa.a}</Typography>}
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </div>
-        </div>
+          {faq.faqs.map((qa) => (
+            <Accordion key={qa.q}>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography>{qa.q}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {qa.custom ? qa.custom : <Typography>{qa.a}</Typography>}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </InView>
       ))}
     </div>
   )

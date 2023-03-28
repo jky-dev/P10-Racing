@@ -6,6 +6,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React, { Key } from 'react'
+import { InView, useInView } from 'react-intersection-observer'
 
 import {
   SupabaseContextProps,
@@ -60,6 +61,12 @@ const Races: React.FC = () => {
     return name.split(' Grand Prix')[0] + ' GP'
   }
 
+  const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    if (inView) {
+      entry.target.classList.add('fadeIn')
+    }
+  }
+
   return (
     <div className={'fadeIn'}>
       <div className={styles.heading}>
@@ -69,27 +76,33 @@ const Races: React.FC = () => {
       </div>
       <div className={styles.container}>
         {races.map((race) => (
-          <Card sx={{ width: '100%' }} key={race.id} elevation={2}>
-            <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
-              <div className={styles.raceTitle}>
-                <Typography variant="h5">{raceName(race.race_name)}</Typography>
-                <Typography variant="subtitle1">
-                  {formatRaceDateTime(race.date, race.time, isMobile)}
-                </Typography>
-              </div>
-              <Divider sx={{ pt: 1, mb: 1 }} />
-              {schedule(race)}
-              {raceResultsMap.get(race.id).length > 0 && (
-                <>
-                  <Divider sx={{ pt: 1, mb: 1 }} />
-                  <div className={styles.heading}>
-                    <Typography variant="body1">Race Results</Typography>
-                  </div>
-                  <RaceResultsTable raceResults={raceResultsMap.get(race.id)} />
-                </>
-              )}
-            </CardContent>
-          </Card>
+          <InView onChange={onChange} style={{ width: '100%' }}>
+            <Card sx={{ width: '100%' }} key={race.id} elevation={2}>
+              <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+                <div className={styles.raceTitle}>
+                  <Typography variant="h5">
+                    {raceName(race.race_name)}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    {formatRaceDateTime(race.date, race.time, isMobile)}
+                  </Typography>
+                </div>
+                <Divider sx={{ pt: 1, mb: 1 }} />
+                {schedule(race)}
+                {raceResultsMap.get(race.id).length > 0 && (
+                  <>
+                    <Divider sx={{ pt: 1, mb: 1 }} />
+                    <div className={styles.heading}>
+                      <Typography variant="body1">Race Results</Typography>
+                    </div>
+                    <RaceResultsTable
+                      raceResults={raceResultsMap.get(race.id)}
+                    />
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </InView>
         ))}
       </div>
     </div>
