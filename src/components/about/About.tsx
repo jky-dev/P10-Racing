@@ -34,20 +34,12 @@ const About = () => {
           a: 'You can sign up by navigating to the "Login" tab in the top right of the navigation bar on desktop, or via the hamburger menu on mobile.',
         },
         {
-          q: 'Why can I only login via Google?',
-          a: 'Currently we only allow logging in with a Google account, however there will be more login options coming soon.',
-        },
-        {
-          q: 'When I go to sign up why does it try to sign me into <gibberish>.supabase.co?',
+          q: 'When I go to sign up with Google, why does it try to sign me into <gibberish>.supabase.co?',
           a: 'We use Supabase to handle our authentication and database needs. You can find more information at https://supabase.com.',
         },
         {
           q: 'What information do you collect from me when I sign up with Google?',
           a: 'We only get email you used to sign up with as a unique identifier for your user account. You can later customise your username by navigating to the "Profile" tab.',
-        },
-        {
-          q: 'Can I sign up with my own credentials?',
-          a: 'Currently we only allow signing up with a Google account.',
         },
       ],
     },
