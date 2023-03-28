@@ -1,6 +1,7 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
+import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import styles from './Home.module.scss'
 import Navigation from './navigation/Navigation'
 
@@ -22,8 +23,16 @@ const Home: React.FC = () => {
     navigate('/join/' + token.code)
   }
 
+  const checkReset = () => {
+    if (localStorage.getItem('reset')) {
+      localStorage.removeItem('reset')
+      navigate('/reset')
+    }
+  }
+
   React.useEffect(() => {
     checkInvite()
+    checkReset()
   }, [])
 
   return (

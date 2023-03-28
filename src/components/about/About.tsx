@@ -86,7 +86,7 @@ const About = () => {
                 {Array.from(pointsMap.entries())
                   .sort((a, b) => a[0] - b[0])
                   .map(([key, value]) => (
-                    <TableRow>
+                    <TableRow key={key}>
                       <TableCell>{key}</TableCell>
                       <TableCell align="right">{value}</TableCell>
                     </TableRow>
@@ -157,11 +157,13 @@ const About = () => {
       </Card>
       <Typography variant="h4">FAQs</Typography>
       {faqs.map((faq) => (
-        <>
-          <Typography variant="h5">{faq.heading}</Typography>
+        <div key={faq.heading}>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            {faq.heading}
+          </Typography>
           <div>
             {faq.faqs.map((qa) => (
-              <Accordion>
+              <Accordion key={qa.q}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography>{qa.q}</Typography>
                 </AccordionSummary>
@@ -171,7 +173,7 @@ const About = () => {
               </Accordion>
             ))}
           </div>
-        </>
+        </div>
       ))}
     </div>
   )

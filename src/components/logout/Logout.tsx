@@ -6,7 +6,7 @@ import { useSupabaseContext } from '../../contexts/SupabaseContext'
 
 const Logout: React.FC = () => {
   const navigate = useNavigate()
-  const { client, user, setUser } = useSupabaseContext()
+  const { client, setUser } = useSupabaseContext()
 
   const goodbye = () => {
     client.auth.signOut()

@@ -1,5 +1,6 @@
 import { SupabaseClient, User, createClient } from '@supabase/supabase-js'
 import React, { ReactNode, createContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   DriversDbProps,
@@ -39,6 +40,14 @@ const useContext: () => SupabaseContextProps | null = () => {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcnFsZGdhZmJhYWdmY3hiY3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg1OTE1NjYsImV4cCI6MTk5NDE2NzU2Nn0.5zGGuJVpBoYLUCr53Haz671UMJw0AtFAHJo9giqnYYA'
 
   const client = createClient(supabaseUrl, supabaseKey)
+
+  const checkReset = async () => {
+    client.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        localStorage.setItem('reset', 'true')
+      }
+    })
+  }
 
   const checkUser = async () => {
     const {
@@ -122,6 +131,7 @@ const useContext: () => SupabaseContextProps | null = () => {
   }
 
   const loadDetails = async () => {
+    await checkReset()
     await checkUser()
     await setData()
     setLoading(false)

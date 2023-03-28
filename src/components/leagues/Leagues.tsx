@@ -119,7 +119,7 @@ const Leagues: React.FC = () => {
     fetchLeagues()
   }
 
-  const isOwner = joinedLeagues.get(leagueId)?.created_by_uuid === user.id
+  const isOwner = joinedLeagues.get(leagueId)?.created_by_uuid === user?.id
 
   const validLeague = leagueId !== -1
 

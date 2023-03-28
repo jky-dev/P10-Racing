@@ -1,14 +1,13 @@
 import { Error } from '@mui/icons-material'
 import { Button, Divider, Link, TextField, Typography } from '@mui/material'
 import { SupabaseClient } from '@supabase/supabase-js'
-import { isValid } from 'date-fns'
 import React from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import Loader from '../loader/Loader'
 import styles from './Login.module.scss'
-import SignupSuccess from './signupSuccess/SignupSuccess'
 
 const signIn = (client: SupabaseClient) => {
   client.auth.signInWithOAuth({
@@ -28,8 +27,9 @@ const Login: React.FC = () => {
   )
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState<string | null>(null)
-  const { client } = useSupabaseContext()
+  const { client, setUser } = useSupabaseContext()
   const { sendAlert } = useUtilsContext()
+  const navigate = useNavigate()
 
   const toggleState = () => {
     setLoginState((prev) => (prev === 'login' ? 'signup' : 'login'))
@@ -74,8 +74,9 @@ const Login: React.FC = () => {
       setError(error.message)
     } else {
       // handle login
-      if (data.user) {
-        // check verification email
+      if (data.user && data.session) {
+        setUser(data.user)
+        navigate('/')
       }
     }
   }
@@ -90,7 +91,6 @@ const Login: React.FC = () => {
         emailRedirectTo: 'https://p10racing.app/login',
       },
     })
-    console.log('data:', data, 'error:', error)
 
     if (error) {
       setError(error.message)
@@ -123,9 +123,10 @@ const Login: React.FC = () => {
       return
     }
     setLoading('Sending forgot password email...')
-    const { data, error } = await client.auth.resetPasswordForEmail(email)
+    const { data, error } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://p10racing.app/reset',
+    })
     setLoading(null)
-    console.log(data, error)
     if (error) {
       if (
         error.message.includes(
