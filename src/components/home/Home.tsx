@@ -1,7 +1,6 @@
 import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
-import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import Navigation from '../navigation/Navigation'
 import styles from './Home.module.scss'
 
