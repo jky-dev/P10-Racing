@@ -26,7 +26,7 @@ import Loader from '../loader/Loader'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
-  const { client, driversIdMap } = useSupabaseContext()
+  const { client, driversIdMap, user } = useSupabaseContext()
   const { pointsMap } = useUtilsContext()
 
   const [leaguesMap, setLeaguesMap] =
@@ -94,7 +94,7 @@ const AdminPanel: React.FC = () => {
       const pointsGained = pointsMap.get(position) ?? 0
       const dnfPointsGained = calcDnfPoints(result?.dnf_driver_id, dnfDriverId)
 
-      const { error } = await client
+      await client
         .from('league_results')
         .update({
           points_gained: pointsGained,

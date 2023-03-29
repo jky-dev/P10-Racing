@@ -11,6 +11,8 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from '@mui/material'
@@ -24,11 +26,35 @@ const Navigation = () => {
   const [open, setOpen] = React.useState(false)
   const { user } = useSupabaseContext()
   const { mode, toggleColorMode } = useUtilsContext()
-  const [navItems, setNavItems] = React.useState<string[]>([])
+  const [navItems, setNavItems] = React.useState<NavItemProp[]>([])
   const navigate = useNavigate()
 
   const handleDrawerToggle = () => {
     setOpen((prev) => !prev)
+  }
+  const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(menuAnchor)
+  const [menuItems, setMenuItems] = React.useState<string[]>([])
+
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLElement>,
+    nav: NavItemProp
+  ) => {
+    setMenuItems(nav.menu)
+    setMenuAnchor(event.currentTarget)
+  }
+
+  const handleMenuClick = (item: string) => {
+    setMenuAnchor(null)
+    navigate('/' + navMap[item])
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>, item: NavItemProp) => {
+    if (item.menu) {
+      handleMenuOpen(e, item)
+    } else {
+      navigate('/' + navMap[item.name])
+    }
   }
 
   const drawer = (
@@ -37,7 +63,7 @@ const Navigation = () => {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: 'center' }}
-            onClick={() => navigate('/')}
+            onClick={(e) => navigate('/')}
           >
             <ListItemText primary="P10 Racing" />
           </ListItemButton>
@@ -46,12 +72,12 @@ const Navigation = () => {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.name} disablePadding>
             <ListItemButton
               sx={{ textAlign: 'center' }}
-              onClick={() => navigate('/' + navMap[item])}
+              onClick={(e) => handleClick(e, item)}
             >
-              <ListItemText primary={item} />
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -78,16 +104,19 @@ const Navigation = () => {
     Quali: 'qualifying',
   }
 
-  React.useEffect(() => {
-    const temp = ['Results', 'Quali']
-    if (user) {
-      temp.push('Leagues', 'My Profile')
+  interface NavItemProp {
+    name: string
+    menu?: string[]
+  }
 
-      user.email === 'battlefield200@gmail.com' && temp.push('Admin')
+  React.useEffect(() => {
+    const temp: NavItemProp[] = [{ name: 'F1', menu: ['Quali', 'Results'] }]
+    if (user) {
+      temp.push({ name: 'Leagues' }, { name: 'My Profile' })
     } else {
-      temp.push('Login')
+      temp.push({ name: 'Login' })
     }
-    temp.push('About')
+    temp.push({ name: 'About' })
 
     setNavItems(temp)
   }, [user])
@@ -133,11 +162,11 @@ const Navigation = () => {
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button
-                key={item}
+                key={item.name}
                 sx={{ color: topbarTextColor }}
-                onClick={() => navigate('/' + navMap[item])}
+                onClick={(e) => handleClick(e, item)}
               >
-                {item}
+                {item.name}
               </Button>
             ))}
             <IconButton
@@ -165,6 +194,15 @@ const Navigation = () => {
       >
         {drawer}
       </Drawer>
+      <Menu
+        anchorEl={menuAnchor}
+        open={menuOpen}
+        onClose={() => setMenuAnchor(null)}
+      >
+        {menuItems.map((item) => (
+          <MenuItem onClick={() => handleMenuClick(item)}>{item}</MenuItem>
+        ))}
+      </Menu>
     </>
   )
 }

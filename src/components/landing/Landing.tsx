@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import styles from './Landing.module.scss'
-import ThreeJSLanding from './ThreeJSLanding'
+
+const ThreeJSLanding = React.lazy(() => import('./ThreeJSLanding'))
 
 const Landing: React.FC = () => {
   const { threeJsHome } = useUtilsContext()

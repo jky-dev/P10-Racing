@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
       {
         path: 'admin',
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute admin>
             <AdminPanel />
           </ProtectedRoute>
         ),
@@ -62,15 +62,6 @@ export const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
-        errorElement: <GenericError />,
-      },
-      {
-        path: 'logout',
-        element: (
-          <ProtectedRoute>
-            <Logout />
-          </ProtectedRoute>
-        ),
         errorElement: <GenericError />,
       },
       { path: 'join', element: <Join />, errorElement: <GenericError /> },
