@@ -15,6 +15,17 @@
   animation: fade-in 0.5s ease 0s forwards, slide-in-top 0.5s ease 0s forwards;
 }
 
+:global(.fadeInListDelay) {
+  animation: fade-in 0.5s ease 0s forwards, slide-in 0.5s ease 0s forwards;
+  opacity: 0;
+}
+
+@for $i from 1 through 1000 {
+  :global(.fadeInListDelay):nth-child(#{$i}) {
+    animation-delay: #{$i * 50}ms;
+  }
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

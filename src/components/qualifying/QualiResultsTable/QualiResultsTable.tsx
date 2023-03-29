@@ -8,6 +8,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { driverName, formatRaceDateTime } from '../../../helpers/helpers'
@@ -21,6 +22,7 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
   qualiResults,
 }) => {
   const { driversMap } = useSupabaseContext()
+  const { ref, inView, entry } = useInView()
   const headers = ['Position', 'Driver', 'Q1', 'Q2', 'Q3']
 
   const isMobile = useMediaQuery('(max-width:600px)')
@@ -32,6 +34,13 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
 
     return true
   }
+
+  React.useEffect(() => {
+    inView &&
+      Array.from(entry.target.children).forEach((child) =>
+        child.classList.add(`fadeInListDelay`)
+      )
+  }, [inView])
 
   if (!qualiResults.length) return <Typography>TBD</Typography>
 
@@ -50,7 +59,7 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
           )}
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody ref={ref}>
         {qualiResults.map((result) => (
           <TableRow key={result.id}>
             <>

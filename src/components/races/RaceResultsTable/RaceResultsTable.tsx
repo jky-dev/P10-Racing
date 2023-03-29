@@ -29,7 +29,7 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
   React.useEffect(() => {
     inView &&
       Array.from(entry.target.children).forEach((child) =>
-        child.classList.add(`${styles.tableRow}`)
+        child.classList.add(`fadeInListDelay`)
       )
   }, [inView])
 
