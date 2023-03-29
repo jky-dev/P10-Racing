@@ -24,18 +24,18 @@ import { NavItemProp } from '../../interfaces'
 import NestedNavItem from './NestedNavItem'
 
 const Navigation = () => {
-  const [open, setOpen] = React.useState(false)
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
   const { user } = useSupabaseContext()
   const { mode, toggleColorMode } = useUtilsContext()
   const [navItems, setNavItems] = React.useState<NavItemProp[]>([])
   const navigate = useNavigate()
-
-  const handleDrawerToggle = () => {
-    setOpen((prev) => !prev)
-  }
   const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null)
   const menuOpen = Boolean(menuAnchor)
   const [menuItems, setMenuItems] = React.useState<string[]>([])
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen((prev) => !prev)
+  }
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -48,7 +48,9 @@ const Navigation = () => {
   const handleMenuClick = (item: string) => {
     setMenuAnchor(null)
     navigate('/' + navMap[item])
-    handleDrawerToggle()
+    if (drawerOpen) {
+      setDrawerOpen(false)
+    }
   }
 
   const handleClick = (e: React.MouseEvent<HTMLElement>, item: NavItemProp) => {
@@ -56,6 +58,9 @@ const Navigation = () => {
       handleMenuOpen(e, item)
     } else {
       navigate('/' + navMap[item.name])
+      if (drawerOpen) {
+        setDrawerOpen(false)
+      }
     }
   }
 
@@ -189,7 +194,7 @@ const Navigation = () => {
       <Drawer
         anchor="right"
         variant="temporary"
-        open={open}
+        open={drawerOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
