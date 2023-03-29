@@ -48,6 +48,7 @@ const Navigation = () => {
   const handleMenuClick = (item: string) => {
     setMenuAnchor(null)
     navigate('/' + navMap[item])
+    handleDrawerToggle()
   }
 
   const handleClick = (e: React.MouseEvent<HTMLElement>, item: NavItemProp) => {
