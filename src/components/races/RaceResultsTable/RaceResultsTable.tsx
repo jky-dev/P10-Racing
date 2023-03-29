@@ -7,7 +7,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
-import { InView, useInView } from 'react-intersection-observer'
+import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../../contexts/UtilsContext'
