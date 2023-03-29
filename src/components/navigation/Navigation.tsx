@@ -14,7 +14,6 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Typography,
 } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -130,7 +129,7 @@ const Navigation = () => {
     <>
       <AppBar
         component="nav"
-        sx={{ background: 'transparent' }}
+        sx={{ background: 'transparent', zIndex: 100 }}
         elevation={0}
         position="static"
       >
