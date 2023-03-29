@@ -21,6 +21,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
+import { NavItemProp } from '../../interfaces'
+import NestedNavItem from './NestedNavItem'
 
 const Navigation = () => {
   const [open, setOpen] = React.useState(false)
@@ -58,7 +60,7 @@ const Navigation = () => {
   }
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', mb: 3 }}>
+    <Box sx={{ textAlign: 'center', mb: 3 }}>
       <List>
         <ListItem disablePadding>
           <ListItemButton
@@ -71,16 +73,20 @@ const Navigation = () => {
       </List>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton
-              sx={{ textAlign: 'center' }}
-              onClick={(e) => handleClick(e, item)}
-            >
-              <ListItemText primary={item.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {navItems.map((item) =>
+          item.menu ? (
+            <NestedNavItem item={item} />
+          ) : (
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton
+                sx={{ textAlign: 'center' }}
+                onClick={(e) => handleClick(e, item)}
+              >
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            </ListItem>
+          )
+        )}
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: 'center', justifyContent: 'center' }}
@@ -104,13 +110,10 @@ const Navigation = () => {
     Quali: 'qualifying',
   }
 
-  interface NavItemProp {
-    name: string
-    menu?: string[]
-  }
-
   React.useEffect(() => {
-    const temp: NavItemProp[] = [{ name: 'F1', menu: ['Quali', 'Results'] }]
+    const temp: NavItemProp[] = [
+      { name: 'F1 info', menu: ['Quali', 'Results'] },
+    ]
     if (user) {
       temp.push({ name: 'Leagues' }, { name: 'My Profile' })
     } else {

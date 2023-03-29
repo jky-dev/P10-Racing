@@ -171,3 +171,8 @@ export interface QualiDbProps {
   q3?: string
   position: number
 }
+
+export interface NavItemProp {
+  name: string
+  menu?: string[]
+}
