@@ -18,7 +18,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {loading ? (
-          <div className={styles.container}>
+          <div className={styles.loadingContainer}>
             <Loader />
           </div>
         ) : (

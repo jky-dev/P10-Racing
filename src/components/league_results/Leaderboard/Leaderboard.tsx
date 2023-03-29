@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import React from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { LeagueMembersDbProps, LeagueResultsDbProps } from '../../../interfaces'
 
@@ -32,6 +33,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   const [leaderboardArray, setLeaderboardArray] = React.useState<
     LeaderboardArrayProp[]
   >([])
+
+  const { ref, inView, entry } = useInView()
 
   const init = () => {
     const tempArray: LeaderboardArrayProp[] = []
@@ -59,6 +62,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     init()
   }, [])
 
+  React.useEffect(() => {
+    inView &&
+      Array.from(entry.target.children).forEach((e) =>
+        e.classList.add('fadeInListDelay')
+      )
+  }, [inView])
+
   const colorMap: { [index: number]: string } = {
     0: '#FFD700',
     1: '#C0C0C0',
@@ -71,9 +81,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         Leaderboard
       </Typography>
       <Card elevation={2} sx={{ pt: 0, pl: 2 }} className="fadeIn">
-        <List sx={{ pt: 0, pb: 0 }}>
+        <List sx={{ pt: 0, pb: 0 }} ref={ref}>
           {leaderboardArray.map((obj, index) => (
-            <ListItem disableGutters key={obj.user}>
+            <ListItem disableGutters key={obj.user} sx={{ opacity: 0 }}>
               {index < 3 && (
                 <ListItemAvatar>
                   <EmojiEvents htmlColor={colorMap[index]} />

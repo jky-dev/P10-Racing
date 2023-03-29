@@ -7,6 +7,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import React from 'react'
+import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { driverName } from '../../../helpers/helpers'
@@ -29,6 +30,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
 }) => {
   const { raceResultsDriverMap, driversMap } = useSupabaseContext()
   const isMobile = useMediaQuery('(max-width:600px)')
+  const { ref, inView, entry } = useInView()
 
   const getPointsColumn = (userId: string, raceId: number) => {
     const points = leagueResultsMap.get(userId).get(raceId)?.points_gained
@@ -51,6 +53,13 @@ const ResultsTable: React.FC<ResultsTable> = ({
 
     return `${points}`
   }
+
+  React.useEffect(() => {
+    inView &&
+      Array.from(entry.target.children).forEach((e) =>
+        e.classList.add('fadeInListDelay')
+      )
+  }, [inView])
 
   return (
     <Table sx={{ width: '100%', overflow: 'auto' }} size="small">
@@ -81,7 +90,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
           </TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody ref={ref}>
         {Array.from(leagueMembers.entries()).map(([uuid, value]) => (
           <>
             <TableRow key={uuid} sx={{ borderBottom: 0 }}>
