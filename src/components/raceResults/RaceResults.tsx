@@ -5,8 +5,8 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material'
-import React, { Key } from 'react'
-import { InView, useInView } from 'react-intersection-observer'
+import React from 'react'
+import { InView } from 'react-intersection-observer'
 
 import {
   SupabaseContextProps,
@@ -14,10 +14,10 @@ import {
 } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
 import { RacesDbProps } from '../../interfaces'
+import styles from './RaceResults.module.scss'
 import RaceResultsTable from './RaceResultsTable/RaceResultsTable'
-import styles from './Races.module.scss'
 
-const Races: React.FC = () => {
+const RaceResults: React.FC = () => {
   const { raceResultsMap, races }: SupabaseContextProps = useSupabaseContext()
   const isMobile = useMediaQuery('(max-width:600px)')
 
@@ -71,7 +71,7 @@ const Races: React.FC = () => {
     <div className={'fadeIn'}>
       <div className={styles.heading}>
         <Typography variant="h4" sx={{ mb: 2 }}>
-          Races Results
+          Race Results
         </Typography>
       </div>
       <div className={styles.container}>
@@ -109,4 +109,4 @@ const Races: React.FC = () => {
   )
 }
 
-export default Races
+export default RaceResults

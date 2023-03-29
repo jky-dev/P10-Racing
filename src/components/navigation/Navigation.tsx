@@ -69,7 +69,7 @@ const Navigation = () => {
 
   const navMap: { [key: string]: string } = {
     'P10 Racing': '',
-    Races: 'races',
+    Results: 'results',
     Leagues: 'leagues',
     'My Profile': 'profile',
     Admin: 'admin',
@@ -79,7 +79,7 @@ const Navigation = () => {
   }
 
   React.useEffect(() => {
-    const temp = ['Races', 'Quali']
+    const temp = ['Results', 'Quali']
     if (user) {
       temp.push('Leagues', 'My Profile')
 
