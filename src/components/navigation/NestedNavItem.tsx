@@ -1,21 +1,19 @@
-import { ExpandLess, ExpandMore, StarBorder } from '@mui/icons-material'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import {
   Collapse,
-  Divider,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
 } from '@mui/material'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { NavItemProp } from '../../interfaces'
 
 interface NestedNavItemProps {
   item: NavItemProp
   handleMenuClick: (item: string) => void
+  key: string
 }
 
 const NestedNavItem: React.FC<NestedNavItemProps> = ({
@@ -29,7 +27,7 @@ const NestedNavItem: React.FC<NestedNavItemProps> = ({
 
   return (
     <>
-      <ListItem key={item.name} disablePadding>
+      <ListItem disablePadding>
         <ListItemButton sx={{ textAlign: 'center' }} onClick={handleOpen}>
           <ListItemText primary={item.name} />
           {open ? (
@@ -45,6 +43,7 @@ const NestedNavItem: React.FC<NestedNavItemProps> = ({
             <ListItemButton
               sx={{ textAlign: 'center' }}
               onClick={() => handleMenuClick(name)}
+              key={name}
             >
               <ListItemText primary={name} />
             </ListItemButton>

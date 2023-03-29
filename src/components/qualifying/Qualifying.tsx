@@ -36,8 +36,8 @@ const Qualifying: React.FC = () => {
     <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">Qualifying Results</Typography>
       {Array.from(qualiResultsMap.entries()).map(([race_id, resultsArray]) => (
-        <InView style={{ width: '100%' }} onChange={onChange}>
-          <Card key={race_id} sx={{ width: '100%' }} elevation={2}>
+        <InView style={{ width: '100%' }} onChange={onChange} key={race_id}>
+          <Card sx={{ width: '100%' }} elevation={2}>
             <CardContent>
               <div className={styles.cardTitle}>
                 <Typography variant="h5">
@@ -52,9 +52,7 @@ const Qualifying: React.FC = () => {
                 </Typography>
               </div>
               <Divider sx={{ pt: 1, mb: 1 }} />
-              <QualiResultsTable
-                qualiResults={resultsArray}
-              ></QualiResultsTable>
+              <QualiResultsTable qualiResults={resultsArray} />
             </CardContent>
           </Card>
         </InView>

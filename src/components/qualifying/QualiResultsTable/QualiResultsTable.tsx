@@ -53,9 +53,7 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
               <TableCell align={index > 0 ? 'right' : 'left'} key={header}>
                 {header}
               </TableCell>
-            ) : (
-              <></>
-            )
+            ) : null
           )}
         </TableRow>
       </TableHead>

@@ -65,7 +65,7 @@ const Navigation = () => {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: 'center' }}
-            onClick={(e) => navigate('/')}
+            onClick={() => handleMenuClick('P10 Racing')}
           >
             <ListItemText primary="P10 Racing" />
           </ListItemButton>
@@ -75,7 +75,11 @@ const Navigation = () => {
       <List>
         {navItems.map((item) =>
           item.menu ? (
-            <NestedNavItem item={item} handleMenuClick={handleMenuClick} />
+            <NestedNavItem
+              item={item}
+              handleMenuClick={handleMenuClick}
+              key={item.name}
+            />
           ) : (
             <ListItem key={item.name} disablePadding>
               <ListItemButton
@@ -112,7 +116,7 @@ const Navigation = () => {
 
   React.useEffect(() => {
     const temp: NavItemProp[] = [
-      { name: 'F1 info', menu: ['Quali', 'Results'] },
+      { name: 'F1 Info', menu: ['Quali', 'Results'] },
     ]
     if (user) {
       temp.push({ name: 'Leagues' }, { name: 'My Profile' })
@@ -205,7 +209,9 @@ const Navigation = () => {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
       >
         {menuItems.map((item) => (
-          <MenuItem onClick={() => handleMenuClick(item)}>{item}</MenuItem>
+          <MenuItem onClick={() => handleMenuClick(item)} key={item}>
+            {item}
+          </MenuItem>
         ))}
       </Menu>
     </>

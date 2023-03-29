@@ -76,8 +76,8 @@ const RaceResults: React.FC = () => {
       </div>
       <div className={styles.container}>
         {races.map((race) => (
-          <InView onChange={onChange} style={{ width: '100%' }}>
-            <Card sx={{ width: '100%' }} key={race.id} elevation={2}>
+          <InView onChange={onChange} style={{ width: '100%' }} key={race.id}>
+            <Card sx={{ width: '100%' }} elevation={2}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
                 <div className={styles.raceTitle}>
                   <Typography variant="h5">
