@@ -12,6 +12,7 @@ import {
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
+import { useUtilsContext } from '../../../contexts/UtilsContext'
 import { LeagueMembersDbProps, LeagueResultsDbProps } from '../../../interfaces'
 
 interface LeaderboardProps {
@@ -33,6 +34,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   const [leaderboardArray, setLeaderboardArray] = React.useState<
     LeaderboardArrayProp[]
   >([])
+  const { mode } = useUtilsContext()
 
   const { ref, inView, entry } = useInView()
 
@@ -67,7 +69,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       Array.from(entry.target.children).forEach((e) =>
         e.classList.add('fadeInListDelay')
       )
-  }, [inView])
+  }, [inView, mode])
 
   const colorMap: { [index: number]: string } = {
     0: '#FFD700',
