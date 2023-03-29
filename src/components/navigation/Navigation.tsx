@@ -200,6 +200,8 @@ const Navigation = () => {
         anchorEl={menuAnchor}
         open={menuOpen}
         onClose={() => setMenuAnchor(null)}
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
       >
         {menuItems.map((item) => (
           <MenuItem onClick={() => handleMenuClick(item)}>{item}</MenuItem>
