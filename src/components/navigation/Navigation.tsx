@@ -74,7 +74,7 @@ const Navigation = () => {
       <List>
         {navItems.map((item) =>
           item.menu ? (
-            <NestedNavItem item={item} />
+            <NestedNavItem item={item} handleMenuClick={handleMenuClick} />
           ) : (
             <ListItem key={item.name} disablePadding>
               <ListItemButton

@@ -9,14 +9,19 @@ import {
   ListItemText,
 } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { NavItemProp } from '../../interfaces'
 
 interface NestedNavItemProps {
   item: NavItemProp
+  handleMenuClick: (item: string) => void
 }
 
-const NestedNavItem: React.FC<NestedNavItemProps> = ({ item }) => {
+const NestedNavItem: React.FC<NestedNavItemProps> = ({
+  item,
+  handleMenuClick,
+}) => {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => {
     setOpen((prev) => !prev)
@@ -37,7 +42,10 @@ const NestedNavItem: React.FC<NestedNavItemProps> = ({ item }) => {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {item.menu.map((name) => (
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton
+              sx={{ textAlign: 'center' }}
+              onClick={() => handleMenuClick(name)}
+            >
               <ListItemText primary={name} />
             </ListItemButton>
           ))}
