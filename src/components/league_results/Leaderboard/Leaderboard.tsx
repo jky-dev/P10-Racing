@@ -127,7 +127,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         Leaderboard
       </Typography>
       <Card elevation={2} sx={{ pt: 0, pl: 2 }} className="fadeIn">
-        <List sx={{ pt: 0, pb: 0, pr: 2 }} ref={ref}>
+        <List sx={{ pt: 0, pb: 0, pr: 1 }} ref={ref}>
           {leaderboardArray.map((obj, index) => (
             <ListItem
               key={obj.user}
