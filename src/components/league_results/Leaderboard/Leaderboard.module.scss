@@ -1,0 +1,9 @@
+.icons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 60px;
+  > * {
+    flex: 1 1 0;
+  }
+}

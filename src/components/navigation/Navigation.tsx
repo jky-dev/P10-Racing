@@ -116,13 +116,13 @@ const Navigation = () => {
     Admin: 'admin',
     Login: 'login',
     About: 'about',
-    Quali: 'qualifying',
+    Qualifying: 'qualifying',
     Schedule: 'schedule',
   }
 
   React.useEffect(() => {
     const temp: NavItemProp[] = [
-      { name: 'F1 Info', menu: ['Schedule', 'Quali', 'Results'] },
+      { name: 'F1 Info', menu: ['Schedule', 'Qualifying', 'Results'] },
     ]
     if (user) {
       temp.push({ name: 'Leagues' }, { name: 'My Profile' })

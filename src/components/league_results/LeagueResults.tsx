@@ -50,7 +50,8 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       .select(
         `
           *,
-          leagues (name, invite_code)
+          leagues (name, invite_code),
+          races (*)
         `
       )
       .eq('league_id', leagueId)
