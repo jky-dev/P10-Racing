@@ -36,11 +36,11 @@ const About = () => {
         },
         {
           q: 'When I go to sign up with Google, why does it try to sign me into <gibberish>.supabase.co?',
-          a: 'We use Supabase to handle our authentication and database needs. You can find more information at https://supabase.com.',
+          a: 'P10 Racing uses Supabase to handle our authentication and database needs. You can find more information at https://supabase.com.',
         },
         {
           q: 'What information do you collect from me when I sign up with Google?',
-          a: 'We only get email you used to sign up with as a unique identifier for your user account. You can later customise your username by navigating to the "Profile" tab.',
+          a: 'We only get the email you used to sign up with as a unique identifier for your user account. You can later customise your username by navigating to the "Profile" tab.',
         },
       ],
     },
@@ -93,8 +93,8 @@ const About = () => {
           a: 'If your DNF pick is the first DNF of the race (or P20, in the case of simultaneous DNFs), you will earn 10 points. If you choose "No DNF" and there happens to be no DNFs in the race, you will earn an additional 25 points! Although choose wisely, there have only been a handful of races in F1 history with no DNFs.',
         },
         {
-          q: 'Is there any other way to earn points?',
-          a: 'There will be additional ways to earn points in the future. Locking in your P10 driver before qualifying starts and keeping said driver locked in will net you 1.5x points. Coming soon!',
+          q: 'How long do I have to lock in a pick for the race?',
+          a: 'You will be able to pick drivers up until qualifying starts. After qualifying, you lose the opportunity to lock in a driver and if you did not pick, will not earn any points for that race.',
         },
       ],
     },
@@ -103,7 +103,7 @@ const About = () => {
       faqs: [
         {
           q: 'Where do I give feedback/suggestions?',
-          a: 'There will be a form at the bottom of the page where you can submit feedback, otherwise you can email p10racingleague AT gmail DOT com',
+          a: 'There will be a form at the bottom of the page where you can submit feedback (coming soon), otherwise you can email p10racingleague AT gmail DOT com',
         },
       ],
     },
