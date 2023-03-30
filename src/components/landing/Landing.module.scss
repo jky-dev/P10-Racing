@@ -33,6 +33,11 @@
   animation: fade 1s ease-out 1s forwards;
 }
 
+.stats {
+  opacity: 0;
+  animation: fade 1s ease-out 1.5s forwards;
+}
+
 @keyframes fade {
   0% {
     opacity: 0;

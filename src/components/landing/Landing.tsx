@@ -11,7 +11,11 @@ const ThreeJSLanding = React.lazy(() => import('./ThreeJSLanding'))
 
 const Landing: React.FC = () => {
   const { threeJsHome } = useUtilsContext()
-  const { user } = useSupabaseContext()
+  const { user, client } = useSupabaseContext()
+  const [numberUsers, setNumberUsers] = React.useState(null)
+  const [numberLeagues, setNumberLeagues] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+
   const navigate = useNavigate()
 
   const handleClick = () => {
@@ -21,6 +25,19 @@ const Landing: React.FC = () => {
       navigate('/login')
     }
   }
+
+  const init = async () => {
+    let { data: users } = await client.rpc('get_number_of_users')
+    let { data: leagues } = await client.rpc('get_number_of_leagues')
+    setNumberLeagues(leagues)
+    setNumberUsers(users)
+    setLoading(false)
+  }
+
+  React.useEffect(() => {
+    init()
+  }, [])
+
   return threeJsHome ? (
     <Suspense fallback={<Loader />}>
       <ThreeJSLanding />
@@ -50,6 +67,16 @@ const Landing: React.FC = () => {
           {user ? 'Join a league' : 'Get started'}
         </Button>
       </div>
+      {!loading && (
+        <Typography
+          variant="caption"
+          textAlign="center"
+          className={styles.stats}
+        >
+          Join {numberUsers} users competing in {numberLeagues} different
+          leagues!
+        </Typography>
+      )}
     </span>
   )
 }
