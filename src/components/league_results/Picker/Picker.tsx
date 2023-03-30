@@ -84,16 +84,14 @@ const Picker: React.FC<PickerProps> = ({
             <MenuItem value={-1} disabled>
               Pick a driver
             </MenuItem>
-            {Array.from(drivers.values()).map((key) => {
-              return (
-                <MenuItem value={key.id} key={key.id} className={styles.picker}>
-                  <span>
-                    {key.given_name} {key.last_name}
-                  </span>
-                  <img src={`images/${key.constructor}.png`} height={20} />
-                </MenuItem>
-              )
-            })}
+            {Array.from(drivers.values()).map((key) => (
+              <MenuItem value={key.id} key={key.id} className={styles.picker}>
+                <span>
+                  {key.given_name} {key.last_name}
+                </span>
+                <img src={`images/${key.constructor}.png`} height={20} />
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Button
@@ -130,16 +128,14 @@ const Picker: React.FC<PickerProps> = ({
             <MenuItem value={-1} disabled>
               Pick a driver
             </MenuItem>
-            {Array.from(drivers.values()).map((key) => {
-              return (
-                <MenuItem value={key.id} key={key.id} className={styles.picker}>
-                  <span>
-                    {key.given_name} {key.last_name}
-                  </span>
-                  <img src={`images/${key.constructor}.png`} height={20} />
-                </MenuItem>
-              )
-            })}
+            {Array.from(drivers.values()).map((key) => (
+              <MenuItem value={key.id} key={key.id} className={styles.picker}>
+                <span>
+                  {key.given_name} {key.last_name}
+                </span>
+                <img src={`images/${key.constructor}.png`} height={20} />
+              </MenuItem>
+            ))}
             <MenuItem value={241} className={styles.picker}>
               NO DNF!
             </MenuItem>

@@ -92,8 +92,8 @@ const ResultsTable: React.FC<ResultsTable> = ({
       </TableHead>
       <TableBody ref={ref}>
         {Array.from(leagueMembers.entries()).map(([uuid, value]) => (
-          <>
-            <TableRow key={uuid} sx={{ borderBottom: 0 }}>
+          <React.Fragment key={uuid}>
+            <TableRow sx={{ borderBottom: 0 }}>
               <TableCell
                 sx={{
                   textOverflow: 'ellipsis',
@@ -197,7 +197,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
                 {getDnfPointsColumn(uuid, race.id)}
               </TableCell>
             </TableRow>
-          </>
+          </React.Fragment>
         ))}
       </TableBody>
     </Table>

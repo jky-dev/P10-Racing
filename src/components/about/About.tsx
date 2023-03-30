@@ -158,7 +158,7 @@ const About = () => {
       </Card>
       <Typography variant="h4">FAQs</Typography>
       {faqs.map((faq) => (
-        <InView onChange={onChange}>
+        <InView onChange={onChange} key={faq.heading}>
           <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
             {faq.heading}
           </Typography>

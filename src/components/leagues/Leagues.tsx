@@ -172,11 +172,9 @@ const Leagues: React.FC = () => {
                 },
               }}
             >
-              {Array.from(joinedLeagues.values()).map((league) => {
-                return (
-                  <Tab label={league.name} value={league.id} key={league.id} />
-                )
-              })}
+              {Array.from(joinedLeagues.values()).map((league) => (
+                <Tab label={league.name} value={league.id} key={league.id} />
+              ))}
             </Tabs>
           </Box>
           <LeagueResults leagueId={leagueId} />

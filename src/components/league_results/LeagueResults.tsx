@@ -164,7 +164,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <div>Error - missing some results</div>
         )}
         {races.map((race) => (
-          <InView onChange={onChange}>
+          <InView onChange={onChange} key={race.race_name}>
             <Accordion
               key={race.race_name}
               defaultExpanded={nextRaceRoundId === race.id}

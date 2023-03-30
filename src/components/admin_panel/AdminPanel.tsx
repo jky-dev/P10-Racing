@@ -184,7 +184,7 @@ const AdminPanel: React.FC = () => {
       </div>
       <Divider />
       {Array.from(leaguesMap.entries()).map(([leagueId, league]) => (
-        <div key={leagueId}>
+        <React.Fragment key={leagueId}>
           <div>
             <Typography variant="h4">{league.name}</Typography>
             {leagueMembersMap.get(leagueId).map((member) => (
@@ -196,7 +196,7 @@ const AdminPanel: React.FC = () => {
             ))}
           </div>
           <Divider />
-        </div>
+        </React.Fragment>
       ))}
     </List>
   )
