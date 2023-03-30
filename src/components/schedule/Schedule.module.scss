@@ -1,0 +1,27 @@
+.raceTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+
+.raceTimeContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.racesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
+}

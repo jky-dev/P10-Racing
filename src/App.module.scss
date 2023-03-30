@@ -20,7 +20,11 @@
   opacity: 0;
 }
 
-@for $i from 1 through 1000 {
+:global(.hidden) {
+  opacity: 0;
+}
+
+@for $i from 1 through 50 {
   :global(.fadeInListDelay):nth-child(#{$i}) {
     animation-delay: #{$i * 50}ms;
   }
