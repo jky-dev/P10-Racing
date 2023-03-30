@@ -88,7 +88,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   }
 
   const disabled = (race: RacesDbProps) => {
-    const raceDate = Date.parse(`${race.date} ${race.time}`)
+    const raceDate = Date.parse(`${race.quali_date} ${race.quali_time}`)
     return raceDate < Date.now()
   }
 
