@@ -1,7 +1,8 @@
 import { ThemeProvider } from '@emotion/react'
-import { CssBaseline, PaletteMode, createTheme } from '@mui/material'
+import { CssBaseline, CssBaselineProps } from '@mui/material'
+import { inject } from '@vercel/analytics'
 import React from 'react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider } from 'react-router-dom'
 
 import styles from './App.module.scss'
 import { router } from './Router'
@@ -12,6 +13,7 @@ import { useUtilsContext } from './contexts/UtilsContext'
 const App = () => {
   const { loading } = useSupabaseContext()
   const { SnackBar, theme } = useUtilsContext()
+  inject()
 
   return (
     <>
