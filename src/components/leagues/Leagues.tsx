@@ -19,7 +19,7 @@ import {
   LeagueMembersDbProps,
   LeaguesProps,
 } from '../../interfaces'
-import { createLeague, joinLeague } from '../../services/database'
+import { joinLeague } from '../../services/database'
 import LeagueResults from '../league_results/LeagueResults'
 import Loader from '../loader/Loader'
 import DeleteDialog from './DeleteDialog/DeleteDialog'
@@ -49,12 +49,10 @@ const Leagues: React.FC = () => {
     if (leagueName.length === 0) return
     setLoading(true)
     try {
-      await createLeague(
-        client,
-        user,
-        leagueName,
-        crypto.randomUUID().slice(0, 6)
-      )
+      await client.rpc('create_league', {
+        i_code: crypto.randomUUID().slice(0, 6),
+        l_name: leagueName,
+      })
       sendAlert('Successfully created league ' + leagueName)
       setLeagueName('')
     } catch (exception) {

@@ -8,39 +8,7 @@ import {
   F1RaceApiProps,
   F1ResultsApiProps,
   InviteCodeDbProps,
-  LeagueMembersDbProps,
-  LeaguesProps,
 } from '../interfaces'
-
-export const createLeague = async (
-  client: SupabaseClient,
-  user: any,
-  name: string,
-  code: string
-) => {
-  const { data: league_data, error } = await client
-    .from('leagues')
-    .insert([
-      {
-        name: name,
-        invite_code: code,
-        created_by_uuid: user.id,
-      },
-    ])
-    .select()
-
-  if (error || league_data.length === 0) throw new Error('An error occurred')
-
-  const returnedRecord = league_data[0] as LeaguesProps
-
-  await client.from('invite_codes').insert({
-    invite_code: code,
-    league_id: returnedRecord.id,
-    created_by_uuid: user.id,
-  })
-
-  await addUserToLeague(client, returnedRecord.id, user.id)
-}
 
 export const joinLeague = async (
   client: SupabaseClient,
@@ -55,45 +23,11 @@ export const joinLeague = async (
   if ((data as InviteCodeDbProps[]).length !== 1)
     throw new Error('League invite not found')
 
-  const leagueId = (data as InviteCodeDbProps[])[0].league_id
-
-  const { data: check } = await client
-    .from('league_members')
-    .select('id')
-    .eq('league_id', leagueId)
-    .eq('user_uuid', user.id)
-
-  if ((check as LeagueMembersDbProps[]).length !== 0)
-    throw new Error('You are already part of this league')
-
-  await addUserToLeague(client, leagueId, user.id)
-}
-
-const addUserToLeague = async (
-  client: SupabaseClient,
-  leagueId: number,
-  userId: string
-) => {
-  await client.from('league_members').insert({
-    league_id: leagueId,
-    user_uuid: userId,
-    index: `${leagueId}_${userId}`,
+  const { error } = await client.rpc('join_league', {
+    i_code: code,
   })
 
-  // race ids just happen to be 1 -> 23
-  for (let i = 1; i < 24; i++) {
-    await client.from('league_results').upsert(
-      {
-        race_id: i,
-        driver_id: null,
-        points_gained: null,
-        league_id: leagueId,
-        user_uuid: userId,
-        index: `${i}_${leagueId}_${userId}`,
-      },
-      { onConflict: 'index', ignoreDuplicates: true }
-    )
-  }
+  if (error) throw new Error('An error joining the league as occured')
 }
 
 export const insertIntoRaces = async (
