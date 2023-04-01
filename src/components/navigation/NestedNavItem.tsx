@@ -1,6 +1,7 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import {
   Collapse,
+  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -38,6 +39,7 @@ const NestedNavItem: React.FC<NestedNavItemProps> = ({
         </ListItemButton>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
+        <Divider sx={{ width: '6rem', margin: 'auto' }} />
         <List component="div" disablePadding>
           {item.menu.map((name) => (
             <ListItemButton

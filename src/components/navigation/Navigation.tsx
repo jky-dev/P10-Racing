@@ -118,6 +118,7 @@ const Navigation = () => {
     About: 'about',
     Qualifying: 'qualifying',
     Schedule: 'schedule',
+    FAQs: 'faqs',
   }
 
   React.useEffect(() => {
@@ -129,7 +130,7 @@ const Navigation = () => {
     } else {
       temp.push({ name: 'Login' })
     }
-    temp.push({ name: 'About' })
+    temp.push({ name: 'Help', menu: ['About', 'FAQs'] })
 
     setNavItems(temp)
   }, [user])
