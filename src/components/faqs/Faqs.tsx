@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { InView } from 'react-intersection-observer'
+import { Link } from 'react-router-dom'
 
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import styles from './Faqs.module.scss'
@@ -120,6 +121,17 @@ const Faqs = () => {
     <>
       <Typography variant="h4" sx={{ mb: '1rem' }}>
         FAQs
+      </Typography>
+      <Typography variant="subtitle1" sx={{ mb: '1rem' }}>
+        Playing a version of P10 Racing elsewhere and want to migrate to this
+        app?{' '}
+        <strong>
+          Backfilling driver picks can be requested through the{' '}
+          <Link to="/contact" className={styles.link}>
+            contact us
+          </Link>{' '}
+          form!
+        </strong>
       </Typography>
       <div className={styles.faqs}>
         {faqs.map((faq) => (
