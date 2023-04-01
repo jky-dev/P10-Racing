@@ -78,7 +78,7 @@ const useContext = () => {
               styleOverrides: {
                 paper: {
                   background: 'transparent',
-                  backdropFilter: 'blur(5px)',
+                  backdropFilter: 'blur(100px)',
                 },
               },
             },
