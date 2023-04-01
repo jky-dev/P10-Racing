@@ -80,7 +80,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'reset',
-        element: <ResetPassword />,
+        element: (
+          <ProtectedRoute>
+            <ResetPassword />
+          </ProtectedRoute>
+        ),
         errorElement: <GenericError />,
       },
       {
