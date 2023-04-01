@@ -81,15 +81,20 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     setLeagueResultsMap(map)
     setLeagueMembers(tempMembersMap)
 
-    const indexOfNextRace = races.findIndex((value) => !disabled(value))
+    const indexOfNextRace = races.findIndex((value) => !raced(value))
 
     setNextRaceRoundId(races[indexOfNextRace].id)
 
     setLoading(false)
   }
 
-  const disabled = (race: RacesDbProps) => {
+  const passedQualiDate = (race: RacesDbProps) => {
     const raceDate = Date.parse(`${race.quali_date} ${race.quali_time}`)
+    return raceDate < Date.now()
+  }
+
+  const raced = (race: RacesDbProps) => {
+    const raceDate = Date.parse(`${race.date} ${race.time}`)
     return raceDate < Date.now()
   }
 
@@ -203,15 +208,16 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                     race={race}
                   />
                 </div>
-                <Picker
-                  id={race.race_name}
-                  rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
-                  drivers={driversMap}
-                  submitHandler={submitDriver}
-                  resultsRow={leagueResultsMap.get(user.id).get(race.id)}
-                  disabled={disabled(race)}
-                  submitDnfHandler={submitDnfPick}
-                />
+                {!passedQualiDate(race) && (
+                  <Picker
+                    id={race.race_name}
+                    rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
+                    drivers={driversMap}
+                    submitHandler={submitDriver}
+                    resultsRow={leagueResultsMap.get(user.id).get(race.id)}
+                    submitDnfHandler={submitDnfPick}
+                  />
+                )}
               </AccordionDetails>
             </Accordion>
           </InView>
