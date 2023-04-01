@@ -14,6 +14,7 @@ import React, { useMemo } from 'react'
 import { InView } from 'react-intersection-observer'
 
 import { useUtilsContext } from '../../contexts/UtilsContext'
+import styles from './Faqs.module.scss'
 
 interface FaqProps {
   heading: string
@@ -117,22 +118,26 @@ const Faqs = () => {
 
   return (
     <>
-      <Typography variant="h4">FAQs</Typography>
-      {faqs.map((faq) => (
-        <InView onChange={onChange} key={faq.heading} className="hidden">
-          <Typography variant="h5">{faq.heading}</Typography>
-          {faq.faqs.map((qa) => (
-            <Accordion key={qa.q}>
-              <AccordionSummary expandIcon={<ExpandMore />}>
-                <Typography>{qa.q}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {qa.custom ? qa.custom : <Typography>{qa.a}</Typography>}
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </InView>
-      ))}
+      <Typography variant="h4" sx={{ mb: '1rem' }}>
+        FAQs
+      </Typography>
+      <div className={styles.faqs}>
+        {faqs.map((faq) => (
+          <InView onChange={onChange} key={faq.heading} className="hidden">
+            <Typography variant="h5">{faq.heading}</Typography>
+            {faq.faqs.map((qa) => (
+              <Accordion key={qa.q}>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Typography>{qa.q}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {qa.custom ? qa.custom : <Typography>{qa.a}</Typography>}
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </InView>
+        ))}
+      </div>
     </>
   )
 }
