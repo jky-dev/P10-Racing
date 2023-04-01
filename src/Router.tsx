@@ -1,4 +1,3 @@
-import { CoPresent } from '@mui/icons-material'
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -6,12 +5,12 @@ import ProtectedRoute from './ProtectedRoute'
 import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
 import GenericError from './components/error/GenericError'
+import Faqs from './components/faqs/Faqs'
 import Home from './components/home/Home'
 import Join from './components/join/Join'
 import Landing from './components/landing/Landing'
 import Leagues from './components/leagues/Leagues'
 import Login from './components/login/Login'
-import Logout from './components/logout/Logout'
 import Profile from './components/profile/Profile'
 import Qualifying from './components/qualifying/Qualifying'
 import RaceResults from './components/raceResults/RaceResults'
@@ -94,7 +93,12 @@ export const router = createBrowserRouter([
       },
       {
         path: 'faqs',
-        element: <About />,
+        element: <Faqs />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: '*',
+        element: <div>Page not found</div>,
         errorElement: <GenericError />,
       },
     ],
