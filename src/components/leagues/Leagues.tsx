@@ -9,7 +9,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useRef } from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
@@ -31,8 +31,8 @@ interface JoinedLeagueProps extends LeagueMembersDbProps {
 }
 
 const Leagues: React.FC = () => {
-  const [leagueName, setLeagueName] = React.useState('')
-  const [leagueCode, setLeagueCode] = React.useState('')
+  const leagueNameRef = useRef<HTMLInputElement>()
+  const leagueCodeRef = useRef<HTMLInputElement>()
   const [leagueId, setLeagueId] = React.useState<number>(-1)
   const { client, user } = useSupabaseContext()
   const [loading, setLoading] = React.useState(true)
@@ -46,6 +46,7 @@ const Leagues: React.FC = () => {
     // add the league to your user profile
     // create league, access code and add user to it
     // create access code -> league mapping
+    const leagueName = leagueNameRef.current.value
     if (leagueName.length === 0) return
     setLoading(true)
     try {
@@ -54,9 +55,11 @@ const Leagues: React.FC = () => {
         l_name: leagueName,
       })
       sendAlert('Successfully created league ' + leagueName)
-      setLeagueName('')
     } catch (exception) {
-      sendAlert('Failed to create league, please try again later', 'error')
+      sendAlert(
+        `Failed to create league, please try again later ${exception.message}`,
+        'error'
+      )
     }
     setLoading(false)
     fetchLeagues()
@@ -65,7 +68,11 @@ const Leagues: React.FC = () => {
   const onJoinHandler = async () => {
     // add user to the league
     // add league to the user
-    if (leagueCode.length === 0) return
+    const leagueCode = leagueCodeRef.current.value
+    if (leagueCode.length === 0) {
+      sendAlert('League code must not be empty', 'error')
+      return
+    }
     setLoading(true)
     try {
       await joinLeague(client, user!, leagueCode)
@@ -186,8 +193,7 @@ const Leagues: React.FC = () => {
       <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league name"
-          value={leagueName}
-          onChange={(e) => setLeagueName(e.target.value)}
+          inputRef={leagueNameRef}
           autoComplete="off"
         >
           League name
@@ -201,8 +207,7 @@ const Leagues: React.FC = () => {
       <div className={styles.leagueSubmitContainer}>
         <TextField
           helperText="Enter your league code here"
-          value={leagueCode}
-          onChange={(e) => setLeagueCode(e.target.value)}
+          inputRef={leagueCodeRef}
           autoComplete="off"
         >
           League code
