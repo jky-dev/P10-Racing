@@ -119,10 +119,8 @@ const Faqs = () => {
     <>
       <Typography variant="h4">FAQs</Typography>
       {faqs.map((faq) => (
-        <InView onChange={onChange} key={faq.heading}>
-          <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
-            {faq.heading}
-          </Typography>
+        <InView onChange={onChange} key={faq.heading} className="hidden">
+          <Typography variant="h5">{faq.heading}</Typography>
           {faq.faqs.map((qa) => (
             <Accordion key={qa.q}>
               <AccordionSummary expandIcon={<ExpandMore />}>
