@@ -53,7 +53,7 @@ const Contact = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">Contact Us</Typography>
       <Typography variant="subtitle1">
         Leave any questions, feedback, or backfill requests down below!

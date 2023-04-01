@@ -119,10 +119,10 @@ const Faqs = () => {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mb: '1rem' }}>
+      <Typography variant="h4" sx={{ mb: '1rem' }} className="fadeIn">
         FAQs
       </Typography>
-      <Typography variant="subtitle1" sx={{ mb: '1rem' }}>
+      <Typography variant="subtitle1" sx={{ mb: '1rem' }} className="fadeIn">
         Playing a version of P10 Racing elsewhere and want to migrate to this
         app?{' '}
         <strong>
