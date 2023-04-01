@@ -1,3 +1,4 @@
+import { CoPresent } from '@mui/icons-material'
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
@@ -85,6 +86,11 @@ export const router = createBrowserRouter([
       {
         path: 'schedule',
         element: <Schedule />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'faqs',
+        element: <About />,
         errorElement: <GenericError />,
       },
     ],
