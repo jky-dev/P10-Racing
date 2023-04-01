@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
 import About from './components/about/About'
 import AdminPanel from './components/admin_panel/AdminPanel'
+import Contact from './components/contact/Contact'
 import GenericError from './components/error/GenericError'
 import Faqs from './components/faqs/Faqs'
 import Home from './components/home/Home'
@@ -99,6 +100,11 @@ export const router = createBrowserRouter([
       {
         path: '*',
         element: <div>Page not found</div>,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'contact',
+        element: <Contact />,
         errorElement: <GenericError />,
       },
     ],
