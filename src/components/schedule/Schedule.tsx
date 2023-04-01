@@ -45,7 +45,12 @@ const Schedule: React.FC = () => {
       </div>
       <div className={styles.racesContainer}>
         {races.map((race) => (
-          <InView onChange={onChange} style={{ width: '100%' }} key={race.id}>
+          <InView
+            onChange={onChange}
+            style={{ width: '100%' }}
+            key={race.id}
+            className="hidden"
+          >
             <ScheduleCard race={race} />
           </InView>
         ))}
