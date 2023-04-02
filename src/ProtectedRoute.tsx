@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { useSupabaseContext } from './contexts/SupabaseContext'
 
 interface ProtectedRouteProps {
@@ -27,6 +28,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   React.useEffect(() => {
     checkUser()
   }, [])
+
+  if (!user) return null
 
   return <>{children}</>
 }

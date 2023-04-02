@@ -45,6 +45,10 @@ const ResetPassword = () => {
     }
   }
 
+  React.useEffect(() => {
+    if (user.app_metadata.provider !== 'email') navigate('/')
+  }, [])
+
   return (
     <div className={`${styles.container} fadeIn`}>
       <Typography sx={{ userSelect: 'none' }} variant="h4">
