@@ -1,5 +1,6 @@
 import { Box, Button, Switch, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
@@ -14,6 +15,7 @@ const Profile = () => {
   const [loading, setLoading] = React.useState<boolean>(false)
   const [name, setName] = React.useState('')
   const { sendAlert, threeJsHome, handleThreeToggle } = useUtilsContext()
+  const navigate = useNavigate()
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -93,6 +95,13 @@ const Profile = () => {
               onChange={(e) => handleThreeToggle(e)}
             />
           </div>
+          {user.app_metadata.provider === 'email' && (
+            <span>
+              <Button variant="contained" onClick={() => navigate('/reset')}>
+                Reset Password
+              </Button>
+            </span>
+          )}
           <Logout />
         </>
       )}

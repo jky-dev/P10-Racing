@@ -45,12 +45,8 @@ const ResetPassword = () => {
     }
   }
 
-  React.useEffect(() => {
-    console.log(user.app_metadata.provider)
-  }, [])
-
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} fadeIn`}>
       <Typography sx={{ userSelect: 'none' }} variant="h4">
         Reset password
       </Typography>
@@ -71,9 +67,11 @@ const ResetPassword = () => {
           {error}
         </Typography>
       )}
-      <Button variant="contained" onClick={handleSubmit}>
-        Submit
-      </Button>
+      <span>
+        <Button variant="contained" onClick={handleSubmit}>
+          Change Password
+        </Button>
+      </span>
     </div>
   )
 }
