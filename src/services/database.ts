@@ -7,7 +7,7 @@ import {
   F1QualifyingApiProps,
   F1RaceApiProps,
   F1ResultsApiProps,
-  InviteCodeDbProps,
+  InvitedLeagueRpcProps,
 } from '../interfaces'
 
 export const joinLeague = async (
@@ -15,12 +15,11 @@ export const joinLeague = async (
   user: User,
   code: string
 ) => {
-  const { data } = await client
-    .from('invite_codes')
-    .select('league_id')
-    .eq('invite_code', code)
+  const { data } = await client.rpc('get_league_for_invite_code', {
+    invite: code,
+  })
 
-  if ((data as InviteCodeDbProps[]).length !== 1)
+  if ((data as InvitedLeagueRpcProps[]).length !== 1)
     throw new Error('League invite not found')
 
   const { error } = await client.rpc('join_league', {

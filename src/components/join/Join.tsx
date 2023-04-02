@@ -4,32 +4,28 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
-import { InviteCodeDbProps, LeagueDbProps } from '../../interfaces'
+import { InvitedLeagueRpcProps } from '../../interfaces'
 import { joinLeague } from '../../services/database'
 import Loader from '../loader/Loader'
 import styles from './Join.module.scss'
-
-interface InvitedLeagueProps extends InviteCodeDbProps {
-  leagues: LeagueDbProps
-}
 
 const Join = () => {
   const { inviteCode } = useParams()
   const { client, user } = useSupabaseContext()
   const { sendAlert } = useUtilsContext()
-  const [invitedLeague, setInvitedLeague] = React.useState<InvitedLeagueProps>()
+  const [invitedLeague, setInvitedLeague] =
+    React.useState<InvitedLeagueRpcProps>()
   const [loading, setLoading] = React.useState(true)
 
   const navigate = useNavigate()
 
   const getLeagueForInvite = async () => {
-    const { data } = await client
-      .from('invite_codes')
-      .select('*, leagues (*)')
-      .eq('invite_code', inviteCode)
+    const { data } = await client.rpc('get_league_for_invite_code', {
+      invite: inviteCode,
+    })
 
     if (data.length === 1) {
-      setInvitedLeague(data[0] as InvitedLeagueProps)
+      setInvitedLeague(data[0] as InvitedLeagueRpcProps)
     }
     setLoading(false)
   }
@@ -81,7 +77,7 @@ const Join = () => {
     <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">You have been invited to join</Typography>
       <Typography variant="h5" sx={{ mt: 6, mb: 6 }}>
-        {invitedLeague.leagues.name}!
+        {invitedLeague.name}!
       </Typography>
       {!user && (
         <Typography variant="body1">

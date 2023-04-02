@@ -176,3 +176,8 @@ export interface NavItemProp {
   name: string
   menu?: string[]
 }
+
+export interface InvitedLeagueRpcProps {
+  name: string
+  id: number
+}
