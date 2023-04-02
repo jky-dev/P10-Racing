@@ -167,7 +167,7 @@ const Navigation = () => {
             <MenuIcon />
           </IconButton>
           <Button
-            onClick={() => handleNavigation('/')}
+            onClick={() => handleNavigation('P10 Racing')}
             sx={{
               color: topbarTextColor,
               display: { xs: 'none', sm: 'inline' },
