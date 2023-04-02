@@ -20,14 +20,6 @@ interface SnackBarStateProps {
   timeout: number | null
 }
 
-const pointsMap = new Map<number, number>()
-const pointsArray = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1]
-pointsArray.forEach((value, index) => {
-  pointsMap.set(10 - index, value)
-  pointsMap.set(10 + index, value)
-})
-pointsMap.set(20, -5)
-
 const useContext = () => {
   const [snackBarState, setSnackBarState] = React.useState<SnackBarStateProps>({
     open: false,
@@ -74,6 +66,13 @@ const useContext = () => {
       responsiveFontSizes(
         createTheme({
           components: {
+            MuiTableCell: {
+              styleOverrides: {
+                body: {
+                  borderBottom: 'none',
+                },
+              },
+            },
             MuiMenu: {
               styleOverrides: {
                 paper: {
@@ -140,7 +139,6 @@ const useContext = () => {
   return {
     SnackBar,
     sendAlert,
-    pointsMap,
     theme,
     toggleColorMode,
     mode,
@@ -156,7 +154,6 @@ interface UtilsContextProps {
     timeout?: number | null
   ) => void
   SnackBar: () => JSX.Element
-  pointsMap: Map<number, number>
   theme: Theme
   toggleColorMode: () => void
   mode: PaletteMode

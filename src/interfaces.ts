@@ -175,3 +175,7 @@ export interface InvitedLeagueRpcProps {
   name: string
   id: number
 }
+
+export type RaceId = number
+export type DriverId = number
+export type DriverIdString = string

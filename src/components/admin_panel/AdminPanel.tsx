@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
+import { pointsMap } from '../../helpers/helpers'
 import {
   LeagueMembersDbProps,
   LeagueResultsDbProps,
@@ -27,7 +28,6 @@ import Loader from '../loader/Loader'
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
   const { client, driversIdMap, user } = useSupabaseContext()
-  const { pointsMap } = useUtilsContext()
 
   const [leaguesMap, setLeaguesMap] =
     React.useState<Map<number, LeaguesProps>>(null)
@@ -91,7 +91,8 @@ const AdminPanel: React.FC = () => {
 
     for (const result of leagueResults as LeagueResultsDbProps[]) {
       const position = driverResultMap.get(result?.driver_id)?.position
-      const pointsGained = pointsMap.get(position) ?? 0
+      if (!position) continue
+      const pointsGained = pointsMap[position] ?? 0
       const dnfPointsGained = calcDnfPoints(result?.dnf_driver_id, dnfDriverId)
 
       await client

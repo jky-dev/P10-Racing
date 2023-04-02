@@ -93,14 +93,13 @@ const ResultsTable: React.FC<ResultsTable> = ({
       <TableBody ref={ref}>
         {Array.from(leagueMembers.entries()).map(([uuid, value]) => (
           <React.Fragment key={uuid}>
-            <TableRow sx={{ borderBottom: 0 }}>
+            <TableRow>
               <TableCell
                 sx={{
                   textOverflow: 'ellipsis',
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   maxWidth: 0,
-                  borderBottom: 'none',
                 }}
               >
                 {value.users.name}
@@ -112,7 +111,6 @@ const ResultsTable: React.FC<ResultsTable> = ({
                   whiteSpace: 'nowrap',
                   maxWidth: 0,
                   verticalAlign: 'middle',
-                  borderBottom: 'none',
                 }}
                 align="right"
               >
@@ -147,15 +145,14 @@ const ResultsTable: React.FC<ResultsTable> = ({
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   maxWidth: 0,
-                  borderBottom: 'none',
                 }}
               >
                 {getPointsColumn(uuid, race.id)}
               </TableCell>
             </TableRow>
             <TableRow key={uuid + 'dnf'}>
-              <TableCell sx={{ borderBottom: 'none' }}></TableCell>
-              <TableCell align="right" sx={{ borderBottom: 'none' }}>
+              <TableCell></TableCell>
+              <TableCell align="right">
                 <div className={styles.driverName}>
                   <span className={styles.text}>
                     {leagueResultsMap.get(uuid).get(race.id).dnf_driver_id ===
@@ -191,7 +188,6 @@ const ResultsTable: React.FC<ResultsTable> = ({
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
                   maxWidth: 0,
-                  borderBottom: 'none',
                 }}
               >
                 {getDnfPointsColumn(uuid, race.id)}

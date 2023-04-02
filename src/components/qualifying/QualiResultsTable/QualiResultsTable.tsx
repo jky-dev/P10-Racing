@@ -61,14 +61,8 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
         {qualiResults.map((result) => (
           <TableRow key={result.id}>
             <>
-              <TableCell width="10%" sx={{ borderBottom: 'none' }}>
-                {result.position}
-              </TableCell>
-              <TableCell
-                width="50%"
-                align="right"
-                sx={{ borderBottom: 'none' }}
-              >
+              <TableCell width="10%">{result.position}</TableCell>
+              <TableCell width="50%" align="right">
                 <div className={styles.driverName}>
                   <span>
                     {driverName(driversMap.get(result.driver_id), false)}
@@ -83,25 +77,13 @@ const QualiResultsTable: React.FC<QualiResultsTableProps> = ({
               </TableCell>
               {!isMobile && (
                 <>
-                  <TableCell
-                    width="15%"
-                    align="right"
-                    sx={{ borderBottom: 'none' }}
-                  >
+                  <TableCell width="15%" align="right">
                     {result.q1}
                   </TableCell>
-                  <TableCell
-                    width="15%"
-                    align="right"
-                    sx={{ borderBottom: 'none' }}
-                  >
+                  <TableCell width="15%" align="right">
                     {result.q2}
                   </TableCell>
-                  <TableCell
-                    width="15%"
-                    align="right"
-                    sx={{ borderBottom: 'none' }}
-                  >
+                  <TableCell width="15%" align="right">
                     {result.q3}
                   </TableCell>
                 </>

@@ -17,6 +17,7 @@ import Qualifying from './components/qualifying/Qualifying'
 import RaceResults from './components/raceResults/RaceResults'
 import ResetPassword from './components/resetPassword/ResetPassword'
 import Schedule from './components/schedule/Schedule'
+import Standings from './components/standings/Standings'
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +106,11 @@ export const router = createBrowserRouter([
       {
         path: 'contact',
         element: <Contact />,
+        errorElement: <GenericError />,
+      },
+      {
+        path: 'standings',
+        element: <Standings />,
         errorElement: <GenericError />,
       },
     ],

@@ -1,10 +1,13 @@
 import { SupabaseClient, User, createClient } from '@supabase/supabase-js'
 import React, { ReactNode, createContext } from 'react'
-import { useNavigate } from 'react-router-dom'
 
+import { pointsMap } from '../helpers/helpers'
 import {
+  DriverId,
+  DriverIdString,
   DriversDbProps,
   QualiDbProps,
+  RaceId,
   RaceResultsDbProps,
   RacesDbProps,
 } from '../interfaces'
@@ -16,23 +19,26 @@ SupabaseContext.displayName = 'Supabase Context'
 const useContext: () => SupabaseContextProps | null = () => {
   const [user, setUser] = React.useState<User | null>(null)
   const [driversMap, setDriversMap] = React.useState<
-    Map<number, DriversDbProps>
+    Map<DriverId, DriversDbProps>
   >(new Map())
-  const [racesMap, setRacesMap] = React.useState<Map<number, RacesDbProps>>(
+  const [racesMap, setRacesMap] = React.useState<Map<RaceId, RacesDbProps>>(
     new Map()
   )
   const [raceResultsMap, setRaceResultsMap] = React.useState<
-    Map<number, RaceResultsDbProps[]>
+    Map<RaceId, RaceResultsDbProps[]>
   >(new Map())
   const [raceResultsDriverMap, setRaceResultsDriverMap] = React.useState<
-    Map<number, Map<number, RaceResultsDbProps>>
+    Map<RaceId, Map<DriverId, RaceResultsDbProps>>
   >(new Map())
   const [driversIdMap, setDriverIdMap] = React.useState<
-    Map<string, DriversDbProps>
+    Map<DriverIdString, DriversDbProps>
   >(new Map())
   const [qualiResultsMap, setQualiResultsMap] = React.useState<
-    Map<number, QualiDbProps[]>
+    Map<RaceId, QualiDbProps[]>
   >(new Map())
+  const [p10PointsMap, setP10PointsMap] = React.useState<Map<DriverId, number>>(
+    new Map()
+  )
   const [races, setRaces] = React.useState<RacesDbProps[]>([])
   const [loading, setLoading] = React.useState(true)
   const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
@@ -97,9 +103,11 @@ const useContext: () => SupabaseContextProps | null = () => {
 
     const dMap = new Map<number, DriversDbProps>()
     const dIdMap = new Map<string, DriversDbProps>()
-    for (const driver of drivers) {
+    const p10DriverTotalPointsMap = new Map<DriverId, number>()
+    for (const driver of drivers as DriversDbProps[]) {
       dMap.set(driver.id, driver)
       dIdMap.set(driver.driver_id, driver)
+      p10DriverTotalPointsMap.set(driver.id, 0)
     }
 
     const rrdMap = new Map<number, Map<number, RaceResultsDbProps>>()
@@ -115,6 +123,13 @@ const useContext: () => SupabaseContextProps | null = () => {
     for (const raceResult of raceResults as RaceResultsDbProps[]) {
       rrMap.get(raceResult.race_id)!.push(raceResult)
       rrdMap.get(raceResult.race_id).set(raceResult.driver_id, raceResult)
+      if (raceResult.position) {
+        p10DriverTotalPointsMap.set(
+          raceResult.driver_id,
+          p10DriverTotalPointsMap.get(raceResult.driver_id) +
+            pointsMap[raceResult.position]
+        )
+      }
     }
     for (const qualiResult of qualiResults as QualiDbProps[]) {
       qMap.get(qualiResult.race_id).push(qualiResult)
@@ -128,6 +143,8 @@ const useContext: () => SupabaseContextProps | null = () => {
     setDriverIdMap(dIdMap)
 
     setQualiResultsMap(qMap)
+
+    setP10PointsMap(p10DriverTotalPointsMap)
   }
 
   const loadDetails = async () => {
@@ -154,6 +171,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     races,
     loading,
     qualiResultsMap,
+    p10PointsMap,
   }
 }
 
@@ -165,14 +183,15 @@ export interface SupabaseContextProps {
   client: SupabaseClient
   user: User | null
   setUser: React.Dispatch<React.SetStateAction<User | null>>
-  driversMap: Map<number, DriversDbProps>
-  driversIdMap: Map<string, DriversDbProps>
-  racesMap: Map<number, RacesDbProps>
-  raceResultsMap: Map<number, RaceResultsDbProps[]>
-  raceResultsDriverMap: Map<number, Map<number, RaceResultsDbProps>>
+  driversMap: Map<DriverId, DriversDbProps>
+  driversIdMap: Map<DriverIdString, DriversDbProps>
+  racesMap: Map<RaceId, RacesDbProps>
+  raceResultsMap: Map<RaceId, RaceResultsDbProps[]>
+  raceResultsDriverMap: Map<RaceId, Map<DriverId, RaceResultsDbProps>>
   races: RacesDbProps[]
   loading: boolean
-  qualiResultsMap: Map<number, QualiDbProps[]>
+  qualiResultsMap: Map<RaceId, QualiDbProps[]>
+  p10PointsMap: Map<DriverId, number>
 }
 
 export const useSupabaseContext: () => SupabaseContextProps = () => {

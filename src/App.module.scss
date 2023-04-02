@@ -24,6 +24,25 @@
   opacity: 0;
 }
 
+:global(.driverConstructorContainer) {
+  display: flex !important;
+  column-gap: 0.5rem;
+  align-items: center;
+  flex-direction: row !important;
+  justify-content: flex-end;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.driverName) {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @for $i from 1 through 50 {
   :global(.fadeInListDelay):nth-child(#{$i}) {
     animation-delay: #{$i * 50}ms;

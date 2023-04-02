@@ -15,6 +15,7 @@ import { InView } from 'react-intersection-observer'
 import { Link } from 'react-router-dom'
 
 import { useUtilsContext } from '../../contexts/UtilsContext'
+import { pointsMap } from '../../helpers/helpers'
 import styles from './Faqs.module.scss'
 
 interface FaqProps {
@@ -23,8 +24,6 @@ interface FaqProps {
 }
 
 const Faqs = () => {
-  const { pointsMap } = useUtilsContext()
-
   const faqs: FaqProps[] = useMemo(
     () => [
       {
@@ -76,14 +75,12 @@ const Faqs = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Array.from(pointsMap.entries())
-                    .sort((a, b) => a[0] - b[0])
-                    .map(([key, value]) => (
-                      <TableRow key={key}>
-                        <TableCell>{key}</TableCell>
-                        <TableCell align="right">{value}</TableCell>
-                      </TableRow>
-                    ))}
+                  {Object.entries(pointsMap).map(([key, value]) => (
+                    <TableRow key={key}>
+                      <TableCell>{key}</TableCell>
+                      <TableCell align="right">{value}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             ),

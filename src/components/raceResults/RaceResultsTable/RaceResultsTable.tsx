@@ -11,7 +11,7 @@ import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../../contexts/UtilsContext'
-import { driverName } from '../../../helpers/helpers'
+import { driverName, pointsMap } from '../../../helpers/helpers'
 import { RaceResultsDbProps } from '../../../interfaces'
 import styles from './RaceResultsTable.module.scss'
 
@@ -21,7 +21,6 @@ interface RaceResultsTable {
 
 const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
   const { driversMap } = useSupabaseContext()
-  const { pointsMap } = useUtilsContext()
   const isMobile = useMediaQuery('(max-width:600px)')
 
   const { ref, inView, entry } = useInView()
@@ -56,9 +55,7 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
       <TableBody ref={ref}>
         {raceResults.map((result) => (
           <TableRow key={result.driver_id}>
-            <TableCell sx={{ borderBottom: 'none' }}>
-              {result.position}
-            </TableCell>
+            <TableCell>{result.position}</TableCell>
             <TableCell
               sx={{
                 maxWidth: 0,
@@ -98,8 +95,8 @@ const RaceResultsTable: React.FC<RaceResultsTable> = ({ raceResults }) => {
                 >
                   {result.points}
                 </TableCell>
-                <TableCell align="right" sx={{ borderBottom: 'none' }}>
-                  {pointsMap.get(result.position)}
+                <TableCell align="right">
+                  {pointsMap[result.position]}
                 </TableCell>
               </>
             )}

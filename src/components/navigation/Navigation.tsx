@@ -121,7 +121,10 @@ const Navigation = () => {
 
   React.useEffect(() => {
     const temp: NavItemProp[] = [
-      { name: 'F1 Info', menu: ['Schedule', 'Qualifying', 'Results'] },
+      {
+        name: 'F1 Info',
+        menu: ['Schedule', 'Qualifying', 'Results', 'Standings'],
+      },
     ]
     if (user) {
       const profileMenu = ['Edit Profile']

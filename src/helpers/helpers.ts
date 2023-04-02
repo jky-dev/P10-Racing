@@ -49,4 +49,28 @@ export const navItemToPathMap: { [key: string]: string } = {
   'Contact Us': 'contact',
   'Edit Profile': 'profile',
   Logout: 'logout',
+  Standings: 'standings',
+}
+
+export const pointsMap: { [key: number]: number } = {
+  1: 1,
+  2: 2,
+  3: 4,
+  4: 6,
+  5: 8,
+  6: 10,
+  7: 12,
+  8: 15,
+  9: 18,
+  10: 25,
+  11: 18,
+  12: 15,
+  13: 12,
+  14: 10,
+  15: 8,
+  16: 6,
+  17: 4,
+  18: 2,
+  19: 1,
+  20: -5,
 }
