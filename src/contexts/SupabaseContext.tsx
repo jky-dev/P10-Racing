@@ -20,6 +20,7 @@ SupabaseContext.displayName = 'Supabase Context'
 
 const useContext: () => SupabaseContextProps | null = () => {
   const [user, setUser] = React.useState<User | null>(null)
+  const [isAdmin, setIsAdmin] = React.useState(false)
   const [driversMap, setDriversMap] = React.useState<
     Map<DriverId, DriversDbProps>
   >(new Map())
@@ -82,6 +83,11 @@ const useContext: () => SupabaseContextProps | null = () => {
     setUser(user)
   }
 
+  const checkAdmin = async () => {
+    const { data } = await client.rpc('get_admins')
+    setIsAdmin(data.length > 0)
+  }
+
   const setData = async () => {
     const { data: drivers }: any = await client
       .from('drivers')
@@ -123,8 +129,6 @@ const useContext: () => SupabaseContextProps | null = () => {
       p10DriverTotalPointsMap.set(driver.id, 0)
       f1DriverTotalPointsMap.set(driver.id, 0)
     }
-
-    console.log(constructors)
 
     for (const constructor of constructors as ConstructorDbProps[]) {
       constructorsTotalPointsMap.set(constructor.constructor_id, 0)
@@ -182,6 +186,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     await checkReset()
     await checkUser()
     await setData()
+    await checkAdmin()
     setLoading(false)
   }
 
@@ -205,6 +210,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     p10PointsMap,
     f1PointsMap,
     constructorsPointsMap,
+    isAdmin: isAdmin,
   }
 }
 
@@ -227,6 +233,7 @@ export interface SupabaseContextProps {
   p10PointsMap: Map<DriverId, number>
   f1PointsMap: Map<DriverId, number>
   constructorsPointsMap: Map<ConstructorIdString, number>
+  isAdmin: boolean
 }
 
 export const useSupabaseContext: () => SupabaseContextProps = () => {
