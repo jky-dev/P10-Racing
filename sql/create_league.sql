@@ -1,11 +1,7 @@
-create or replace function join_league(i_code varchar)
-returns void
-language sql
-security definer
-set search_path = public
-volatile
-as $$
-with rows as (SELECT id FROM leagues where invite_code = i_code),
+
+with rows as (INSERT INTO leagues (name, invite_code, created_by_uuid, is_deleted) values
+(l_name, i_code, auth.uid()::text, false)
+RETURNING id),
 
 ins1 as (INSERT into league_members (league_id, user_uuid, index)
 SELECT id, auth.uid()::text, CONCAT(id,'_',auth.uid()::text) from rows),
@@ -80,4 +76,3 @@ insert into league_results (race_id, league_id, user_uuid, index)
 select 23, id, auth.uid()::text, CONCAT(23,'_',id,'_',auth.uid()::text) from rows
 
 
-$$;
