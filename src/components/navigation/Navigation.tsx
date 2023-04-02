@@ -20,12 +20,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
+import { navItemToPathMap } from '../../helpers/helpers'
 import { NavItemProp } from '../../interfaces'
 import NestedNavItem from './NestedNavItem'
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false)
-  const { user } = useSupabaseContext()
+  const { user, client, setUser } = useSupabaseContext()
   const { mode, toggleColorMode } = useUtilsContext()
   const [navItems, setNavItems] = React.useState<NavItemProp[]>([])
   const navigate = useNavigate()
@@ -45,9 +46,9 @@ const Navigation = () => {
     setMenuAnchor(event.currentTarget)
   }
 
-  const handleMenuClick = (item: string) => {
+  const handleMenuClick = (menuItemString: string) => {
     setMenuAnchor(null)
-    navigate('/' + navMap[item])
+    handleNavigation(menuItemString)
     if (drawerOpen) {
       setDrawerOpen(false)
     }
@@ -57,10 +58,20 @@ const Navigation = () => {
     if (item.menu) {
       handleMenuOpen(e, item)
     } else {
-      navigate('/' + navMap[item.name])
+      navigate('/' + navItemToPathMap[item.name])
       if (drawerOpen) {
         setDrawerOpen(false)
       }
+    }
+  }
+
+  const handleNavigation = (navItemString: string) => {
+    if (navItemString === 'Logout') {
+      client.auth.signOut()
+      setUser(null)
+      navigate('/')
+    } else {
+      navigate(`/${navItemToPathMap[navItemString]}`)
     }
   }
 
@@ -108,26 +119,16 @@ const Navigation = () => {
     </Box>
   )
 
-  const navMap: { [key: string]: string } = {
-    'P10 Racing': '',
-    Results: 'results',
-    Leagues: 'leagues',
-    'My Profile': 'profile',
-    Admin: 'admin',
-    Login: 'login',
-    About: 'about',
-    Qualifying: 'qualifying',
-    Schedule: 'schedule',
-    FAQs: 'faqs',
-    'Contact Us': 'contact',
-  }
-
   React.useEffect(() => {
     const temp: NavItemProp[] = [
       { name: 'F1 Info', menu: ['Schedule', 'Qualifying', 'Results'] },
     ]
     if (user) {
-      temp.push({ name: 'Leagues' }, { name: 'My Profile' })
+      const profileMenu = ['Edit Profile']
+      if (user.app_metadata.provider === 'email')
+        profileMenu.push('Change Password')
+      profileMenu.push('Logout')
+      temp.push({ name: 'Leagues' }, { name: 'Profile', menu: profileMenu })
     } else {
       temp.push({ name: 'Login' })
     }
@@ -166,7 +167,7 @@ const Navigation = () => {
             <MenuIcon />
           </IconButton>
           <Button
-            onClick={() => navigate('/')}
+            onClick={() => handleNavigation('/')}
             sx={{
               color: topbarTextColor,
               display: { xs: 'none', sm: 'inline' },

@@ -69,7 +69,7 @@ const Profile = () => {
       className="fadeIn"
     >
       <Typography variant="h4" sx={{ mb: 1 }}>
-        My Profile
+        Edit Profile
       </Typography>
       {loading || profile === null ? (
         <Loader />
@@ -102,7 +102,6 @@ const Profile = () => {
               </Button>
             </span>
           )}
-          <Logout />
         </>
       )}
     </Box>

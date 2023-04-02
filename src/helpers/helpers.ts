@@ -34,3 +34,19 @@ export const driverName = (
     return `${driver.given_name} ${driver.last_name}`
   }
 }
+
+export const navItemToPathMap: { [key: string]: string } = {
+  'P10 Racing': '',
+  Results: 'results',
+  Leagues: 'leagues',
+  Profile: 'profile',
+  Admin: 'admin',
+  Login: 'login',
+  About: 'about',
+  Qualifying: 'qualifying',
+  Schedule: 'schedule',
+  FAQs: 'faqs',
+  'Contact Us': 'contact',
+  'Edit Profile': 'profile',
+  Logout: 'logout',
+}
