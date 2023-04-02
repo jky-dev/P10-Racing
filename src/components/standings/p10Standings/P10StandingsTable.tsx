@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
@@ -8,13 +8,10 @@ import { driverName } from '../../../helpers/helpers'
 const P10StandingsTable = () => {
   const { p10PointsMap, driversMap } = useSupabaseContext()
   const { ref, inView, entry } = useInView()
-
-  const sortedP10Array = Array.from(p10PointsMap.entries()).sort(
-    (a, b) => b[1] - a[1]
+  const sortedP10Array = useMemo(
+    () => Array.from(p10PointsMap.entries()).sort((a, b) => b[1] - a[1]),
+    [p10PointsMap]
   )
-  for (const result of sortedP10Array) {
-    console.log(driversMap.get(result[0]).given_name, result[1])
-  }
 
   React.useEffect(() => {
     inView &&

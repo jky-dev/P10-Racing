@@ -3,6 +3,8 @@ import React, { ReactNode, createContext } from 'react'
 
 import { pointsMap } from '../helpers/helpers'
 import {
+  ConstructorDbProps,
+  ConstructorIdString,
   DriverId,
   DriverIdString,
   DriversDbProps,
@@ -39,6 +41,12 @@ const useContext: () => SupabaseContextProps | null = () => {
   const [p10PointsMap, setP10PointsMap] = React.useState<Map<DriverId, number>>(
     new Map()
   )
+  const [f1PointsMap, setF1PointsMap] = React.useState<Map<DriverId, number>>(
+    new Map()
+  )
+  const [constructorsPointsMap, setConstructorsPointsMap] = React.useState<
+    Map<ConstructorIdString, number>
+  >(new Map())
   const [races, setRaces] = React.useState<RacesDbProps[]>([])
   const [loading, setLoading] = React.useState(true)
   const supabaseUrl = 'https://msrqldgafbaagfcxbcyv.supabase.co'
@@ -98,16 +106,28 @@ const useContext: () => SupabaseContextProps | null = () => {
       .order('race_id', { ascending: true })
       .order('position', { ascending: true })
 
+    const { data: constructors } = await client.from('constructor').select('*')
+
     if (!drivers || !dbRaces || !raceResults || !qualiResults)
       throw new Error('failed to initialize')
 
     const dMap = new Map<number, DriversDbProps>()
     const dIdMap = new Map<string, DriversDbProps>()
     const p10DriverTotalPointsMap = new Map<DriverId, number>()
+    const f1DriverTotalPointsMap = new Map<DriverId, number>()
+    const constructorsTotalPointsMap = new Map<ConstructorIdString, number>()
+
     for (const driver of drivers as DriversDbProps[]) {
       dMap.set(driver.id, driver)
       dIdMap.set(driver.driver_id, driver)
       p10DriverTotalPointsMap.set(driver.id, 0)
+      f1DriverTotalPointsMap.set(driver.id, 0)
+    }
+
+    console.log(constructors)
+
+    for (const constructor of constructors as ConstructorDbProps[]) {
+      constructorsTotalPointsMap.set(constructor.constructor_id, 0)
     }
 
     const rrdMap = new Map<number, Map<number, RaceResultsDbProps>>()
@@ -121,13 +141,22 @@ const useContext: () => SupabaseContextProps | null = () => {
       rrdMap.set(race.id, new Map<number, RaceResultsDbProps>())
     }
     for (const raceResult of raceResults as RaceResultsDbProps[]) {
+      const dId = raceResult.driver_id
       rrMap.get(raceResult.race_id)!.push(raceResult)
-      rrdMap.get(raceResult.race_id).set(raceResult.driver_id, raceResult)
+      rrdMap.get(raceResult.race_id).set(dId, raceResult)
       if (raceResult.position) {
         p10DriverTotalPointsMap.set(
-          raceResult.driver_id,
-          p10DriverTotalPointsMap.get(raceResult.driver_id) +
-            pointsMap[raceResult.position]
+          dId,
+          p10DriverTotalPointsMap.get(dId) + pointsMap[raceResult.position]
+        )
+        f1DriverTotalPointsMap.set(
+          dId,
+          f1DriverTotalPointsMap.get(dId) + raceResult.points
+        )
+        constructorsTotalPointsMap.set(
+          dMap.get(dId).constructor,
+          constructorsTotalPointsMap.get(dMap.get(dId).constructor) +
+            raceResult.points
         )
       }
     }
@@ -145,6 +174,8 @@ const useContext: () => SupabaseContextProps | null = () => {
     setQualiResultsMap(qMap)
 
     setP10PointsMap(p10DriverTotalPointsMap)
+    setF1PointsMap(f1DriverTotalPointsMap)
+    setConstructorsPointsMap(constructorsTotalPointsMap)
   }
 
   const loadDetails = async () => {
@@ -172,6 +203,8 @@ const useContext: () => SupabaseContextProps | null = () => {
     loading,
     qualiResultsMap,
     p10PointsMap,
+    f1PointsMap,
+    constructorsPointsMap,
   }
 }
 
@@ -192,6 +225,8 @@ export interface SupabaseContextProps {
   loading: boolean
   qualiResultsMap: Map<RaceId, QualiDbProps[]>
   p10PointsMap: Map<DriverId, number>
+  f1PointsMap: Map<DriverId, number>
+  constructorsPointsMap: Map<ConstructorIdString, number>
 }
 
 export const useSupabaseContext: () => SupabaseContextProps = () => {

@@ -13,7 +13,6 @@ import {
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
-import { RacesDbProps } from '../../interfaces'
 import styles from './RaceResults.module.scss'
 import RaceResultsTable from './RaceResultsTable/RaceResultsTable'
 

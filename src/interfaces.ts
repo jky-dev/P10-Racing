@@ -166,6 +166,13 @@ export interface QualiDbProps {
   position: number
 }
 
+export interface ConstructorDbProps {
+  id: number
+  created_at: string
+  constructor_id: string
+  name: string
+}
+
 export interface NavItemProp {
   name: string
   menu?: string[]
@@ -179,3 +186,4 @@ export interface InvitedLeagueRpcProps {
 export type RaceId = number
 export type DriverId = number
 export type DriverIdString = string
+export type ConstructorIdString = string
