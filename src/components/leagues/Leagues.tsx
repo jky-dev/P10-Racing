@@ -14,7 +14,6 @@ import React, { useRef } from 'react'
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import {
-  InviteCodeDbProps,
   LeagueDbProps,
   LeagueMembersDbProps,
   LeaguesProps,
@@ -27,7 +26,6 @@ import styles from './Leagues.module.scss'
 
 interface JoinedLeagueProps extends LeagueMembersDbProps {
   leagues: LeagueDbProps
-  invite_codes: InviteCodeDbProps
 }
 
 const Leagues: React.FC = () => {

@@ -148,12 +148,6 @@ export interface UserDbProps {
   uuid: string
 }
 
-export interface InviteCodeDbProps {
-  invite_code: string
-  created_at: string
-  league_id: number
-}
-
 export interface LeagueDbProps {
   id: number
   created_at: string
