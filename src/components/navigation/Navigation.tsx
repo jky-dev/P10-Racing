@@ -26,7 +26,7 @@ import NestedNavItem from './NestedNavItem'
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false)
-  const { user, client, setUser } = useSupabaseContext()
+  const { user, client, setUser, isAdmin } = useSupabaseContext()
   const { mode, toggleColorMode } = useUtilsContext()
   const [navItems, setNavItems] = React.useState<NavItemProp[]>([])
   const navigate = useNavigate()
@@ -130,12 +130,21 @@ const Navigation = () => {
       const profileMenu = ['Edit Profile']
       if (user.app_metadata.provider === 'email')
         profileMenu.push('Change Password')
+      if (isAdmin) profileMenu.push('Admin')
       profileMenu.push('Logout')
-      temp.push({ name: 'Leagues' }, { name: 'Profile', menu: profileMenu })
+
+      temp.push(
+        { name: 'Leagues' },
+        { name: 'Help', menu: ['About', 'FAQs', 'Contact Us'] },
+        { name: 'Profile', menu: profileMenu }
+      )
     } else {
-      temp.push({ name: 'Login' })
+      temp.push(
+        { name: 'Login' },
+        { name: 'Help', menu: ['About', 'FAQs', 'Contact Us'] }
+      )
     }
-    temp.push({ name: 'Help', menu: ['About', 'FAQs', 'Contact Us'] })
+    temp.push()
 
     setNavItems(temp)
   }, [user])
