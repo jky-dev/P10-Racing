@@ -56,7 +56,7 @@ export const setRaceResultsByRound = (
 ) => {
   if (round < 1) return
 
-  axios
+  return axios
     .get(`https://ergast.com/api/f1/2023/${round}/results.json`)
     .then(async (res) => {
       const results: F1ResultsApiProps[] =
@@ -82,7 +82,7 @@ export const setQualiResultsByRound = (
 ) => {
   if (round < 1) return
 
-  axios
+  return axios
     .get(`https://ergast.com/api/f1/2023/${round}/qualifying.json`)
     .then(async (res) => {
       const results: F1QualifyingApiProps[] =

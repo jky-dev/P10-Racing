@@ -1,5 +1,13 @@
-import { Button, Divider, List, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import {
+  Button,
+  Divider,
+  List,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material'
+import React, { useRef, useState } from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
@@ -24,18 +32,18 @@ import {
   setRaces,
 } from '../../services/f1'
 import Loader from '../loader/Loader'
+import styles from './AdminPanel.module.scss'
 
 const AdminPanel: React.FC = () => {
   const [round, setRound] = useState<number>(1)
-  const { client, driversIdMap, user } = useSupabaseContext()
-
+  const { client, driversIdMap, races } = useSupabaseContext()
   const [leaguesMap, setLeaguesMap] =
     React.useState<Map<number, LeaguesProps>>(null)
   const [leagueMembersMap, setLeagueMembersMap] =
     React.useState<Map<number, LeagueMembersDbProps[]>>(null)
   const [userMap, setUserMap] = React.useState<Map<string, UserDbProps>>(null)
-
   const [loading, setLoading] = React.useState(true)
+  const { sendAlert } = useUtilsContext()
 
   const setupLeagues = async () => {
     const { data: leagues }: any = await getTable(client, 'leagues')
@@ -89,6 +97,7 @@ const AdminPanel: React.FC = () => {
       .select('*')
       .eq('race_id', raceId)
 
+    let updatedCount = 0
     for (const result of leagueResults as LeagueResultsDbProps[]) {
       const position = driverResultMap.get(result?.driver_id)?.position
       if (!position) continue
@@ -102,7 +111,9 @@ const AdminPanel: React.FC = () => {
           dnf_points_gained: dnfPointsGained,
         })
         .eq('id', result.id)
+      updatedCount++
     }
+    sendAlert(`Calculated results for ${updatedCount} players`)
   }
 
   const isDnf = (status: string) => {
@@ -117,6 +128,24 @@ const AdminPanel: React.FC = () => {
     return 10
   }
 
+  const setRaceResultsByRoundClickHandler = async () => {
+    try {
+      await setRaceResultsByRound(client, round, driversIdMap)
+      sendAlert('success')
+    } catch (e) {
+      sendAlert(e.message, 'error')
+    }
+  }
+
+  const setQualiByRoundClickHandler = async () => {
+    try {
+      await setQualiResultsByRound(client, round, driversIdMap)
+      sendAlert('success')
+    } catch (e) {
+      sendAlert(e.message, 'error')
+    }
+  }
+
   React.useEffect(() => {
     setupLeagues()
   }, [])
@@ -125,62 +154,42 @@ const AdminPanel: React.FC = () => {
 
   return (
     <List>
-      <div>
-        <Typography variant="body1" mr={2}>
-          Set Race Details
-        </Typography>
+      <Typography variant="body1" mr={2}>
+        Setup
+      </Typography>
+      <div className={styles.buttonContainer}>
         <Button onClick={() => setRaces(client)} variant="contained">
           Set Races
         </Button>
-      </div>
-      <Divider />
-      <div>
-        <div>
-          <TextField
-            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-            value={round}
-            onChange={(e) => setRound(Number(e.target.value))}
-            sx={{ width: 100 }}
-          />
-        </div>
-        <span>
-          <Button
-            onClick={() => setRaceResultsByRound(client, round, driversIdMap)}
-            variant="contained"
-          >
-            Race Results
-          </Button>
-        </span>
-        <span>
-          <Button onClick={() => calculatePoints()} variant="contained">
-            Calculate Points
-          </Button>
-        </span>
-        <span>
-          <Button
-            onClick={() => setQualiResultsByRound(client, round, driversIdMap)}
-            variant="contained"
-          >
-            Quali
-          </Button>
-        </span>
-      </div>
-      <Divider />
-      <div>
-        <Typography variant="body1" mr={2}>
-          Set Constructors
-        </Typography>
         <Button onClick={() => setConstructors(client)} variant="contained">
           Set Constructors
+        </Button>
+        <Button onClick={() => setDrivers(client)} variant="contained">
+          Set Drivers
         </Button>
       </div>
       <Divider />
       <div>
-        <Typography variant="body1" mr={2}>
-          Set Drivers
-        </Typography>
-        <Button onClick={() => setDrivers(client)} variant="contained">
-          Set Drivers
+        <Select
+          value={round}
+          onChange={(e) => setRound(Number(e.target.value))}
+        >
+          {Array.from(races.values()).map((key, index) => (
+            <MenuItem value={index + 1} key={key.id}>
+              <span>{key.race_name}</span>
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+      <div className={styles.buttonContainer}>
+        <Button onClick={setQualiByRoundClickHandler} variant="contained">
+          Quali
+        </Button>
+        <Button onClick={setRaceResultsByRoundClickHandler} variant="contained">
+          Race Results
+        </Button>
+        <Button onClick={() => calculatePoints()} variant="contained">
+          Calculate Points
         </Button>
       </div>
       <Divider />
