@@ -81,7 +81,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     setLeagueResultsMap(map)
     setLeagueMembers(tempMembersMap)
 
-    const indexOfNextRace = races.findIndex((value) => !raced(value))
+    const indexOfNextRace = races.findIndex((value) => !passedQualiDate(value))
 
     setNextRaceRoundId(races[indexOfNextRace].id)
 
@@ -90,11 +90,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
 
   const passedQualiDate = (race: RacesDbProps) => {
     const raceDate = Date.parse(`${race.quali_date} ${race.quali_time}`)
-    return raceDate < Date.now()
-  }
-
-  const raced = (race: RacesDbProps) => {
-    const raceDate = Date.parse(`${race.date} ${race.time}`)
     return raceDate < Date.now()
   }
 
