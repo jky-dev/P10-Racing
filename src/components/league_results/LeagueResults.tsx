@@ -13,7 +13,7 @@ import { InView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
-import { driverName, formatRaceDateTime } from '../../helpers/helpers'
+import { formatRaceDateTime } from '../../helpers/helpers'
 import {
   LeagueMembersDbProps,
   LeagueResultsDbProps,
@@ -112,26 +112,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
       fetchResults()
     } else {
       sendAlert('Failed to submit drivers - please try again later', 'error')
-    }
-  }
-
-  const submitDnfPick = async (driverId: number, rowId: number) => {
-    const { error } = await client
-      .from('league_results')
-      .update({
-        dnf_driver_id: driverId,
-      })
-      .eq('id', rowId)
-
-    if (!error) {
-      const nameOrDnf =
-        driverId === 241
-          ? 'NO DNF!'
-          : driverName(driversMap.get(driverId), isMobile)
-      sendAlert('Submitted DNF Pick: ' + nameOrDnf)
-      fetchResults()
-    } else {
-      sendAlert('Failed to submit pick - please try again later', 'error')
     }
   }
 
