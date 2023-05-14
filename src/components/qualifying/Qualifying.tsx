@@ -24,6 +24,17 @@ const Qualifying: React.FC = () => {
     return racesMap.get(raceId).quali_time
   }
 
+  const passedQualiDate = (raceId: number) => {
+    const raceDate = Date.parse(
+      `${racesMap.get(raceId).quali_date} ${racesMap.get(raceId).quali_time}`
+    )
+    return raceDate < Date.now()
+  }
+
+  const indexOfNextRace = Array.from(qualiResultsMap.keys()).findIndex(
+    (raceId) => !passedQualiDate(raceId)
+  )
+
   const isMobile = useMediaQuery('(max-width:600px)')
 
   const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
@@ -35,33 +46,68 @@ const Qualifying: React.FC = () => {
   return (
     <div className={`${styles.container} fadeIn`}>
       <Typography variant="h4">Qualifying Results</Typography>
-      {Array.from(qualiResultsMap.entries()).map(([race_id, resultsArray]) => (
-        <InView
-          style={{ width: '100%' }}
-          onChange={onChange}
-          key={race_id}
-          className="hidden"
-        >
-          <Card sx={{ width: '100%' }} elevation={2}>
-            <CardContent>
-              <div className={styles.cardTitle}>
-                <Typography variant="h5">
-                  {racesMap.get(race_id).race_name}
-                </Typography>
-                <Typography variant="subtitle1">
-                  {formatRaceDateTime(
-                    getQualiDate(race_id),
-                    getQualiTime(race_id),
-                    isMobile
-                  )}
-                </Typography>
-              </div>
-              <Divider sx={{ pt: 1, mb: 1 }} />
-              <QualiResultsTable qualiResults={resultsArray} />
-            </CardContent>
-          </Card>
-        </InView>
-      ))}
+      {Array.from(qualiResultsMap.entries())
+        .slice(0, indexOfNextRace)
+        .reverse()
+        .map(([race_id, resultsArray]) => (
+          <InView
+            style={{ width: '100%' }}
+            onChange={onChange}
+            key={race_id}
+            className="hidden"
+          >
+            <Card sx={{ width: '100%' }} elevation={2}>
+              <CardContent>
+                <div className={styles.cardTitle}>
+                  <Typography variant="h5">
+                    {racesMap.get(race_id).race_name}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    {formatRaceDateTime(
+                      getQualiDate(race_id),
+                      getQualiTime(race_id),
+                      isMobile
+                    )}
+                  </Typography>
+                </div>
+                <Divider sx={{ pt: 1, mb: 1 }} />
+                <QualiResultsTable qualiResults={resultsArray} />
+              </CardContent>
+            </Card>
+          </InView>
+        ))}
+      {indexOfNextRace !== -1 && (
+        <>
+          <Typography variant="h4">Upcoming Qualifying Results</Typography>
+          {Array.from(qualiResultsMap.entries())
+            .slice(indexOfNextRace, undefined)
+            .map(([race_id]) => (
+              <InView
+                style={{ width: '100%' }}
+                onChange={onChange}
+                key={race_id}
+                className="hidden"
+              >
+                <Card sx={{ width: '100%' }} elevation={2}>
+                  <CardContent>
+                    <div className={styles.cardTitle}>
+                      <Typography variant="h5">
+                        {racesMap.get(race_id).race_name}
+                      </Typography>
+                      <Typography variant="subtitle1">
+                        {formatRaceDateTime(
+                          getQualiDate(race_id),
+                          getQualiTime(race_id),
+                          isMobile
+                        )}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+              </InView>
+            ))}
+        </>
+      )}
     </div>
   )
 }
