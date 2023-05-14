@@ -190,7 +190,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                     {nextRaceRoundId === race.id &&
                       leagueResultsMap.get(user.id).get(race.id)?.driver_id ===
                         null && (
-                        <Tooltip title="Lock in a driver before the race starts!">
+                        <Tooltip title="Lock in a driver before the qualifying starts!">
                           <PriorityHigh color="error" />
                         </Tooltip>
                       )}
