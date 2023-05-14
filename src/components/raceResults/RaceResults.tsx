@@ -13,6 +13,7 @@ import {
   useSupabaseContext,
 } from '../../contexts/SupabaseContext'
 import { formatRaceDateTime } from '../../helpers/helpers'
+import { RacesDbProps } from '../../interfaces'
 import styles from './RaceResults.module.scss'
 import RaceResultsTable from './RaceResultsTable/RaceResultsTable'
 
@@ -26,6 +27,13 @@ const RaceResults: React.FC = () => {
     }
   }
 
+  const passedRaceDate = (race: RacesDbProps) => {
+    const raceDate = Date.parse(`${race.date} ${race.time}`)
+    return raceDate < Date.now()
+  }
+
+  const indexOfNextRace = races.findIndex((race) => !passedRaceDate(race))
+
   return (
     <div className={'fadeIn'}>
       <div className={styles.heading}>
@@ -34,37 +42,70 @@ const RaceResults: React.FC = () => {
         </Typography>
       </div>
       <div className={styles.container}>
-        {races.map((race) => (
-          <InView
-            onChange={onChange}
-            style={{ width: '100%' }}
-            key={race.id}
-            className="hidden"
-          >
-            <Card sx={{ width: '100%' }} elevation={2}>
-              <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
-                <div className={styles.raceTitle}>
-                  <Typography variant="h5">{race.race_name}</Typography>
-                  <Typography variant="subtitle1">
-                    {formatRaceDateTime(race.date, race.time, isMobile)}
-                  </Typography>
-                </div>
-                {raceResultsMap.get(race.id).length > 0 && (
-                  <>
-                    <Divider sx={{ pt: 1, mb: 1 }} />
-                    <div className={styles.heading}>
-                      <Typography variant="body1">Race Results</Typography>
-                    </div>
-                    <RaceResultsTable
-                      raceResults={raceResultsMap.get(race.id)}
-                    />
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </InView>
-        ))}
+        {races
+          .slice(0, indexOfNextRace)
+          .reverse()
+          .map((race) => (
+            <InView
+              onChange={onChange}
+              style={{ width: '100%' }}
+              key={race.id}
+              className="hidden"
+            >
+              <Card sx={{ width: '100%' }} elevation={2}>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <div className={styles.raceTitle}>
+                    <Typography variant="h5">{race.race_name}</Typography>
+                    <Typography variant="subtitle1">
+                      {formatRaceDateTime(race.date, race.time, isMobile)}
+                    </Typography>
+                  </div>
+                  {raceResultsMap.get(race.id).length > 0 && (
+                    <>
+                      <Divider sx={{ pt: 1, mb: 1 }} />
+                      <div className={styles.heading}>
+                        <Typography variant="body1">Race Results</Typography>
+                      </div>
+                      <RaceResultsTable
+                        raceResults={raceResultsMap.get(race.id)}
+                      />
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </InView>
+          ))}
       </div>
+      {indexOfNextRace !== -1 && (
+        <>
+          <div className={styles.heading}>
+            <Typography variant="h4" sx={{ mb: 2, mt: 2 }}>
+              Upcoming Race Results
+            </Typography>
+          </div>
+          <div className={styles.container}>
+            {races.slice(indexOfNextRace, undefined).map((race) => (
+              <InView
+                onChange={onChange}
+                style={{ width: '100%' }}
+                key={race.id}
+                className="hidden"
+              >
+                <Card sx={{ width: '100%' }} elevation={2}>
+                  <CardContent>
+                    <div className={styles.raceTitle}>
+                      <Typography variant="h5">{race.race_name}</Typography>
+                      <Typography variant="subtitle1">
+                        {formatRaceDateTime(race.date, race.time, isMobile)}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+              </InView>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

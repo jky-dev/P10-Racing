@@ -16,9 +16,14 @@
   width: 100%;
 }
 
-.result {
-  display: inline-flex;
-  justify-content: flex-start;
-  column-gap: 0.5rem;
+.raceTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
