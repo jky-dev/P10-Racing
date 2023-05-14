@@ -14,10 +14,9 @@ import styles from './Picker.module.scss'
 interface PickerProps {
   id: string
   drivers: Map<number, DriversDbProps>
-  submitHandler: (driverId: number, rowId: number) => void
+  submitHandler: (driverId: number, dnfDriverId: number, rowId: number) => void
   resultsRow: LeagueResultsDbProps
   rowId: number
-  submitDnfHandler: (driverId: number, rowId: number) => void
 }
 
 const Picker: React.FC<PickerProps> = ({
@@ -26,7 +25,6 @@ const Picker: React.FC<PickerProps> = ({
   submitHandler,
   resultsRow,
   rowId,
-  submitDnfHandler,
 }) => {
   const [driver, setDriver] = React.useState<number>(
     resultsRow?.driver_id ?? -1
@@ -45,12 +43,8 @@ const Picker: React.FC<PickerProps> = ({
 
   const handleSubmit = () => {
     if (driver === -1) return
-    submitHandler(driver, rowId)
-  }
-
-  const handleDnfSubmit = () => {
-    if (driver === -1) return
-    submitDnfHandler(dnfDriver, rowId)
+    if (dnfDriver === -1) return
+    submitHandler(driver, dnfDriver, rowId)
   }
 
   return (
@@ -59,7 +53,6 @@ const Picker: React.FC<PickerProps> = ({
         <FormControl
           key={id}
           sx={{
-            m: 1,
             width: 200,
           }}
         >
@@ -88,19 +81,9 @@ const Picker: React.FC<PickerProps> = ({
             ))}
           </Select>
         </FormControl>
-        <Button
-          onClick={handleSubmit}
-          disabled={driver === -1}
-          variant="outlined"
-        >
-          Submit
-        </Button>
-      </div>
-      <div className={styles.container}>
         <FormControl
           key={id + 'dnf'}
           sx={{
-            m: 1,
             width: 200,
           }}
         >
@@ -133,8 +116,8 @@ const Picker: React.FC<PickerProps> = ({
           </Select>
         </FormControl>
         <Button
-          onClick={handleDnfSubmit}
-          disabled={dnfDriver === -1}
+          onClick={handleSubmit}
+          disabled={driver === -1 || dnfDriver === -1}
           variant="outlined"
         >
           Submit

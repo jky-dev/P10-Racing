@@ -94,21 +94,24 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     return raceDate < Date.now()
   }
 
-  const submitDriver = async (driverId: number, rowId: number) => {
+  const submitDriver = async (
+    driverId: number,
+    dnfDriverId: number,
+    rowId: number
+  ) => {
     const { error } = await client
       .from('league_results')
       .update({
         driver_id: driverId,
+        dnf_driver_id: dnfDriverId,
       })
       .eq('id', rowId)
 
     if (!error) {
-      sendAlert(
-        'Submitted driver: ' + driverName(driversMap.get(driverId), isMobile)
-      )
+      sendAlert('Submitted!')
       fetchResults()
     } else {
-      sendAlert('Failed to submit driver - please try again later', 'error')
+      sendAlert('Failed to submit drivers - please try again later', 'error')
     }
   }
 
@@ -212,7 +215,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                       drivers={driversMap}
                       submitHandler={submitDriver}
                       resultsRow={leagueResultsMap.get(user.id).get(race.id)}
-                      submitDnfHandler={submitDnfPick}
                     />
                   )}
                 </AccordionDetails>
