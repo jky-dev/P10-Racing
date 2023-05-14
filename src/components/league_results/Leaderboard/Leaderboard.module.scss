@@ -7,3 +7,9 @@
     flex: 1 1 0;
   }
 }
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem 0.5rem 0;
+}

@@ -168,11 +168,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
                 />
               </ListItem>
             ))}
-          {leaderboardArray.length > 3 && (
-            <Button onClick={() => setIsExpanded((prev) => !prev)}>
-              {isExpanded ? 'Show less' : 'Show more'}
-            </Button>
-          )}
+          <div className={styles.buttonContainer}>
+            {leaderboardArray.length > 3 && (
+              <Button onClick={() => setIsExpanded((prev) => !prev)}>
+                {isExpanded ? 'Show less' : 'Show more'}
+              </Button>
+            )}
+          </div>
         </List>
       </Card>
     </>
