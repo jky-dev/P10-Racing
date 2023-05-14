@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material'
 import {
   Avatar,
+  Button,
   Card,
   CardContent,
   List,
@@ -46,6 +47,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     number
   > | null>(null)
   const { mode } = useUtilsContext()
+  const [isExpanded, setIsExpanded] = React.useState<boolean>(false)
 
   const { ref, inView, entry } = useInView()
 
@@ -113,7 +115,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       Array.from(entry.target.children).forEach((e) =>
         e.classList.add('fadeInListDelay')
       )
-  }, [inView, mode])
+  }, [inView, mode, isExpanded])
 
   const colorMap: { [index: number]: string } = {
     0: '#FFD700',
@@ -127,43 +129,50 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         Leaderboard
       </Typography>
       <Card elevation={2} sx={{ pt: 0, pl: 2 }} className="fadeIn">
-        <List sx={{ pt: 0, pb: 0, pr: 1 }} ref={ref}>
-          {leaderboardArray.map((obj, index) => (
-            <ListItem
-              key={obj.user}
-              sx={{ opacity: 0 }}
-              secondaryAction={
-                relativeRankings.get(obj.userId) > 0 ? (
-                  <span className={styles.icons}>
-                    <ArrowDropUp htmlColor="green" />
-                    <span>{`(${relativeRankings.get(obj.userId)})`}</span>
-                  </span>
-                ) : relativeRankings.get(obj.userId) < 0 ? (
-                  <span className={styles.icons}>
-                    <ArrowDropDown htmlColor="red" />{' '}
-                    <span>{`(${relativeRankings.get(obj.userId)})`}</span>
-                  </span>
-                ) : (
-                  <span className={styles.icons}>
-                    <Remove htmlColor="gray" />{' '}
-                    <span>{`(${relativeRankings.get(obj.userId)})`}</span>
-                  </span>
-                )
-              }
-            >
-              {index < 3 && (
-                <ListItemAvatar>
-                  <EmojiEvents htmlColor={colorMap[index]} />
-                </ListItemAvatar>
-              )}
-              <ListItemText
-                primary={obj.user}
-                secondary={`${obj.total} | P10 - ${obj.p10Total} | DNF - ${obj.dnfTotal}`}
-                inset={index > 2}
-                sx={{ width: 500 }}
-              />
-            </ListItem>
-          ))}
+        <List sx={{ pt: 1, pb: 1, pr: 1 }} ref={ref}>
+          {leaderboardArray
+            .slice(0, isExpanded ? undefined : 3)
+            .map((obj, index) => (
+              <ListItem
+                key={obj.user}
+                sx={{ opacity: 0 }}
+                secondaryAction={
+                  relativeRankings.get(obj.userId) > 0 ? (
+                    <span className={styles.icons}>
+                      <ArrowDropUp htmlColor="green" />
+                      <span>{`(${relativeRankings.get(obj.userId)})`}</span>
+                    </span>
+                  ) : relativeRankings.get(obj.userId) < 0 ? (
+                    <span className={styles.icons}>
+                      <ArrowDropDown htmlColor="red" />{' '}
+                      <span>{`(${relativeRankings.get(obj.userId)})`}</span>
+                    </span>
+                  ) : (
+                    <span className={styles.icons}>
+                      <Remove htmlColor="gray" />{' '}
+                      <span>{`(${relativeRankings.get(obj.userId)})`}</span>
+                    </span>
+                  )
+                }
+              >
+                {index < 3 && (
+                  <ListItemAvatar>
+                    <EmojiEvents htmlColor={colorMap[index]} />
+                  </ListItemAvatar>
+                )}
+                <ListItemText
+                  primary={obj.user}
+                  secondary={`${obj.total} | P10 - ${obj.p10Total} | DNF - ${obj.dnfTotal}`}
+                  inset={index > 2}
+                  sx={{ width: 500 }}
+                />
+              </ListItem>
+            ))}
+          {leaderboardArray.length > 3 && (
+            <Button onClick={() => setIsExpanded((prev) => !prev)}>
+              {isExpanded ? 'Show less' : 'Show more'}
+            </Button>
+          )}
         </List>
       </Card>
     </>
