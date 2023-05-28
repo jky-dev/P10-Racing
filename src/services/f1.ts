@@ -98,7 +98,5 @@ export const setQualiResultsByRound = (
           driversIdMap.get(result.Driver.driverId).id
         )
       })
-
-      console.log(results)
     })
 }

@@ -6,7 +6,7 @@ import {
   AccordionSummary,
   Tooltip,
   Typography,
-  useMediaQuery,
+  useMediaQuery
 } from '@mui/material'
 import React from 'react'
 import { InView } from 'react-intersection-observer'
@@ -17,7 +17,7 @@ import { formatRaceDateTime } from '../../helpers/helpers'
 import {
   LeagueMembersDbProps,
   LeagueResultsDbProps,
-  RacesDbProps,
+  RacesDbProps
 } from '../../interfaces'
 import Loader from '../loader/Loader'
 import Leaderboard from './Leaderboard/Leaderboard'
@@ -146,7 +146,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <Typography variant="h4" sx={{ mb: 2 }}>
             Upcoming Races
           </Typography>
-          {leagueResultsMap.get(user.id).size !== 23 && (
+          {leagueResultsMap.get(user.id).size !== 22 && (
             <div>Error - missing some results</div>
           )}
           {races.slice(indexOfNextRace, undefined).map((race) => (

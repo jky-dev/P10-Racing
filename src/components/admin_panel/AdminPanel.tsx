@@ -4,7 +4,6 @@ import {
   List,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from '@mui/material'
 import React, { useRef, useState } from 'react'
@@ -146,13 +145,6 @@ const AdminPanel: React.FC = () => {
     }
   }
 
-  const calcRaceRoundForApi = (index: number) => {
-    // round 6 was cancelled, and therefore index 6 should be round 6
-    if (index > 5) return index
-
-    return index + 1
-  }
-
   React.useEffect(() => {
     setupLeagues()
   }, [])
@@ -182,8 +174,10 @@ const AdminPanel: React.FC = () => {
           onChange={(e) => setRound(Number(e.target.value))}
         >
           {Array.from(races.values()).map((key, index) => (
-            <MenuItem value={calcRaceRoundForApi(index)} key={key.id}>
-              <span>{key.race_name}</span>
+            <MenuItem value={index + 1} key={key.id}>
+              <span>
+                {index + 1}: {key.race_name}
+              </span>
             </MenuItem>
           ))}
         </Select>
