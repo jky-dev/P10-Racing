@@ -47,18 +47,20 @@ const Leagues: React.FC = () => {
     const leagueName = leagueNameRef.current.value
     if (leagueName.length === 0) return
     setLoading(true)
-    try {
-      await client.rpc('create_league', {
-        i_code: crypto.randomUUID().slice(0, 6),
-        l_name: leagueName,
-      })
-      sendAlert('Successfully created league ' + leagueName)
-    } catch (exception) {
+    const { data, error } = await client.rpc('create_league', {
+      i_code: crypto.randomUUID().slice(0, 6),
+      l_name: leagueName,
+    })
+
+    if (error) {
       sendAlert(
-        `Failed to create league, please try again later ${exception.message}`,
+        `Failed to create league, please try again later ${error}`,
         'error'
       )
+    } else {
+      sendAlert('Successfully created league ' + leagueName)
     }
+
     setLoading(false)
     fetchLeagues()
   }
