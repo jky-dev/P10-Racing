@@ -54,7 +54,7 @@ const Leagues: React.FC = () => {
 
     if (error) {
       sendAlert(
-        `Failed to create league, please try again later ${error}`,
+        `Failed to create league, please try again later. ${error.details}, ${error.message}`,
         'error'
       )
     } else {
