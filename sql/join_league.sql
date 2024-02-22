@@ -55,9 +55,6 @@ select 14, id, auth.uid()::text, CONCAT(14,'_',id,'_',auth.uid()::text) from row
 row15 as (insert into league_results (race_id, league_id, user_uuid, index)
 select 15, id, auth.uid()::text, CONCAT(15,'_',id,'_',auth.uid()::text) from rows),
 
-row16 as (insert into league_results (race_id, league_id, user_uuid, index)
-select 16, id, auth.uid()::text, CONCAT(16,'_',id,'_',auth.uid()::text) from rows),
-
 row17 as (insert into league_results (race_id, league_id, user_uuid, index)
 select 17, id, auth.uid()::text, CONCAT(17,'_',id,'_',auth.uid()::text) from rows),
 
