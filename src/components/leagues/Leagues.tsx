@@ -25,6 +25,7 @@ import DeleteDialog from './DeleteDialog/DeleteDialog'
 import styles from './Leagues.module.scss'
 
 interface JoinedLeagueProps extends LeagueMembersDbProps {
+  league_id: number
   leagues: LeagueDbProps
 }
 
@@ -96,7 +97,7 @@ const Leagues: React.FC = () => {
       .eq('user_uuid', user.id)
 
     const tempLeaguesMap = new Map<number, LeaguesProps>()
-    for (const league of data as JoinedLeagueProps[]) {
+    for (const league of data as unknown as JoinedLeagueProps[]) {
       tempLeaguesMap.set(league.league_id, league.leagues)
     }
 
