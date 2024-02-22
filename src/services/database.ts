@@ -66,9 +66,11 @@ export const insertIntoConstructors = async (
       {
         constructor_id: constructor.constructorId,
         name: constructor.name,
+        year: 2024,
+        index: constructor.constructorId + '_' + '2024',
       },
     ],
-    { onConflict: 'constructor_id', ignoreDuplicates: true }
+    { onConflict: 'index', ignoreDuplicates: true }
   )
 }
 

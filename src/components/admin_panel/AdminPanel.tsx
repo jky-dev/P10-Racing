@@ -6,7 +6,7 @@ import {
   Select,
   Typography,
 } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'

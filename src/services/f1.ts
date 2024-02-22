@@ -22,30 +22,78 @@ export const setRaces = (client: SupabaseClient) => {
   axios.get('https://ergast.com/api/f1/current.json').then((res) => {
     const races: F1RaceApiProps[] = res.data.MRData.RaceTable.Races
 
-    races.forEach((race) => {
-      insertIntoRaces(client, race)
-    })
+    console.log(races)
+    // races.forEach((race) => {
+    //   insertIntoRaces(client, race)
+    // })
   })
 }
 
 export const setConstructors = (client: SupabaseClient) => {
-  axios.get('https://ergast.com/api/f1/2023/constructors.json').then((res) => {
+  axios.get('https://ergast.com/api/f1/2024/constructors.json').then((res) => {
     const constructors: F1ConstructorsApiProps[] =
       res.data.MRData.ConstructorTable.Constructors
 
-    constructors.forEach((constructor) => {
-      insertIntoConstructors(client, constructor)
-    })
+    console.log(constructors)
+
+    // TODO - DOUBLE CHECK ERGAST API CONSTRUCTORS AGAINST DB RESULTS for 2024
+    // const tempConstructors = [
+    //   {
+    //     constructorId: 'alpine',
+    //     name: 'BWT Alpine F1 Team',
+    //   },
+    //   {
+    //     constructorId: 'aston_martin',
+    //     name: 'Aston Martin Aramco F1 Team',
+    //   },
+    //   {
+    //     constructorId: 'ferrari',
+    //     name: 'Scuderia Ferrari',
+    //   },
+    //   {
+    //     constructorId: 'haas',
+    //     name: 'MoneyGram Haas F1 Team',
+    //   },
+    //   {
+    //     constructorId: 'kick_sauber',
+    //     name: 'Stake F1 Team Kick Sauber',
+    //   },
+    //   {
+    //     constructorId: 'mclaren',
+    //     name: '	McLaren Formula 1 Team',
+    //   },
+    //   {
+    //     constructorId: 'mercedes',
+    //     name: 'Mercedes-AMG PETRONAS F1 Team',
+    //   },
+    //   {
+    //     constructorId: 'rb',
+    //     name: 'Visa Cash App RB Formula One Team',
+    //   },
+    //   {
+    //     constructorId: 'red_bull',
+    //     name: 'Oracle Red Bull Racing',
+    //   },
+    //   {
+    //     constructorId: 'williams',
+    //     name: 'Williams Racing',
+    //   },
+    // ]
+
+    // constructors.forEach((constructor) => {
+    //   insertIntoConstructors(client, constructor)
+    // })
   })
 }
 
 export const setDrivers = (client: SupabaseClient) => {
-  axios.get('https://ergast.com/api/f1/2023/drivers.json').then((res) => {
+  axios.get('https://ergast.com/api/f1/2024/drivers.json').then((res) => {
     const drivers: F1DriversApiProps[] = res.data.MRData.DriverTable.Drivers
 
-    drivers.forEach((driver) => {
-      insertIntoDrivers(client, driver)
-    })
+    console.log(drivers)
+    // drivers.forEach((driver) => {
+    //   insertIntoDrivers(client, driver)
+    // })
   })
 }
 
