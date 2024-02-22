@@ -14,6 +14,7 @@ constructor_z {
 	timestamptz created_at
 	varchar name
 	int8 year
+	text index PK "constructor_id_year"
 }
 contact_submissions {
 	int8 id PK
@@ -29,7 +30,7 @@ drivers {
 	text driver_id "text identifier for a driver - ocon, stroll, max_verstappen"
 	varchar last_name
 	varchar given_name
-	varchar constructor FK
+	varchar constructor
 	int8 year
 }
 league_members {
