@@ -6,7 +6,6 @@ import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
 import { UserDbProps } from '../../interfaces'
 import Loader from '../loader/Loader'
-import Logout from '../logout/Logout'
 import styles from './Profile.module.scss'
 
 const Profile = () => {
@@ -87,13 +86,6 @@ const Profile = () => {
                 Update name
               </Button>
             </span>
-          </div>
-          <div className={styles.toggleContainer}>
-            <Typography>3D Homepage</Typography>
-            <Switch
-              checked={threeJsHome}
-              onChange={(e) => handleThreeToggle(e)}
-            />
           </div>
           {user.app_metadata.provider === 'email' && (
             <span>

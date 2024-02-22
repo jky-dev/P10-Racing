@@ -1,13 +1,10 @@
 import { Button, Typography } from '@mui/material'
-import React, { Suspense } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
-import Loader from '../loader/Loader'
 import styles from './Landing.module.scss'
-
-const ThreeJSLanding = React.lazy(() => import('./ThreeJSLanding'))
 
 const Landing: React.FC = () => {
   const { threeJsHome } = useUtilsContext()
@@ -38,11 +35,7 @@ const Landing: React.FC = () => {
     init()
   }, [])
 
-  return threeJsHome ? (
-    <Suspense fallback={<Loader />}>
-      <ThreeJSLanding />
-    </Suspense>
-  ) : (
+  return (
     <span className={styles.container}>
       <div className={styles.heading}>
         <Typography
