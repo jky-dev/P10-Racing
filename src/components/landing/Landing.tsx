@@ -3,11 +3,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
-import { useUtilsContext } from '../../contexts/UtilsContext'
 import styles from './Landing.module.scss'
 
 const Landing: React.FC = () => {
-  const { threeJsHome } = useUtilsContext()
   const { user, client } = useSupabaseContext()
   const [numberUsers, setNumberUsers] = React.useState(null)
   const [numberLeagues, setNumberLeagues] = React.useState(null)

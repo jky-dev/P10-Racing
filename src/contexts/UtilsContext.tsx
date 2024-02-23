@@ -30,14 +30,6 @@ const useContext = () => {
   const [mode, setMode] = React.useState<PaletteMode>(
     (localStorage.getItem('theme') as PaletteMode) || 'light'
   )
-  const [threeJsHome, setThreeJsHome] = React.useState<boolean>(
-    localStorage.getItem('3dHome') === 'true' || false
-  )
-
-  const handleThreeToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    localStorage.setItem('3dHome', e.target.checked.toString())
-    setThreeJsHome(e.target.checked)
-  }
 
   const sendAlert: (
     message: string,
@@ -142,8 +134,6 @@ const useContext = () => {
     theme,
     toggleColorMode,
     mode,
-    handleThreeToggle,
-    threeJsHome,
   }
 }
 
@@ -157,8 +147,6 @@ interface UtilsContextProps {
   theme: Theme
   toggleColorMode: () => void
   mode: PaletteMode
-  handleThreeToggle: (e: React.ChangeEvent<HTMLInputElement>) => void
-  threeJsHome: boolean
 }
 
 export const useUtilsContext: () => UtilsContextProps = () => {

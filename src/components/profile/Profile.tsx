@@ -1,4 +1,4 @@
-import { Box, Button, Switch, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ const Profile = () => {
   const [profile, setProfile] = React.useState<UserDbProps | null>(null)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [name, setName] = React.useState('')
-  const { sendAlert, threeJsHome, handleThreeToggle } = useUtilsContext()
+  const { sendAlert } = useUtilsContext()
   const navigate = useNavigate()
 
   const fetchProfile = async () => {
