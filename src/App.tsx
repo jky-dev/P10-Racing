@@ -11,9 +11,32 @@ import { useSupabaseContext } from './contexts/SupabaseContext'
 import { useUtilsContext } from './contexts/UtilsContext'
 
 const App = () => {
+  const underConstruction = !window.location.href.includes('localhost')
   const { loading } = useSupabaseContext()
   const { SnackBar, theme } = useUtilsContext()
   inject()
+
+  if (underConstruction)
+    return (
+      <>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <div
+            style={{
+              height: '100vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <p>
+              P10 Racing is under construction for the 2024 season! We will be
+              back soon.
+            </p>
+          </div>
+        </ThemeProvider>
+      </>
+    )
 
   return (
     <>
