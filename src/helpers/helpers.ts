@@ -12,10 +12,14 @@ export const formatRaceDateTime = (
   const shortFormat = 'eee, do MMM - hh:mmaaa'
   const stringFormat = isMobile ? shortFormat : longFormat
 
-  if (dateObject) {
+  if (!isNaN(dateObject.getTime())) {
+    // check valid date object
     return format(dateObject, stringFormat)
+  } else if (date && time) {
+    return format(new Date(`${date} ${time}`), stringFormat)
+  } else {
+    return 'Unknown'
   }
-  return format(new Date(`${date} ${time}`), stringFormat)
 }
 
 export const driverName = (

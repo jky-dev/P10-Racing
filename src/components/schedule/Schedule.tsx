@@ -11,7 +11,9 @@ import styles from './Schedule.module.scss'
 import ScheduleCard from './ScheduleCard/ScheduleCard'
 
 const Schedule: React.FC = () => {
-  const { races }: SupabaseContextProps = useSupabaseContext()
+  const { races: allRaces }: SupabaseContextProps = useSupabaseContext()
+
+  const races = allRaces.filter((race) => race.year === 2024)
 
   const onChange = (inView: boolean, entry: IntersectionObserverEntry) => {
     if (inView) {
