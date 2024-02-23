@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react'
-import { CssBaseline, CssBaselineProps } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import { inject } from '@vercel/analytics'
 import React from 'react'
 import { RouterProvider } from 'react-router-dom'
