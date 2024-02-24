@@ -179,13 +179,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                   </div>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <div className={styles.racePicks}>
-                    <ResultsTable
-                      leagueMembers={leagueMembers}
-                      leagueResultsMap={leagueResultsMap}
-                      race={race}
-                    />
-                  </div>
                   {!passedQualiDate(race) && (
                     <Picker
                       id={race.race_name}
@@ -195,6 +188,13 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
                       resultsRow={leagueResultsMap.get(user.id).get(race.id)}
                     />
                   )}
+                  <div className={styles.racePicks}>
+                    <ResultsTable
+                      leagueMembers={leagueMembers}
+                      leagueResultsMap={leagueResultsMap}
+                      race={race}
+                    />
+                  </div>
                 </AccordionDetails>
               </Accordion>
             </InView>
@@ -210,11 +210,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           .reverse()
           .map((race) => (
             <InView onChange={onChange} key={race.race_name} className="hidden">
-              <Accordion
-                key={race.race_name}
-                defaultExpanded={nextRaceRoundId === race.id}
-                elevation={2}
-              >
+              <Accordion key={race.race_name} elevation={2}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   sx={{

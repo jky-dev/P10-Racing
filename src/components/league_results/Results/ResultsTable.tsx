@@ -137,6 +137,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
       headerData={headerData}
       rowData={tableData.rows}
       secondRowData={tableData.secondRows}
+      pagination
     />
   )
 }
