@@ -1,11 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  useMediaQuery,
-} from '@mui/material'
+import { useMediaQuery } from '@mui/material'
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
@@ -16,6 +9,7 @@ import {
   LeagueResultsDbProps,
   RacesDbProps,
 } from '../../../interfaces'
+import DataTable, { HeaderData, Row, RowData } from '../../table/DataTable'
 import styles from './ResultsTable.module.scss'
 
 interface ResultsTable {
@@ -30,7 +24,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
 }) => {
   const { raceResultsDriverMap, driversMap } = useSupabaseContext()
   const isMobile = useMediaQuery('(max-width:600px)')
-  const { ref, inView, entry } = useInView()
+  const [tableData, setTableData] = React.useState(null)
 
   const getPointsColumn = (userId: string, raceId: number) => {
     const points = leagueResultsMap.get(userId).get(raceId)?.points_gained
@@ -55,148 +49,96 @@ const ResultsTable: React.FC<ResultsTable> = ({
   }
 
   React.useEffect(() => {
-    inView &&
-      Array.from(entry.target.children).forEach((e) =>
-        e.classList.add('fadeInListDelay')
-      )
-  }, [inView])
+    init()
+  }, [])
+
+  const getDriver = (uuid: string) => {
+    return (
+      <div className={styles.driverName}>
+        <span className={styles.text}>
+          {driverName(
+            driversMap.get(leagueResultsMap.get(uuid).get(race.id).driver_id),
+            isMobile,
+            '-'
+          )}
+        </span>
+        {!!driversMap.get(
+          leagueResultsMap.get(uuid).get(race.id).driver_id
+        ) && (
+          <img
+            src={`/images/${
+              driversMap.get(leagueResultsMap.get(uuid).get(race.id).driver_id)
+                .constructor
+            }.png`}
+            height={20}
+          />
+        )}
+      </div>
+    )
+  }
+
+  const getDnfDriver = (uuid: string) => {
+    return (
+      <div className={styles.driverName}>
+        <span className={styles.text}>
+          {leagueResultsMap.get(uuid).get(race.id).dnf_driver_id === 266
+            ? 'NO DNF!'
+            : driverName(
+                driversMap.get(
+                  leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
+                ),
+                isMobile,
+                '-'
+              )}
+        </span>
+        {driversMap.get(
+          leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
+        ) && (
+          <img
+            src={`/images/${
+              driversMap.get(
+                leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
+              ).constructor
+            }.png`}
+            height={20}
+          />
+        )}
+      </div>
+    )
+  }
+
+  const headerData: HeaderData[] = [
+    { header: 'User', width: '30%' },
+    { header: 'Picks (P10/DNF)', mobileHeader: 'Picks', width: '40%' },
+    { header: 'Points (Pos)', mobileHeader: 'Points', width: '30%' },
+  ]
+  const rows: Row[][] = []
+  const secondRows: Row[][] = []
+
+  const init = () => {
+    Array.from(leagueMembers.entries()).forEach(([uuid, value]) => {
+      const row: Row[] = []
+      row.push({ data: value.users.name })
+      row.push({ data: getDriver(uuid) })
+      row.push({ data: getPointsColumn(uuid, race.id) })
+      rows.push(row)
+      const secondRow: Row[] = []
+      secondRow.push({ data: '' })
+      secondRow.push({ data: getDnfDriver(uuid) })
+      secondRow.push({ data: getDnfPointsColumn(uuid, race.id) })
+      secondRows.push(secondRow)
+    })
+    setTableData({ rows, secondRows })
+  }
+
+  if (tableData === null) return null
 
   return (
-    <Table sx={{ width: '100%', overflow: 'auto' }} size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell
-            sx={{
-              width: '30%',
-            }}
-          >
-            User
-          </TableCell>
-          <TableCell
-            align="right"
-            sx={{
-              width: '40%',
-            }}
-          >
-            {isMobile ? 'Picks' : 'Picks (P10/DNF)'}
-          </TableCell>
-          <TableCell
-            align="right"
-            sx={{
-              width: '30%',
-            }}
-          >
-            {isMobile ? 'Points' : 'Points (Pos)'}
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody ref={ref}>
-        {Array.from(leagueMembers.entries()).map(([uuid, value]) => (
-          <React.Fragment key={uuid}>
-            <TableRow>
-              <TableCell
-                sx={{
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  maxWidth: 0,
-                }}
-              >
-                {value.users.name}
-              </TableCell>
-              <TableCell
-                sx={{
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  maxWidth: 0,
-                  verticalAlign: 'middle',
-                }}
-                align="right"
-              >
-                <div className={styles.driverName}>
-                  <span className={styles.text}>
-                    {driverName(
-                      driversMap.get(
-                        leagueResultsMap.get(uuid).get(race.id).driver_id
-                      ),
-                      isMobile,
-                      '-'
-                    )}
-                  </span>
-                  {!!driversMap.get(
-                    leagueResultsMap.get(uuid).get(race.id).driver_id
-                  ) && (
-                    <img
-                      src={`/images/${
-                        driversMap.get(
-                          leagueResultsMap.get(uuid).get(race.id).driver_id
-                        ).constructor
-                      }.png`}
-                      height={20}
-                    />
-                  )}
-                </div>
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  maxWidth: 0,
-                }}
-              >
-                {getPointsColumn(uuid, race.id)}
-              </TableCell>
-            </TableRow>
-            <TableRow key={uuid + 'dnf'}>
-              <TableCell></TableCell>
-              <TableCell align="right">
-                <div className={styles.driverName}>
-                  <span className={styles.text}>
-                    {leagueResultsMap.get(uuid).get(race.id).dnf_driver_id ===
-                    266
-                      ? 'NO DNF!'
-                      : driverName(
-                          driversMap.get(
-                            leagueResultsMap.get(uuid).get(race.id)
-                              .dnf_driver_id
-                          ),
-                          isMobile,
-                          '-'
-                        )}
-                  </span>
-                  {!!driversMap.get(
-                    leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
-                  ) && (
-                    <img
-                      src={`/images/${
-                        driversMap.get(
-                          leagueResultsMap.get(uuid).get(race.id).dnf_driver_id
-                        ).constructor
-                      }.png`}
-                      height={20}
-                    />
-                  )}
-                </div>
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden',
-                  whiteSpace: 'nowrap',
-                  maxWidth: 0,
-                }}
-              >
-                {getDnfPointsColumn(uuid, race.id)}
-              </TableCell>
-            </TableRow>
-          </React.Fragment>
-        ))}
-      </TableBody>
-    </Table>
+    <DataTable
+      headerData={headerData}
+      rowData={tableData.rows}
+      secondRowData={tableData.secondRows}
+    />
   )
 }
 
