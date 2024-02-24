@@ -50,20 +50,26 @@ const DataTable = ({
     setPage(0)
   }
 
+  const showPagination = rowData.length > 5 && pagination
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowData.length) : 0
 
-  const visibleRows = React.useMemo(
-    () => rowData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage]
-  )
+  const visibleRows = React.useMemo(() => {
+    return showPagination
+      ? rowData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      : rowData
+  }, [page, rowsPerPage])
 
-  const secondVisibleRows = React.useMemo(
-    () =>
-      secondRowData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage]
-  )
+  const secondVisibleRows = React.useMemo(() => {
+    return showPagination
+      ? secondRowData.slice(
+          page * rowsPerPage,
+          page * rowsPerPage + rowsPerPage
+        )
+      : secondRowData
+  }, [page, rowsPerPage])
 
   const emptyRowHeight = secondRowData ? 32 * emptyRows * 2 : 32 * emptyRows
 
@@ -121,7 +127,7 @@ const DataTable = ({
               )}
             </>
           ))}
-          {emptyRows > 0 && (
+          {showPagination && emptyRows > 0 && (
             <TableRow
               style={{
                 height: emptyRowHeight,
@@ -132,7 +138,7 @@ const DataTable = ({
           )}
         </TableBody>
       </Table>
-      {pagination && (
+      {showPagination && (
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
