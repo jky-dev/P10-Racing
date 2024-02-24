@@ -11,7 +11,7 @@ import { useSupabaseContext } from './contexts/SupabaseContext'
 import { useUtilsContext } from './contexts/UtilsContext'
 
 const App = () => {
-  const underConstruction = !window.location.href.includes('localhost')
+  const underConstruction = false
   const { loading } = useSupabaseContext()
   const { SnackBar, theme } = useUtilsContext()
   inject()
