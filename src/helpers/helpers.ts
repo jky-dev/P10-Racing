@@ -12,7 +12,7 @@ export const formatRaceDateTime = (
   const shortFormat = 'eee, do MMM - hh:mmaaa'
   const stringFormat = isMobile ? shortFormat : longFormat
 
-  if (!isNaN(dateObject.getTime())) {
+  if (dateObject && !isNaN(dateObject.getTime())) {
     // check valid date object
     return format(dateObject, stringFormat)
   } else if (date && time) {

@@ -72,6 +72,7 @@ quali_results {
 	text q1
 	text q2
 	text q3
+	int8 year
 }
 race_results {
 	int8 id PK
@@ -82,6 +83,7 @@ race_results {
 	int8 driver_id FK "driver number id"
 	text unique_index
 	int2 points
+	int8 year
 }
 races ||--|{ race_results : has
 races ||--|{ quali_results : has

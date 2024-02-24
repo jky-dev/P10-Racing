@@ -87,6 +87,7 @@ export interface LeagueResultsDbProps {
   users: UserDbProps
   dnf_driver_id: number | null
   dnf_points_gained: number | null
+  year: number
 }
 
 export interface LeagueMembersDbProps {
@@ -127,6 +128,7 @@ export interface RaceResultsDbProps {
   status: string
   unique_index: string
   points: number
+  year: number
 }
 
 export interface RacesWithResultsDbProps extends RacesDbProps {
@@ -165,6 +167,7 @@ export interface QualiDbProps {
   q2?: string
   q3?: string
   position: number
+  year: 2023
 }
 
 export interface ConstructorDbProps {
@@ -172,6 +175,7 @@ export interface ConstructorDbProps {
   created_at: string
   constructor_id: string
   name: string
+  year: number
 }
 
 export interface NavItemProp {

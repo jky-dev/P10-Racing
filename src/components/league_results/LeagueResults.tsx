@@ -6,7 +6,7 @@ import {
   AccordionSummary,
   Tooltip,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material'
 import React from 'react'
 import { InView } from 'react-intersection-observer'
@@ -17,7 +17,7 @@ import { formatRaceDateTime } from '../../helpers/helpers'
 import {
   LeagueMembersDbProps,
   LeagueResultsDbProps,
-  RacesDbProps
+  RacesDbProps,
 } from '../../interfaces'
 import Loader from '../loader/Loader'
 import Leaderboard from './Leaderboard/Leaderboard'
@@ -75,6 +75,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     }
 
     for (const leagueResult of data as LeagueResultsDbProps[]) {
+      if (leagueResult.year === 2023) continue
       const userId = leagueResult.user_uuid
       map.get(userId).set(leagueResult.race_id, leagueResult)
     }
@@ -146,9 +147,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           <Typography variant="h4" sx={{ mb: 2 }}>
             Upcoming Races
           </Typography>
-          {leagueResultsMap.get(user.id).size !== 22 && (
-            <div>Error - missing some results</div>
-          )}
           {races.slice(indexOfNextRace, undefined).map((race) => (
             <InView onChange={onChange} key={race.race_name} className="hidden">
               <Accordion
