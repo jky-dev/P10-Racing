@@ -33,7 +33,6 @@ const ResultsTable: React.FC<ResultsTable> = ({
   const { ref, inView, entry } = useInView()
 
   const getPointsColumn = (userId: string, raceId: number) => {
-    console.log(leagueResultsMap)
     const points = leagueResultsMap.get(userId).get(raceId)?.points_gained
 
     if (points === null) return '-'

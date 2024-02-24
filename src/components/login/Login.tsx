@@ -69,7 +69,6 @@ const Login: React.FC = () => {
       email,
       password,
     })
-    console.log('data:', data, 'error:', error)
     if (error) {
       setError(error.message)
     } else {

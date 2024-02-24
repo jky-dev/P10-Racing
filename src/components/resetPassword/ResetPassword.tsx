@@ -27,14 +27,11 @@ const ResetPassword = () => {
   }
 
   const handleSubmit = async () => {
-    console.log('submit')
     if (!validate()) return
 
     setError(null)
 
     const { data, error } = await client.auth.updateUser({ password })
-
-    console.log(data, error)
 
     if (error) {
       sendAlert('An error occurred')

@@ -130,7 +130,7 @@ const useContext: () => SupabaseContextProps | null = () => {
       p10DriverTotalPointsMap.set(driver.id, 0)
       f1DriverTotalPointsMap.set(driver.id, 0)
     }
-    console.log(constructors)
+
     for (const constructor of constructors as ConstructorDbProps[]) {
       if (constructor.year === 2023) continue
       constructorsTotalPointsMap.set(constructor.constructor_id, 0)
@@ -140,7 +140,6 @@ const useContext: () => SupabaseContextProps | null = () => {
     const rrMap = new Map<number, RaceResultsDbProps[]>()
     const rMap = new Map()
     const qMap = new Map<number, QualiDbProps[]>()
-    console.log(dbRaces)
     for (const race of dbRaces as RacesDbProps[]) {
       if (race.year === 2023) continue
       rMap.set(race.id, race)
@@ -148,7 +147,6 @@ const useContext: () => SupabaseContextProps | null = () => {
       qMap.set(race.id, [])
       rrdMap.set(race.id, new Map<number, RaceResultsDbProps>())
     }
-    console.log(raceResults)
     for (const raceResult of raceResults as RaceResultsDbProps[]) {
       if (raceResult.year === 2023) continue
       const dId = raceResult.driver_id
