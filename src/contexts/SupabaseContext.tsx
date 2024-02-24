@@ -93,26 +93,34 @@ const useContext: () => SupabaseContextProps | null = () => {
       .from('drivers')
       .select('*')
       .not('id', 'eq', 241)
+      .not('id', 'eq', 266)
+      .not('year', 'eq', 2023)
       .order('constructor')
       .order('id')
 
     const { data: dbRaces } = await client
       .from('races')
       .select('*')
+      .not('year', 'eq', 2023)
       .order('round_number', { ascending: true })
 
     const { data: raceResults } = await client
       .from('race_results')
       .select('*')
+      .not('year', 'eq', 2023)
       .order('position', { ascending: true })
 
     const { data: qualiResults } = await client
       .from('quali_results')
       .select('*')
+      .not('year', 'eq', 2023)
       .order('race_id', { ascending: true })
       .order('position', { ascending: true })
 
-    const { data: constructors } = await client.from('constructor').select('*')
+    const { data: constructors } = await client
+      .from('constructor')
+      .select('*')
+      .not('year', 'eq', 2023)
 
     if (!drivers || !dbRaces || !raceResults || !qualiResults)
       throw new Error('failed to initialize')
@@ -124,7 +132,6 @@ const useContext: () => SupabaseContextProps | null = () => {
     const constructorsTotalPointsMap = new Map<ConstructorIdString, number>()
 
     for (const driver of drivers as DriversDbProps[]) {
-      if (driver.year === 2023 || driver.constructor === null) continue
       dMap.set(driver.id, driver)
       dIdMap.set(driver.driver_id, driver)
       p10DriverTotalPointsMap.set(driver.id, 0)
@@ -132,7 +139,6 @@ const useContext: () => SupabaseContextProps | null = () => {
     }
 
     for (const constructor of constructors as ConstructorDbProps[]) {
-      if (constructor.year === 2023) continue
       constructorsTotalPointsMap.set(constructor.constructor_id, 0)
     }
 
@@ -141,14 +147,12 @@ const useContext: () => SupabaseContextProps | null = () => {
     const rMap = new Map()
     const qMap = new Map<number, QualiDbProps[]>()
     for (const race of dbRaces as RacesDbProps[]) {
-      if (race.year === 2023) continue
       rMap.set(race.id, race)
       rrMap.set(race.id, [])
       qMap.set(race.id, [])
       rrdMap.set(race.id, new Map<number, RaceResultsDbProps>())
     }
     for (const raceResult of raceResults as RaceResultsDbProps[]) {
-      if (raceResult.year === 2023) continue
       const dId = raceResult.driver_id
       rrMap.get(raceResult.race_id)!.push(raceResult)
       rrdMap.get(raceResult.race_id).set(dId, raceResult)
@@ -169,11 +173,10 @@ const useContext: () => SupabaseContextProps | null = () => {
       }
     }
     for (const qualiResult of qualiResults as QualiDbProps[]) {
-      if (qualiResult.year === 2023) continue
       qMap.get(qualiResult.race_id).push(qualiResult)
     }
     setRacesMap(rMap)
-    setRaces(dbRaces.filter((race) => race.year === 2024) as RacesDbProps[])
+    setRaces(dbRaces as RacesDbProps[])
     setRaceResultsMap(rrMap)
     setRaceResultsDriverMap(rrdMap)
 
