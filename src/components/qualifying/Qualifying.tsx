@@ -45,7 +45,9 @@ const Qualifying: React.FC = () => {
 
   return (
     <div className={`${styles.container} fadeIn`}>
-      <Typography variant="h4">Qualifying Results</Typography>
+      {indexOfNextRace !== 0 && (
+        <Typography variant="h4">Qualifying Results</Typography>
+      )}
       {Array.from(qualiResultsMap.entries())
         .slice(0, indexOfNextRace)
         .reverse()

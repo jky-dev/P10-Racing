@@ -51,11 +51,13 @@ const Schedule: React.FC = () => {
           </div>
         </>
       )}
-      <div className={styles.heading}>
-        <Typography variant="h4" sx={{ mb: 2, mt: 2 }}>
-          Past Race Schedule
-        </Typography>
-      </div>
+      {nextRaceIndex !== 0 && (
+        <div className={styles.heading}>
+          <Typography variant="h4" sx={{ mb: 2, mt: 2 }}>
+            Past Race Schedule
+          </Typography>
+        </div>
+      )}
       <div className={styles.racesContainer}>
         {races.slice(0, nextRaceIndex).map((race) => (
           <InView

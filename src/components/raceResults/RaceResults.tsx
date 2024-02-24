@@ -36,11 +36,13 @@ const RaceResults: React.FC = () => {
 
   return (
     <div className={'fadeIn'}>
-      <div className={styles.heading}>
-        <Typography variant="h4" sx={{ mb: 2 }}>
-          Race Results
-        </Typography>
-      </div>
+      {indexOfNextRace !== 0 && (
+        <div className={styles.heading}>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            Race Results
+          </Typography>
+        </div>
+      )}
       <div className={styles.container}>
         {races
           .slice(0, indexOfNextRace)
@@ -79,7 +81,7 @@ const RaceResults: React.FC = () => {
       {indexOfNextRace !== -1 && (
         <>
           <div className={styles.heading}>
-            <Typography variant="h4" sx={{ mb: 2, mt: 2 }}>
+            <Typography variant="h4" sx={{ mb: 2 }}>
               Upcoming Race Results
             </Typography>
           </div>
