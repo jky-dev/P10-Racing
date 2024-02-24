@@ -11,11 +11,7 @@ import React from 'react'
 export interface HeaderData {
   header: string
   mobileHeader?: string
-  width: string
-}
-
-export interface RowData {
-  row: Row[]
+  width?: string
 }
 
 export interface Row {

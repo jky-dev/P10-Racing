@@ -1,52 +1,51 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React, { useMemo } from 'react'
-import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { driverName } from '../../../helpers/helpers'
+import DataTable, { HeaderData, Row } from '../../table/DataTable'
 
 const P10StandingsTable = () => {
   const { p10PointsMap, driversMap } = useSupabaseContext()
-  const { ref, inView, entry } = useInView()
   const sortedP10Array = useMemo(
     () => Array.from(p10PointsMap.entries()).sort((a, b) => b[1] - a[1]),
     [p10PointsMap]
   )
+  const [tableData, setTableData] = React.useState(null)
+
+  const header: HeaderData[] = [
+    { header: 'Rank', width: '10%' },
+    { header: 'Driver' },
+    { header: 'Points', width: '25%' },
+  ]
+
+  const getDriver = (driverId: number) => {
+    return (
+      <span className="driverConstructorContainer">
+        <span className="driverName">
+          {driverName(driversMap.get(driverId), false)}{' '}
+        </span>
+        <img
+          src={`/images/${driversMap.get(driverId).constructor}.png`}
+          height={20}
+        />
+      </span>
+    )
+  }
 
   React.useEffect(() => {
-    inView &&
-      Array.from(entry.target.children).forEach((child) =>
-        child.classList.add('fadeInListDelay')
-      )
-  }, [inView])
+    const rows: Row[][] = []
+    sortedP10Array.forEach(([driverId, points], index) => {
+      const row: Row[] = []
+      row.push({ data: index + 1 })
+      row.push({ data: getDriver(driverId) })
+      row.push({ data: points })
+      rows.push(row)
+    })
+    setTableData(rows)
+  }, [sortedP10Array])
 
-  return (
-    <Table size="small" className="fadeIn">
-      <TableHead>
-        <TableRow>
-          <TableCell>Rank</TableCell>
-          <TableCell align="right">Driver</TableCell>
-          <TableCell align="right">Points</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody ref={ref}>
-        {sortedP10Array.map(([driverId, points], index) => (
-          <TableRow key={driverId} className="hidden">
-            <TableCell>{index + 1}</TableCell>
-            <TableCell className="driverConstructorContainer" align="right">
-              <span className="driverName">
-                {driverName(driversMap.get(driverId), false)}{' '}
-              </span>
-              <img
-                src={`/images/${driversMap.get(driverId).constructor}.png`}
-                height={20}
-              />
-            </TableCell>
-            <TableCell align="right">{points}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+  return !tableData ? null : (
+    <DataTable headerData={header} rowData={tableData} />
   )
 }
 

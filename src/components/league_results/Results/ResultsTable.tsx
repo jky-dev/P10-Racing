@@ -1,6 +1,5 @@
 import { useMediaQuery } from '@mui/material'
 import React from 'react'
-import { useInView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../../contexts/SupabaseContext'
 import { driverName } from '../../../helpers/helpers'
@@ -9,7 +8,7 @@ import {
   LeagueResultsDbProps,
   RacesDbProps,
 } from '../../../interfaces'
-import DataTable, { HeaderData, Row, RowData } from '../../table/DataTable'
+import DataTable, { HeaderData, Row } from '../../table/DataTable'
 import styles from './ResultsTable.module.scss'
 
 interface ResultsTable {
