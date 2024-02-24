@@ -124,7 +124,7 @@ const useContext: () => SupabaseContextProps | null = () => {
     const constructorsTotalPointsMap = new Map<ConstructorIdString, number>()
 
     for (const driver of drivers as DriversDbProps[]) {
-      if (driver.year === 2023) continue
+      if (driver.year === 2023 || driver.constructor === null) continue
       dMap.set(driver.id, driver)
       dIdMap.set(driver.driver_id, driver)
       p10DriverTotalPointsMap.set(driver.id, 0)

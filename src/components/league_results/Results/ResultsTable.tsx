@@ -157,7 +157,7 @@ const ResultsTable: React.FC<ResultsTable> = ({
                 <div className={styles.driverName}>
                   <span className={styles.text}>
                     {leagueResultsMap.get(uuid).get(race.id).dnf_driver_id ===
-                    241
+                    266
                       ? 'NO DNF!'
                       : driverName(
                           driversMap.get(

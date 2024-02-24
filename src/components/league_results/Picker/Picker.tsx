@@ -47,11 +47,6 @@ const Picker: React.FC<PickerProps> = ({
     submitHandler(driver, dnfDriver, rowId)
   }
 
-  const validDriver = (driver_id: string): boolean => {
-    if (driver_id === 'de_vries') return false
-    return true
-  }
-
   return (
     <>
       <div className={styles.container}>
@@ -76,16 +71,14 @@ const Picker: React.FC<PickerProps> = ({
             }}
           >
             <MenuItem value={-1}>Pick a driver</MenuItem>
-            {Array.from(drivers.values())
-              .filter((value) => validDriver(value.driver_id))
-              .map((key) => (
-                <MenuItem value={key.id} key={key.id} className={styles.picker}>
-                  <span>
-                    {key.given_name} {key.last_name}
-                  </span>
-                  <img src={`images/${key.constructor}.png`} height={20} />
-                </MenuItem>
-              ))}
+            {Array.from(drivers.values()).map((key) => (
+              <MenuItem value={key.id} key={key.id} className={styles.picker}>
+                <span>
+                  {key.given_name} {key.last_name}
+                </span>
+                <img src={`images/${key.constructor}.png`} height={20} />
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <FormControl
@@ -109,17 +102,15 @@ const Picker: React.FC<PickerProps> = ({
             }}
           >
             <MenuItem value={-1}>Pick a driver</MenuItem>
-            {Array.from(drivers.values())
-              .filter((value) => validDriver(value.driver_id))
-              .map((key) => (
-                <MenuItem value={key.id} key={key.id} className={styles.picker}>
-                  <span>
-                    {key.given_name} {key.last_name}
-                  </span>
-                  <img src={`images/${key.constructor}.png`} height={20} />
-                </MenuItem>
-              ))}
-            <MenuItem value={241} className={styles.picker}>
+            {Array.from(drivers.values()).map((key) => (
+              <MenuItem value={key.id} key={key.id} className={styles.picker}>
+                <span>
+                  {key.given_name} {key.last_name}
+                </span>
+                <img src={`images/${key.constructor}.png`} height={20} />
+              </MenuItem>
+            ))}
+            <MenuItem value={266} className={styles.picker}>
               NO DNF!
             </MenuItem>
           </Select>
