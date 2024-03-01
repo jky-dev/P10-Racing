@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   admin = false,
   children,
 }) => {
-  const { user } = useSupabaseContext()
+  const { user, isAdmin } = useSupabaseContext()
   const navigate = useNavigate()
 
   const checkUser = () => {
@@ -20,7 +20,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       navigate('/')
     }
 
-    if (admin && user.email !== 'battlefield200@gmail.com') {
+    if (admin && !isAdmin) {
       navigate('/')
     }
   }
