@@ -1,11 +1,26 @@
-name: Workflow for Codecov example-python
+name: Workflow for Codecov
 on: [push, pull_request]
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.0.1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        slug: jky-dev/P10-Racing
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: jky-dev/P10-Racing
