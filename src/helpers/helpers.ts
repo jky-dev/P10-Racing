@@ -12,7 +12,7 @@ export const formatRaceDateTime = (
   const shortFormat = 'eee, do MMM - hh:mmaaa'
   const stringFormat = isMobile ? shortFormat : longFormat
 
-  if (dateObject && !isNaN(dateObject.getTime())) {
+  if (dateObject && !isNaN(dateObject?.getTime())) {
     // check valid date object
     return format(dateObject, stringFormat)
   } else if (date && time) {
@@ -80,7 +80,7 @@ export const pointsMap: { [key: number]: number } = {
 }
 
 const timePlural = (time: number, unit: string) => {
-  return `${time} ${unit}${time !== 1 && 's'}`
+  return `${time} ${unit}${time !== 1 ? 's' : ''}`
 }
 
 export const timeLeftString = (
@@ -123,7 +123,5 @@ export const timeLeftString = (
     )}`
   }
 
-  if (seconds > 0) {
-    return `less than a minute`
-  }
+  return `less than a minute`
 }

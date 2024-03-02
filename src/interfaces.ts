@@ -142,6 +142,8 @@ export interface DriversDbProps {
   given_name: string
   last_name: string
   year: number
+  created_at: string
+  index: string
 }
 
 export interface UserDbProps {
