@@ -1,19 +1,9 @@
-import { PriorityHigh } from '@mui/icons-material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from '@mui/material'
+import { Typography } from '@mui/material'
 import React from 'react'
 import { InView } from 'react-intersection-observer'
 
 import { useSupabaseContext } from '../../contexts/SupabaseContext'
 import { useUtilsContext } from '../../contexts/UtilsContext'
-import { formatRaceDateTime } from '../../helpers/helpers'
 import {
   LeagueMembersDbProps,
   LeagueResultsDbProps,
@@ -22,8 +12,7 @@ import {
 import Loader from '../loader/Loader'
 import Leaderboard from './Leaderboard/Leaderboard'
 import styles from './LeagueResults.module.scss'
-import Picker from './Picker/Picker'
-import ResultsTable from './Results/ResultsTable'
+import RaceAccordion from './RaceAccordion/RaceAccordion'
 
 interface LeagueResultsProps {
   leagueId: number
@@ -42,7 +31,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
   const [indexOfNextRace, setIndexOfNextRace] = React.useState(-1)
 
   const { sendAlert } = useUtilsContext()
-  const isMobile = useMediaQuery('(max-width:600px)')
 
   const fetchResults = async () => {
     setLoading(true)
@@ -56,6 +44,7 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
         `
       )
       .eq('league_id', leagueId)
+      .eq('year', 2024)
 
     const { data: leagueMembers }: { data: unknown } = await client
       .from('league_members')
@@ -75,7 +64,6 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
     }
 
     for (const leagueResult of data as LeagueResultsDbProps[]) {
-      if (leagueResult.year === 2023) continue
       const userId = leagueResult.user_uuid
       map.get(userId).set(leagueResult.race_id, leagueResult)
     }
@@ -149,54 +137,13 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           </Typography>
           {races.slice(indexOfNextRace, undefined).map((race) => (
             <InView onChange={onChange} key={race.race_name} className="hidden">
-              <Accordion
-                key={race.race_name}
-                defaultExpanded={nextRaceRoundId === race.id}
-                elevation={2}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  sx={{
-                    '& .MuiAccordionSummary-content': {
-                      justifyContent: 'space-between',
-                    },
-                  }}
-                >
-                  <div className={styles.accordionText}>
-                    <Typography className={styles.raceName}>
-                      {race.race_name}{' '}
-                      {nextRaceRoundId === race.id &&
-                        leagueResultsMap.get(user.id).get(race.id)
-                          ?.driver_id === null && (
-                          <Tooltip title="Lock in a driver before the qualifying starts!">
-                            <PriorityHigh color="error" />
-                          </Tooltip>
-                        )}
-                    </Typography>
-                    <Typography variant="body2">
-                      {formatRaceDateTime(race.date, race.time, isMobile)}
-                    </Typography>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {!passedQualiDate(race) && (
-                    <Picker
-                      id={race.race_name}
-                      rowId={leagueResultsMap.get(user.id).get(race.id)?.id}
-                      drivers={driversMap}
-                      submitHandler={submitDriver}
-                      resultsRow={leagueResultsMap.get(user.id).get(race.id)}
-                    />
-                  )}
-                  <div className={styles.racePicks}>
-                    <ResultsTable
-                      leagueMembers={leagueMembers}
-                      leagueResultsMap={leagueResultsMap}
-                      race={race}
-                    />
-                  </div>
-                </AccordionDetails>
-              </Accordion>
+              <RaceAccordion
+                race={race}
+                nextRaceRoundId={nextRaceRoundId}
+                leagueResultsMap={leagueResultsMap}
+                submitDriver={submitDriver}
+                leagueMembers={leagueMembers}
+              />
             </InView>
           ))}
         </div>
@@ -210,34 +157,13 @@ const LeagueResults: React.FC<LeagueResultsProps> = ({ leagueId }) => {
           .reverse()
           .map((race) => (
             <InView onChange={onChange} key={race.race_name} className="hidden">
-              <Accordion key={race.race_name} elevation={2}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  sx={{
-                    '& .MuiAccordionSummary-content': {
-                      justifyContent: 'space-between',
-                    },
-                  }}
-                >
-                  <div className={styles.accordionText}>
-                    <Typography className={styles.raceName}>
-                      {race.race_name}
-                    </Typography>
-                    <Typography variant="body2">
-                      {formatRaceDateTime(race.date, race.time, isMobile)}
-                    </Typography>
-                  </div>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <div className={styles.racePicks}>
-                    <ResultsTable
-                      leagueMembers={leagueMembers}
-                      leagueResultsMap={leagueResultsMap}
-                      race={race}
-                    />
-                  </div>
-                </AccordionDetails>
-              </Accordion>
+              <RaceAccordion
+                race={race}
+                nextRaceRoundId={nextRaceRoundId}
+                leagueResultsMap={leagueResultsMap}
+                submitDriver={submitDriver}
+                leagueMembers={leagueMembers}
+              />
             </InView>
           ))}
       </div>

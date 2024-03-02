@@ -78,3 +78,52 @@ export const pointsMap: { [key: number]: number } = {
   19: 1,
   20: -5,
 }
+
+const timePlural = (time: number, unit: string) => {
+  return `${time} ${unit}${time !== 1 && 's'}`
+}
+
+export const timeLeftString = (
+  days: number,
+  hours: number,
+  minutes: number,
+  seconds: number
+): string => {
+  // if greater than 2 days remaining, just return x days
+  // if < 2 days, show days + hours
+  // if 0 days remaining, show hours + minutes
+  // if < 1 hour, show minutes + seconds
+
+  if (days > 1) {
+    return `${days} days`
+  }
+
+  if (days > 0) {
+    return `1 day and ${
+      hours > 0
+        ? timePlural(hours, 'hour')
+        : minutes > 0
+        ? timePlural(minutes, 'minute')
+        : timePlural(seconds, 'second')
+    }`
+  }
+
+  if (hours > 0) {
+    return `${timePlural(hours, 'hour')} and ${
+      minutes > 0
+        ? timePlural(minutes, 'minute')
+        : timePlural(seconds, 'second')
+    }`
+  }
+
+  if (minutes > 0) {
+    return `${timePlural(minutes, 'minute')} and ${timePlural(
+      seconds,
+      'second'
+    )}`
+  }
+
+  if (seconds > 0) {
+    return `less than a minute`
+  }
+}

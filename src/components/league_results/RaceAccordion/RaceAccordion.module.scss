@@ -1,0 +1,22 @@
+.accordionText {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 1rem;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+}
+
+.raceName {
+  display: flex;
+  align-items: center;
+}
+
+.racePicks {
+  margin-bottom: 1rem;
+}
