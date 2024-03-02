@@ -94,7 +94,8 @@ export const updateRaceResultWithFinish = async (
   client: SupabaseClient,
   result: F1ResultsApiProps,
   race_id: number,
-  driversIdMap: Map<string, DriversDbProps>
+  driversIdMap: Map<string, DriversDbProps>,
+  year: number
 ) => {
   await client.from('race_results').upsert(
     [
@@ -107,6 +108,7 @@ export const updateRaceResultWithFinish = async (
           driversIdMap.get(result.Driver.driverId).id
         }`,
         points: result.points,
+        year: year,
       },
     ],
     { onConflict: 'unique_index', ignoreDuplicates: false }
@@ -117,7 +119,8 @@ export const updateQualiResultWithFinish = async (
   client: SupabaseClient,
   result: F1QualifyingApiProps,
   race_id: number,
-  driverId: number
+  driverId: number,
+  year: number
 ) => {
   await client.from('quali_results').upsert(
     [
@@ -129,6 +132,7 @@ export const updateQualiResultWithFinish = async (
         q1: result.Q1,
         q2: result.Q2,
         q3: result.Q3,
+        year: year,
       },
     ],
     { onConflict: 'unique_index', ignoreDuplicates: false }
@@ -139,7 +143,11 @@ export const getRaceByRoundNumber = async (
   client: SupabaseClient,
   roundNumber: number
 ) => {
-  return await client.from('races').select('id').eq('round_number', roundNumber)
+  return await client
+    .from('races')
+    .select('id')
+    .eq('round_number', roundNumber)
+    .eq('year', 2024)
 }
 
 export const getRaceResultsByRaceId = async (

@@ -104,8 +104,10 @@ export const setRaceResultsByRound = (
 ) => {
   if (round < 1) return
 
+  const year = 2024
+
   return axios
-    .get(`https://ergast.com/api/f1/2023/${round}/results.json`)
+    .get(`https://ergast.com/api/f1/${year}/${round}/results.json`)
     .then(async (res) => {
       const results: F1ResultsApiProps[] =
         res.data.MRData.RaceTable.Races[0].Results
@@ -117,7 +119,8 @@ export const setRaceResultsByRound = (
           client,
           result,
           race.data[0].id,
-          driversIdMap
+          driversIdMap,
+          year
         )
       })
     })
@@ -130,8 +133,10 @@ export const setQualiResultsByRound = (
 ) => {
   if (round < 1) return
 
+  const year = 2024
+
   return axios
-    .get(`https://ergast.com/api/f1/2023/${round}/qualifying.json`)
+    .get(`https://ergast.com/api/f1/${year}/${round}/qualifying.json`)
     .then(async (res) => {
       const results: F1QualifyingApiProps[] =
         res.data.MRData.RaceTable.Races[0].QualifyingResults
@@ -143,7 +148,8 @@ export const setQualiResultsByRound = (
           client,
           result,
           race.data[0].id,
-          driversIdMap.get(result.Driver.driverId).id
+          driversIdMap.get(result.Driver.driverId).id,
+          year
         )
       })
     })
