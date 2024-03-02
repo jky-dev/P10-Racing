@@ -94,6 +94,9 @@ export const timeLeftString = (
   // if 0 days remaining, show hours + minutes
   // if < 1 hour, show minutes + seconds
 
+  if (days == null || hours == null || minutes == null || seconds == null)
+    return 'unknown'
+
   if (days > 1) {
     return `${days} days`
   }

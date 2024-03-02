@@ -3,6 +3,14 @@ import { driverName, formatRaceDateTime, timeLeftString } from './helpers'
 
 describe('Helper', () => {
   describe('Time Left String', () => {
+    it('has null', () => {
+      expect(timeLeftString(null, 0, 0, 0)).toBe('unknown')
+    })
+
+    it('has undefined', () => {
+      expect(timeLeftString(undefined, 0, 0, 0)).toBe('unknown')
+    })
+
     describe('Has days left', () => {
       it('should return the correct string when greater than two days left', () => {
         expect(timeLeftString(2, 0, 0, 0)).toBe('2 days')

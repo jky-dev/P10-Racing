@@ -117,6 +117,8 @@ export interface RacesDbProps {
   sprint_time: string
   quali_date: string
   quali_time: string
+  sprint_quali_date: string
+  sprint_quali_time: string
 }
 
 export interface RaceResultsDbProps {
