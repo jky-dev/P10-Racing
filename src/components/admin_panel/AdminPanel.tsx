@@ -84,9 +84,10 @@ const AdminPanel: React.FC = () => {
 
     const driverResultMap = new Map<number, RaceResultsDbProps>()
     let raceDnfDriverId = 266
+    const lastPos = data.length
     for (const result of data as RaceResultsDbProps[]) {
       driverResultMap.set(result.driver_id, result)
-      if (result.position === 20 && isDnf(result.status)) {
+      if (result.position === lastPos && isDnf(result.status)) {
         raceDnfDriverId = result.driver_id
       }
     }
@@ -105,6 +106,8 @@ const AdminPanel: React.FC = () => {
         result?.dnf_driver_id,
         raceDnfDriverId
       )
+
+      console.log(pointsGained, dnfPointsGained)
 
       await client
         .from('league_results')
