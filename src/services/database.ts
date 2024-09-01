@@ -81,7 +81,7 @@ export const insertIntoDrivers = async (
   await client.from('drivers').upsert(
     [
       {
-        driver_id: driver.driverId,
+        driver_id: driver.driverId.trim(),
         last_name: driver.familyName,
         given_name: driver.givenName,
       },
@@ -103,9 +103,9 @@ export const updateRaceResultWithFinish = async (
         race_id: race_id,
         position: result.position,
         status: result.status,
-        driver_id: driversIdMap.get(result.Driver.driverId).id,
+        driver_id: driversIdMap.get(result.Driver.driverId.trim()).id,
         unique_index: `${race_id}_${
-          driversIdMap.get(result.Driver.driverId).id
+          driversIdMap.get(result.Driver.driverId.trim()).id
         }`,
         points: result.points,
         year: year,

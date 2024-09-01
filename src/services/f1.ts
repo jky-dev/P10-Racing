@@ -148,7 +148,7 @@ export const setQualiResultsByRound = (
           client,
           result,
           race.data[0].id,
-          driversIdMap.get(result.Driver.driverId).id,
+          driversIdMap.get(result.Driver.driverId.trim()).id,
           year
         )
       })
